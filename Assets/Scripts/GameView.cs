@@ -11,54 +11,72 @@ public class GameView : MonoBehaviour
 	[SerializeField] private float _rightMinimumPadding;
 	[SerializeField] private float _enemyPosition;
 	[SerializeField] private float _playerPosition;
+	[SerializeField] private float _boardCardsPadding;
 
 	[Space(10)] 
 	[Header("Cards views")]
 	[SerializeField] private PlayerView _playerView;
 	[SerializeField] private EnemyView _enemyView;
-
+	[SerializeField] private BoardView _boardView;
+	
 	private const int PlayerCards = 4;
+	private const int BoardCards = 2;
+	private const int BoardPosition = 0;
 
-	private float cardSpaceWidth;
-	private Vector3 maxRightPoint;
-	private Vector3 maxLeftPoint;
+	private float _cardSpaceWidth;
+	private Vector3 _maxRightPoint;
+	private Vector3 _maxLeftPoint;
+	private float _newScale = 1.0f;
+	private float _cardWidth;
 	
 	void Awake()
 	{
-		maxRightPoint = Camera.main.ViewportToWorldPoint(new Vector3(1.0f - _marginViewport, 0.5f, 0.0f));
-		maxLeftPoint = Camera.main.ViewportToWorldPoint(new Vector3(_marginViewport, 0.5f, 0.0f));
+		_maxRightPoint = Camera.main.ViewportToWorldPoint(new Vector3(1.0f - _marginViewport, 0.5f, 0.0f));
+		_maxLeftPoint = Camera.main.ViewportToWorldPoint(new Vector3(_marginViewport, 0.5f, 0.0f));
 		
-		var playerSpaceWidth = maxRightPoint.x + Math.Abs(maxLeftPoint.x);
-		cardSpaceWidth = playerSpaceWidth / (PlayerCards - 1);
+		var playerSpaceWidth = _maxRightPoint.x + Math.Abs(_maxLeftPoint.x);
+		_cardSpaceWidth = playerSpaceWidth / (PlayerCards - 1);
+		
+		_cardWidth = _card.GetComponent<Renderer>().bounds.size.x;
+		_newScale = GetNewScale();
 		
 		FillCards(_playerView, _playerPosition);
 		FillCards(_enemyView, _enemyPosition);
+		FillBoard();
 	}
 	
 	private void FillCards(CardsView cardsView, float position)
 	{
-		cardsView.Cards = new CardView[PlayerCards];
-		
-		var newScale = GetNewScale();
-		
 		for (int i = 0; i < PlayerCards; ++i)
 		{
 			GameObject instantiatedCard = Instantiate(_card, cardsView.transform);
-			instantiatedCard.transform.position = new Vector2(maxLeftPoint.x + cardSpaceWidth * i, position);
-			
-			instantiatedCard.transform.localScale = new Vector3(newScale, newScale);
 			cardsView.Cards[i] = instantiatedCard.GetComponent<CardView>();
+			instantiatedCard.transform.localScale = new Vector3(_newScale, _newScale);
+			instantiatedCard.transform.position = new Vector2(_maxLeftPoint.x + _cardSpaceWidth * i,
+				position);
+		}
+	}
+
+	private void FillBoard()
+	{
+		for (int i = 0; i < BoardCards; ++i)
+		{
+			GameObject instantiatedCard = Instantiate(_card, _boardView.transform);
+			_boardView.Cards[i] = instantiatedCard.GetComponent<CardView>();
+			instantiatedCard.transform.localScale = new Vector3(_newScale, _newScale);
+			var maxPointBoard = _cardWidth / 2 + _boardCardsPadding;
+			instantiatedCard.transform.position = new Vector2(maxPointBoard * (i == 0? -1 : 1),
+				BoardPosition);
 		}
 	}
 	
 	private float GetNewScale()
 	{
-		var cardWidth = _card.GetComponent<Renderer>().bounds.size.x;
-		var cardWidthWithPadding = cardWidth + _rightMinimumPadding;
-		if (cardSpaceWidth <= cardWidthWithPadding)
+		var cardWidthWithPadding = _cardWidth + _rightMinimumPadding;
+		if (_cardSpaceWidth <= cardWidthWithPadding)
 		{
-			var newCardWidth = cardWidth - (cardWidthWithPadding - cardSpaceWidth);
-			return newCardWidth / cardWidth;
+			var newCardWidth = _cardWidth - (cardWidthWithPadding - _cardSpaceWidth);
+			return newCardWidth / _cardWidth;
 		}
 
 		return 1.0f;
