@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CardView : MonoBehaviour
 {
-	[SerializeField] private TextMeshPro NumText;
+	[SerializeField] private TextMeshProUGUI NumText;
 
 	private int num;
 	
