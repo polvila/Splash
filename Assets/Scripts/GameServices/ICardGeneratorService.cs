@@ -1,8 +1,9 @@
 ﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface ICardGeneratorService
 {
-    void GetRandomCard();
-    void GetPseudoRandomCard(int[] excludedNumbers);
+    CardView GetRandomCard();
+    CardView GetPseudoRandomCard(HashSet<int> excludedNumbers);
 }

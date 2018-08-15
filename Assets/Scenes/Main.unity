@@ -824,7 +824,6 @@ GameObject:
   - component: {fileID: 410874427}
   - component: {fileID: 410874426}
   - component: {fileID: 410874425}
-  - component: {fileID: 410874429}
   m_Layer: 5
   m_Name: GameCanvas
   m_TagString: Untagged
@@ -910,21 +909,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &410874429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 410874424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9551ea541b440bcbb5bc77bf8f16be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _card: {fileID: 1365416982397904, guid: 89fbbf33d9571446bb46bb680ee18422, type: 2}
-  _enemyView: {fileID: 1723697257}
-  _boardView: {fileID: 467011083}
-  _playerView: {fileID: 1501978001}
 --- !u!1 &467011081
 GameObject:
   m_ObjectHideFlags: 0
