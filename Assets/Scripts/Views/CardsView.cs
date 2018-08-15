@@ -8,7 +8,7 @@ public class CardsView : MonoBehaviour {
 	[HideInInspector] public CardView[] Cards;
 	[HideInInspector] public Transform[] Slots;
 
-	private ICardGeneratorService _cardGeneratorService;
+	protected ICardGeneratorService _cardGeneratorService;
 	
 	[Inject]
 	void Init(ICardGeneratorService cardGeneratorService)
@@ -28,8 +28,8 @@ public class CardsView : MonoBehaviour {
 		
 		FillSlotsWithCards();
 	}
-	
-	void FillSlotsWithCards()
+
+	protected virtual void FillSlotsWithCards()
 	{
 		for (int i = 0; i < Cards.Length; ++i)
 		{

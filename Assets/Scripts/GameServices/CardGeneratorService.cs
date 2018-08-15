@@ -11,6 +11,9 @@ public class CardGeneratorService : ICardGeneratorService
 	private const int MaxRange = 12;
 	private const int MinRange = 1;
 	
+	public int GetMaxRange { get { return MaxRange; } }
+	public int GetMinRange { get { return MinRange; } }
+
 	private GameObject _card;
 	private Transform _gameCanvas;
 

@@ -1800,6 +1800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cards: []
   Slots: []
+  BoardView: {fileID: 467011083}
 --- !u!1 &1723697254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1859,6 +1860,7 @@ MonoBehaviour:
   - {fileID: 140272614}
   - {fileID: 194385579}
   - {fileID: 815357555}
+  BoardView: {fileID: 467011083}
 --- !u!1001 &1923848245
 Prefab:
   m_ObjectHideFlags: 0

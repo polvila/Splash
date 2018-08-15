@@ -1,3 +1,4 @@
-﻿public class EnemyView : CardsView {
+﻿public class EnemyView : PlayersView
+{
 
 }
