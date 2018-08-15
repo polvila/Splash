@@ -2,12 +2,12 @@
 
 public class CardsView : MonoBehaviour {
 
-	private const int NumCards = 4;
-	[HideInInspector] public CardView[] Cards = new CardView[NumCards];
-	public Transform[] Slots;
+	[HideInInspector] public CardView[] Cards;
+	[HideInInspector] public Transform[] Slots;
 
 	void Awake()
 	{
+		Cards = new CardView[transform.childCount];
 		Slots = new Transform[transform.childCount];
 		
 		for (int i = 0; i < Slots.Length; ++i)

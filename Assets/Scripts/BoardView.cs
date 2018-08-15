@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-public class BoardView : MonoBehaviour {
+public class BoardView : CardsView {
 
-	private const int NumCards = 2;
-	[HideInInspector] public CardView[] Cards = new CardView[NumCards];
 }
