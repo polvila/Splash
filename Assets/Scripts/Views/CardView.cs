@@ -18,4 +18,6 @@ public class CardView : MonoBehaviour
 			NumText.text = num.ToString();
 		}
 	}
+
+	public int Index;
 }

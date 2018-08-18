@@ -28,8 +28,9 @@ public class CardGeneratorService : ICardGeneratorService
 		return GetNewCardView(() => Random.Range(MinRange, MaxRange));
 	}
 
-	public CardView GetPseudoRandomCard(HashSet<int> excludedNumbers)
+	public CardView GetRandomCardExcluding(CardView[] cards)
 	{
+		HashSet<int> excludedNumbers = cards.Where(x => x != null && x.Num > 0).Select(x => x.Num).ToHashSet();
 		return GetNewCardView(() => GiveMeANumberExcluding(excludedNumbers));
 	}
 

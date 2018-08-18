@@ -7,5 +7,5 @@ public interface ICardGeneratorService
     int GetMaxRange { get; }
     int GetMinRange { get; }
     CardView GetRandomCard();
-    CardView GetPseudoRandomCard(HashSet<int> excludedNumbers);
+    CardView GetRandomCardExcluding(CardView[] cards);
 }

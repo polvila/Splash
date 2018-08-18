@@ -33,9 +33,16 @@ public class CardsView : MonoBehaviour {
 	{
 		for (int i = 0; i < Cards.Length; ++i)
 		{
-			Cards[i] = _cardGeneratorService.GetPseudoRandomCard(
-				Cards.Where(x => x != null && x.Num > 0).Select(x => x.Num).ToHashSet());
-			Cards[i].transform.position = Slots[i].position;
+			if (Cards[i] != null) continue;
+			Cards[i] = GetNewCard(i);
 		}
+	}
+
+	protected CardView GetNewCard(int index)
+	{
+		var card = _cardGeneratorService.GetRandomCardExcluding(Cards);
+		card.transform.position = Slots[index].position;
+		card.Index = index;
+		return card;
 	}
 }
