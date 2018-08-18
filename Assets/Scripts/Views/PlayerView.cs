@@ -15,6 +15,7 @@ public class PlayerView : PlayersView
                 {
                     if (PlayThisCard(card, out boardCard))
                     {
+                        card.transform.SetAsLastSibling();
                         LeanTween.move(card.gameObject,
                             boardCard.transform.position, 0.2f);
                     }
