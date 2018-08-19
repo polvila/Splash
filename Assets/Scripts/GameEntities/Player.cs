@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
-public class PlayersView : CardsView
+public class Player : CardsZone
 {
-    [SerializeField] protected BoardView BoardView;
-
+    [SerializeField] protected Board Board;
+    
     protected bool PlayThisCard(CardView card, out CardView boardCard)
     {
-        for (int i = 0; i < BoardView.Cards.Length; ++i)
+        for (int i = 0; i < Board.Cards.Length; ++i)
         {
-            if (IsACompatibleMove(card.Num, BoardView.Cards[i].Num))
+            if (IsACompatibleMove(card.Num, Board.Cards[i].Num))
             {
-                boardCard = BoardView.Cards[i];
-                BoardView.Cards[i] = card;
+                boardCard = Board.Cards[i];
+                Board.Cards[i] = card;
                 return true;
             }
         }

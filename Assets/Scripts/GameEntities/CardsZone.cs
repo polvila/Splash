@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using ModestTree;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
-public class CardsView : MonoBehaviour {
+public class CardsZone : MonoBehaviour {
 
 	[HideInInspector] public CardView[] Cards;
 	[HideInInspector] public Transform[] Slots;
@@ -40,7 +38,7 @@ public class CardsView : MonoBehaviour {
 
 	protected CardView GetNewCard(int index)
 	{
-		var card = _cardGeneratorService.GetRandomCardExcluding(Cards);
+		var card = _cardGeneratorService.GetNextCard();
 		card.transform.position = Slots[index].position;
 		card.Index = index;
 		return card;
