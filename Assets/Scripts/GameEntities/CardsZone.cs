@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class CardsZone : MonoBehaviour {
+public class CardsZone {
 
-	[HideInInspector] public CardView[] Cards;
-	[HideInInspector] public Transform[] Slots;
+	public CardView[] Cards;
+	public Transform[] Slots;
 
-	protected ICardGeneratorService _cardGeneratorService;
+	private ICardGeneratorService _cardGeneratorService;
 	
 	[Inject]
 	void Init(ICardGeneratorService cardGeneratorService)
@@ -14,33 +14,22 @@ public class CardsZone : MonoBehaviour {
 		_cardGeneratorService = cardGeneratorService;
 	}
 	
-	void Awake()
+	public void FillSlotsWithCards()
 	{
-		Cards = new CardView[transform.childCount];
-		Slots = new Transform[transform.childCount];
+		Cards = new CardView[Slots.Length];
 		
-		for (int i = 0; i < Slots.Length; ++i)
-		{
-			Slots[i] = transform.GetChild(i);
-		}
-		
-		FillSlotsWithCards();
-	}
-
-	protected virtual void FillSlotsWithCards()
-	{
 		for (int i = 0; i < Cards.Length; ++i)
 		{
 			if (Cards[i] != null) continue;
-			Cards[i] = GetNewCard(i);
+			GetNewCard(i);
 		}
 	}
 
-	protected CardView GetNewCard(int index)
+	protected virtual void GetNewCard(int index)
 	{
 		var card = _cardGeneratorService.GetNextCard();
 		card.transform.position = Slots[index].position;
 		card.Index = index;
-		return card;
+		Cards[index] = card;
 	}
 }

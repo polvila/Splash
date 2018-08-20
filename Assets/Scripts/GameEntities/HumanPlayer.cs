@@ -1,17 +1,12 @@
 ﻿using System;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class HumanPlayer : Player
 {
-    protected override void FillSlotsWithCards()
+    protected override void GetNewCard(int index)
     {
-        base.FillSlotsWithCards();
-
-        foreach (var card in Cards)
-        {
-            SetupAsPlayable(card);
-        }
+        base.GetNewCard(index);
+        SetupAsPlayable(Cards[index]); 
     }
     
     void SetupAsPlayable(CardView card)
@@ -19,25 +14,13 @@ public class HumanPlayer : Player
         card.gameObject.AddComponent<Button>().onClick.AddListener(
             () =>
             {
-                CardView boardCard;
-                if (PlayThisCard(card, out boardCard))
+                CardView boardCardDestination;
+                if (card.CanIPlayAbove(out boardCardDestination))
                 {
                     int cardIndex = card.Index;
-                    card.Index = boardCard.Index;
-                    Board.Cards[boardCard.Index] = card;
-                    Cards[cardIndex] = GetNewCard(cardIndex);
-                    SetupAsPlayable(Cards[cardIndex]);
-                    
-                    MoveCard(card, Board.Slots[boardCard.Index].position, 
-                        () => Destroy(boardCard.gameObject));
+                    card.PlayAboveTo(boardCardDestination);
+                    GetNewCard(cardIndex);
                 }
             });
-    }
-
-    void MoveCard(CardView card, Vector2 destination, Action onComplete)
-    {
-        card.transform.SetAsLastSibling();
-        LeanTween.move(card.gameObject,
-            destination, 0.2f).setOnComplete(() => onComplete?.Invoke());
     }
 }

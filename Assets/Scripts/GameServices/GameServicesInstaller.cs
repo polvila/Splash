@@ -5,11 +5,21 @@ public class GameServicesInstaller : MonoInstaller
 {
     [SerializeField] private GameObject _card;
     [SerializeField] private Transform _gameCanvas;
+    
+    [Header("Slots")]
+    [SerializeField] private Transform[] _enemySlots;
+    [SerializeField] private Transform[] _boardSlots;
+    [SerializeField] private Transform[] _playerSlots;
 
     public override void InstallBindings()
     {
         Container.Bind<ICardGeneratorService>().To<CardGeneratorService>()
             .AsSingle()
-            .WithArguments(_card, _gameCanvas);        
+            .WithArguments(_card, _gameCanvas);
+        
+        Container.Bind<IGameStateService>().To<GameStateService>()
+            .AsSingle()
+            .WithArguments(_enemySlots, _boardSlots, _playerSlots)
+            .NonLazy();    
     }
 }
