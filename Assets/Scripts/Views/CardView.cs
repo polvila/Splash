@@ -9,7 +9,7 @@ public class CardView : MonoBehaviour
 
 	private static float _singleNumFontSize = 0.0f;
 	
-	private IGameStateService _gameStateService;
+	private IGameStateModel _gameStateModel;
 	private ICardGeneratorService _cardGeneratorService;
 
 	private int _num;
@@ -26,28 +26,28 @@ public class CardView : MonoBehaviour
 	public int Index;
 
 	[Inject]
-	void Init(IGameStateService gameStateService, ICardGeneratorService cardGeneratorService)
+	void Init(IGameStateModel gameStateModel, ICardGeneratorService cardGeneratorService)
 	{
-		_gameStateService = gameStateService;
+		_gameStateModel = gameStateModel;
 		_cardGeneratorService = cardGeneratorService;
 	}
 
 	public void PlayAboveTo(CardView boardCard)
 	{
 		Index = boardCard.Index;
-		_gameStateService.Board.Cards[boardCard.Index] = this;
+		_gameStateModel.Board.Cards[boardCard.Index] = this;
 				
-		MoveTo(_gameStateService.Board.Slots[boardCard.Index].position, 
+		MoveTo(_gameStateModel.Board.Slots[boardCard.Index].position, 
 			() => Destroy(boardCard.gameObject));
 	}
 
 	public bool CanIPlayAbove(out CardView boardCardDestination)
 	{
-		for (int i = 0; i < _gameStateService.Board.Cards.Length; ++i)
+		for (int i = 0; i < _gameStateModel.Board.Cards.Length; ++i)
 		{
-			if (IsACompatibleMove(Num, _gameStateService.Board.Cards[i].Num))
+			if (IsACompatibleMove(Num, _gameStateModel.Board.Cards[i].Num))
 			{
-				boardCardDestination = _gameStateService.Board.Cards[i];
+				boardCardDestination = _gameStateModel.Board.Cards[i];
 				return true;
 			}
 		}

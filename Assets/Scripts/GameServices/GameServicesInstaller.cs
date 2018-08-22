@@ -16,10 +16,9 @@ public class GameServicesInstaller : MonoInstaller
         Container.Bind<ICardGeneratorService>().To<CardGeneratorService>()
             .AsSingle()
             .WithArguments(_card, _gameCanvas);
-        
-        Container.Bind<IGameStateService>().To<GameStateService>()
+
+        Container.Bind<IGameStateModel>().To<GameStateModel>()
             .AsSingle()
-            .WithArguments(_enemySlots, _boardSlots, _playerSlots)
-            .NonLazy();    
+            .WithArguments(_enemySlots, _boardSlots, _playerSlots);
     }
 }
