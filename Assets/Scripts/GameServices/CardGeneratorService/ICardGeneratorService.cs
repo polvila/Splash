@@ -1,8 +1,4 @@
-﻿
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface ICardGeneratorService
+﻿public interface ICardGeneratorService
 {
     int GetMaxRange { get; }
     int GetMinRange { get; }

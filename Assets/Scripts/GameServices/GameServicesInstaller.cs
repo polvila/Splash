@@ -4,7 +4,7 @@ using Zenject;
 public class GameServicesInstaller : MonoInstaller
 {
     [SerializeField] private GameObject _card;
-    [SerializeField] private Transform _gameCanvas;
+    [SerializeField] private Transform _cardsParent;
     
     [Header("Slots")]
     [SerializeField] private Transform[] _enemySlots;
@@ -15,7 +15,7 @@ public class GameServicesInstaller : MonoInstaller
     {
         Container.Bind<ICardGeneratorService>().To<CardGeneratorService>()
             .AsSingle()
-            .WithArguments(_card, _gameCanvas);
+            .WithArguments(_card, _cardsParent);
 
         Container.Bind<IGameStateModel>().To<GameStateModel>()
             .AsSingle()
