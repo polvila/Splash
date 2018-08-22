@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 public class CardView : MonoBehaviour
 {
@@ -40,14 +41,17 @@ public class CardView : MonoBehaviour
 		MoveTo(_gameStateModel.Board.Slots[boardCard.Index].position, 
 			() => Destroy(boardCard.gameObject));
 	}
+	
 
 	public bool CanIPlayAbove(out CardView boardCardDestination)
 	{
 		for (int i = 0; i < _gameStateModel.Board.Cards.Length; ++i)
 		{
-			if (IsACompatibleMove(Num, _gameStateModel.Board.Cards[i].Num))
+			if (IsACompatibleMove(Num, _gameStateModel.Board.Cards[i].Num) || SROptions.Current.GodMode)
 			{
-				boardCardDestination = _gameStateModel.Board.Cards[i];
+				boardCardDestination = _gameStateModel.Board.Cards[
+					SROptions.Current.GodMode ? Random.Range(0, _gameStateModel.Board.Cards.Length) : i
+				];
 				return true;
 			}
 		}
