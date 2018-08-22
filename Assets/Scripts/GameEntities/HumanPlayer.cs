@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 public class HumanPlayer : Player
 {
@@ -18,8 +17,8 @@ public class HumanPlayer : Player
                 if (card.CanIPlayAbove(out boardCardDestination))
                 {
                     int cardIndex = card.Index;
-                    card.PlayAboveTo(boardCardDestination);
                     GetNewCard(cardIndex);
+                    card.PlayAboveTo(boardCardDestination);
                 }
             });
     }

@@ -27,7 +27,9 @@ public class CardsZone {
 
 	protected virtual void GetNewCard(int index)
 	{
-		var card = _cardGeneratorService.GetNextCard();
+		var card = _cardGeneratorService.GetRandomCardExcluding(Cards);
+		//var card = _cardGeneratorService.GetRandomCard();
+		card.transform.SetAsFirstSibling();
 		card.transform.position = Slots[index].position;
 		card.Index = index;
 		Cards[index] = card;
