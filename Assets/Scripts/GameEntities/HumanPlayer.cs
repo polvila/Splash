@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HumanPlayer : Player
 {
@@ -18,6 +19,7 @@ public class HumanPlayer : Player
                 {
                     int cardIndex = card.Index;
                     GetNewCard(cardIndex);
+                    Object.Destroy(card.GetComponent<Button>());
                     card.PlayAboveTo(boardCardDestination);
                 }
             });
