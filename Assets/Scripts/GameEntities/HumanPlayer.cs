@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class HumanPlayer : Player
+public class HumanPlayer : CardsZone
 {
     protected override void GetNewCard(int index)
     {

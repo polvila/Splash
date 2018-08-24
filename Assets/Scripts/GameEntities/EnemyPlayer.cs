@@ -1,4 +1,5 @@
-﻿public class EnemyPlayer : Player
+﻿public class EnemyPlayer : CardsZone
 {
-
+    
+    
 }
