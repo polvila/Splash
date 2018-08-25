@@ -26,6 +26,7 @@ public class HumanPlayer : CardsZone
                         boardCardDestination = GameStateModel.Board.Cards[i];
                     }
                     card.PlayAboveTo(boardCardDestination);
+                    GameStateModel.HumanCounter.Property++;
                 }
             });
     }

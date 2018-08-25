@@ -41,6 +41,7 @@ public class EnemyPlayer : CardsZone
                 int cardIndex = card.Index;
                 GetNewCard(cardIndex);
                 card.PlayAboveTo(boardCardDestination);
+                GameStateModel.EnemyCounter.Property++;
                 yield break;
             }
         }
