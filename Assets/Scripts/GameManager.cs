@@ -3,8 +3,6 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-	[SerializeField] private int _initialTotalCards;
-	
 	private IGameStateModel _gameStateModel;
 
 	[Inject]
@@ -19,8 +17,8 @@ public class GameManager : MonoBehaviour
 	
 	void Awake()
 	{
-		_gameStateModel.EnemyCounter.Property = _initialTotalCards;
-		_gameStateModel.HumanCounter.Property = _initialTotalCards;
+		_gameStateModel.EnemyCounter.Property = 0;
+		_gameStateModel.HumanCounter.Property = 0;
 		
 		_gameStateModel.EnemyPlayer.FillSlotsWithCards();
 		_gameStateModel.Board.FillSlotsWithCards();

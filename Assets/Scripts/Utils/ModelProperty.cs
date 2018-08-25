@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 
 public class ModelProperty<T>
 {
-    private T _property;
-    public T Property
+    protected T PropertyValue;
+    public virtual T Property
     {
-        get { return _property; }
+        get { return PropertyValue; }
         set
         {
-            if (Compare(_property,value)) return;
-            _property = value;
-            PropertyChanged?.Invoke(_property);
+            PropertyValue = value;
+            PropertyChanged?.Invoke(PropertyValue);
         }
     }
     
-    public event Action<T> PropertyChanged;
-    
-    private bool Compare(T x, T y)
-    {
-        return EqualityComparer<T>.Default.Equals(x, y);
-    }
+    public Action<T> PropertyChanged;
 }

@@ -1,12 +1,10 @@
-﻿using System;
-
-public interface IGameStateModel 
+﻿public interface IGameStateModel 
 {
 	EnemyPlayer EnemyPlayer { get; }
 	Board Board { get; }
 	HumanPlayer HumanPlayer { get; }
 
-	ModelProperty<GameState> State { get; }
+	ModelStateProperty<GameState> State { get; }
 	ModelProperty<int> EnemyCounter { get; }
 	ModelProperty<int> HumanCounter { get; }
 }

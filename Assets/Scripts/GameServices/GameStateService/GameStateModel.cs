@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public class GameStateModel : IGameStateModel 
+public class GameStateModel : IGameStateModel
 {
     public EnemyPlayer EnemyPlayer { get; }
     public Board Board { get; }
     public HumanPlayer HumanPlayer { get; }
 
-    public ModelProperty<GameState> State { get; }
+    public ModelStateProperty<GameState> State { get; }
     public ModelProperty<int> EnemyCounter { get; }
     public ModelProperty<int> HumanCounter { get; }
 
@@ -16,7 +16,7 @@ public class GameStateModel : IGameStateModel
         Board = new Board {Slots = boardSlots};
         HumanPlayer = new HumanPlayer {Slots = humanSlots};
 
-        State = new ModelProperty<GameState>();
+        State = new ModelStateProperty<GameState>();;
         EnemyCounter = new ModelProperty<int>();
         HumanCounter = new ModelProperty<int>();
         
