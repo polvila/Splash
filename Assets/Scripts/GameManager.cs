@@ -3,6 +3,8 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
+	[SerializeField] private int _initialTimerSeconds;
+	
 	private IGameStateModel _gameStateModel;
 
 	[Inject]
@@ -23,12 +25,15 @@ public class GameManager : MonoBehaviour
 		_gameStateModel.EnemyPlayer.FillSlotsWithCards();
 		_gameStateModel.Board.FillSlotsWithCards();
 		_gameStateModel.HumanPlayer.FillSlotsWithCards();
+		
+		_gameStateModel.Timer.Init(_initialTimerSeconds);
 	}
 
 	void Start()
 	{
 		_gameStateModel.EnemyPlayer.UpdateIA();
 		_gameStateModel.State.PropertyChanged += OnStateChanged;
+		_gameStateModel.Timer.StartTimer();
 	}
 
 	void OnStateChanged(GameState gameState)

@@ -13,6 +13,7 @@ public class LeftBarView : MonoBehaviour
 	{
 		gameStateModel.EnemyCounter.PropertyChanged += OnEnemyCardsUpdate;
 		gameStateModel.HumanCounter.PropertyChanged += OnHumanCardsUpdate;
+		gameStateModel.Timer.SecondsUpdated += OnSecondsUpdated;
 	}
 
 	void OnEnemyCardsUpdate(int value)
@@ -23,5 +24,10 @@ public class LeftBarView : MonoBehaviour
 	void OnHumanCardsUpdate(int value)
 	{
 		HumanCardsText.text = value.ToString();
+	}
+
+	void OnSecondsUpdated(string timeInMinutesAndSeconds)
+	{
+		TimerText.text = timeInMinutesAndSeconds;
 	}
 }

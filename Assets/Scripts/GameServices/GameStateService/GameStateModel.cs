@@ -10,7 +10,10 @@ public class GameStateModel : IGameStateModel
     public ModelProperty<int> EnemyCounter { get; }
     public ModelProperty<int> HumanCounter { get; }
 
-    public GameStateModel(Transform[] enemySlots, Transform[] boardSlots, Transform[] humanSlots)
+    public Timer Timer { get; }
+
+    public GameStateModel(Transform[] enemySlots, Transform[] boardSlots, Transform[] humanSlots,
+        Timer timer)
     {
         EnemyPlayer = new EnemyPlayer {Slots = enemySlots};
         Board = new Board {Slots = boardSlots};
@@ -19,6 +22,8 @@ public class GameStateModel : IGameStateModel
         State = new ModelStateProperty<GameState>();;
         EnemyCounter = new ModelProperty<int>();
         HumanCounter = new ModelProperty<int>();
+
+        Timer = timer;
         
         State.Property = GameState.Idle;
     }

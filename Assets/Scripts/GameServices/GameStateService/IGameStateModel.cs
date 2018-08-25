@@ -7,6 +7,8 @@
 	ModelStateProperty<GameState> State { get; }
 	ModelProperty<int> EnemyCounter { get; }
 	ModelProperty<int> HumanCounter { get; }
+	
+	Timer Timer { get; }
 }
 
 public enum GameState

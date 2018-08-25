@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using UnityEngine;
 using Zenject;
 
@@ -20,5 +21,7 @@ public class GameServicesInstaller : MonoInstaller
         Container.Bind<IGameStateModel>().To<GameStateModel>()
             .AsSingle()
             .WithArguments(_enemySlots, _boardSlots, _playerSlots);
+        
+        Container.Bind<Timer>().FromNewComponentOnNewGameObject().AsSingle();
     }
 }
