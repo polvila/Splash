@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -47,11 +47,9 @@ public class CardView : MonoBehaviour
 	{
 		for (int i = 0; i < _gameStateModel.Board.Cards.Length; ++i)
 		{
-			if (IsACompatibleMove(Num, _gameStateModel.Board.Cards[i].Num) || SROptions.Current.GodMode)
+			if (IsACompatibleMove(Num, _gameStateModel.Board.Cards[i].Num))
 			{
-				boardCardDestination = _gameStateModel.Board.Cards[
-					SROptions.Current.GodMode ? Random.Range(0, _gameStateModel.Board.Cards.Length) : i
-				];
+				boardCardDestination = _gameStateModel.Board.Cards[i];
 				return true;
 			}
 		}

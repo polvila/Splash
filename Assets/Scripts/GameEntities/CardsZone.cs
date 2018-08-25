@@ -7,11 +7,13 @@ public class CardsZone {
 	public Transform[] Slots;
 
 	private ICardGeneratorService _cardGeneratorService;
+	protected IGameStateModel GameStateModel;
 	
 	[Inject]
-	void Init(ICardGeneratorService cardGeneratorService)
+	void Init(ICardGeneratorService cardGeneratorService, IGameStateModel gameStateModel)
 	{
 		_cardGeneratorService = cardGeneratorService;
+		GameStateModel = gameStateModel;
 	}
 	
 	public void FillSlotsWithCards()
