@@ -6,8 +6,9 @@ public interface IGameStateModel
 	Board Board { get; }
 	HumanPlayer HumanPlayer { get; }
 
-	GameState State { get; set; }
-	event Action<GameState> StateChanged;
+	ModelProperty<GameState> State { get; }
+	ModelProperty<int> EnemyCounter { get; }
+	ModelProperty<int> HumanCounter { get; }
 }
 
 public enum GameState

@@ -3,8 +3,10 @@ using Zenject;
 
 public class GameManager : MonoBehaviour
 {
-	private IGameStateModel _gameStateModel;
+	[SerializeField] private int _initialTotalCards;
 	
+	private IGameStateModel _gameStateModel;
+
 	[Inject]
 	void Init(IGameStateModel gameStateModel, DiContainer container)
 	{
@@ -17,6 +19,9 @@ public class GameManager : MonoBehaviour
 	
 	void Awake()
 	{
+		_gameStateModel.EnemyCounter.Property = _initialTotalCards;
+		_gameStateModel.HumanCounter.Property = _initialTotalCards;
+		
 		_gameStateModel.EnemyPlayer.FillSlotsWithCards();
 		_gameStateModel.Board.FillSlotsWithCards();
 		_gameStateModel.HumanPlayer.FillSlotsWithCards();
@@ -25,20 +30,20 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		_gameStateModel.EnemyPlayer.UpdateIA();
-		_gameStateModel.StateChanged += OnStateChanged;
+		_gameStateModel.State.PropertyChanged += OnStateChanged;
 	}
 
 	void OnStateChanged(GameState gameState)
 	{
 		if (gameState == GameState.Updated)
 		{
-			_gameStateModel.State = GameState.Idle;
+			_gameStateModel.State.Property = GameState.Idle;
 			_gameStateModel.EnemyPlayer.UpdateIA();
 		}
 	}
 
 	private void OnDestroy()
 	{
-		_gameStateModel.StateChanged -= OnStateChanged;
+		_gameStateModel.State.PropertyChanged -= OnStateChanged;
 	}
 }

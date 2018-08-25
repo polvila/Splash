@@ -385,7 +385,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 32
+  m_text: -1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -922,6 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c39e9c45b6b94e2fb92b72c7629b32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initialTotalCards: 50
 --- !u!1 &467011081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,6 +1271,7 @@ GameObject:
   - component: {fileID: 757259654}
   - component: {fileID: 757259656}
   - component: {fileID: 757259655}
+  - component: {fileID: 757259657}
   m_Layer: 5
   m_Name: LeftBar
   m_TagString: Untagged
@@ -1332,6 +1334,20 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 757259653}
   m_CullTransparentMesh: 0
+--- !u!114 &757259657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 757259653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3030c6723589f4c65a14fe914538b969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyCardsText: {fileID: 183850921}
+  TimerText: {fileID: 2140860832}
+  HumanCardsText: {fileID: 1926959806}
 --- !u!1 &760545031
 GameObject:
   m_ObjectHideFlags: 0
@@ -2051,7 +2067,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 43
+  m_text: -1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
