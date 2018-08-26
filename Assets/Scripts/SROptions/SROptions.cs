@@ -13,4 +13,9 @@ public partial class SROptions {
 	public void ResetScene() {
 		SceneManager.LoadScene("Main");
 	}
+	
+	[DisplayName("End Game")]
+	public void EndGame() {
+		GetContainer().Resolve<IGameStateModel>().State.Property = GameState.Finished;
+	}
 }
