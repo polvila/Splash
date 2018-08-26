@@ -35,6 +35,8 @@ public class EnemyPlayer : CardsZone
             
             yield return new WaitForSeconds(Random.Range(MinSeconds, MaxSeconds+1));
             
+            if (!Playable) yield break;
+            
             CardView boardCardDestination;
             if (card.CanIPlayAbove(out boardCardDestination))
             {

@@ -9,10 +9,20 @@
 	ModelProperty<int> HumanCounter { get; }
 	
 	Timer Timer { get; }
+	
+	ModelProperty<GameResult> Result { get; }
 }
 
 public enum GameState
 {
 	Idle,
-	Updated
+	Updated,
+	Finished
+}
+
+public enum GameResult
+{
+	HumanWins,
+	EnemyWins,
+	Draw
 }

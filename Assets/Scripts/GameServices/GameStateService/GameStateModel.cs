@@ -9,8 +9,10 @@ public class GameStateModel : IGameStateModel
     public ModelStateProperty<GameState> State { get; }
     public ModelProperty<int> EnemyCounter { get; }
     public ModelProperty<int> HumanCounter { get; }
-
+    
     public Timer Timer { get; }
+
+    public ModelProperty<GameResult> Result { get; }
 
     public GameStateModel(Transform[] enemySlots, Transform[] boardSlots, Transform[] humanSlots,
         Timer timer)
@@ -24,7 +26,9 @@ public class GameStateModel : IGameStateModel
         HumanCounter = new ModelProperty<int>();
 
         Timer = timer;
-        
+
+        Result = new ModelProperty<GameResult>();
+
         State.Property = GameState.Idle;
     }
 }

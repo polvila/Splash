@@ -5,6 +5,7 @@ public class CardsZone {
 
 	public CardView[] Cards;
 	public Transform[] Slots;
+	public bool Playable = true;
 
 	private ICardGeneratorService _cardGeneratorService;
 	protected IGameStateModel GameStateModel;

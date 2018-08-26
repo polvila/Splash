@@ -37,7 +37,10 @@ public class CardView : MonoBehaviour
 	{
 		Index = boardCard.Index;
 		_gameStateModel.Board.Cards[boardCard.Index] = this;
-		_gameStateModel.State.Property = GameState.Updated;
+		if (_gameStateModel.State.Property == GameState.Idle)
+		{
+			_gameStateModel.State.Property = GameState.Updated;
+		}
 				
 		MoveTo(_gameStateModel.Board.Slots[boardCard.Index].position, 
 			() => Destroy(boardCard.gameObject));

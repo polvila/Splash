@@ -14,6 +14,8 @@ public class HumanPlayer : CardsZone
         card.gameObject.AddComponent<Button>().onClick.AddListener(
             () =>
             {
+                if(!Playable) return;
+                
                 CardView boardCardDestination;
                 if (card.CanIPlayAbove(out boardCardDestination) || SROptions.Current.GodMode)
                 {
