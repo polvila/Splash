@@ -2,6 +2,5 @@
 {
     int GetMaxRange { get; }
     int GetMinRange { get; }
-    CardView GetRandomCard();
-    CardView GetRandomCardExcluding(CardView[] cards);
+    CardView GenerateCard();
 }

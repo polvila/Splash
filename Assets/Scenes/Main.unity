@@ -1532,6 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e66cde7f7b3e0425b98b9372f9d0fa21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _generatorMode: 1
   _card: {fileID: 1365416982397904, guid: 89fbbf33d9571446bb46bb680ee18422, type: 2}
   _cardsParent: {fileID: 1726775004}
   _enemySlots:
