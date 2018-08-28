@@ -28,7 +28,7 @@ public class GameServicesInstaller : MonoInstaller
             .AsSingle()
             .WithArguments(_enemySlots, _boardSlots, _playerSlots);
         
-        Container.Bind<Timer>().FromNewComponentOnNewGameObject().AsSingle();
+        Container.Bind<Timer>().FromNewComponentOnNewGameObject().AsTransient();
     }
 
     public void BindCardGenerator()
