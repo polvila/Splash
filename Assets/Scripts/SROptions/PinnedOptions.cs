@@ -7,5 +7,6 @@ public class PinnedOptions : MonoBehaviour
         SRDebug.Instance.PinOption("Reset Scene");
         SRDebug.Instance.PinOption("God Mode");
         SRDebug.Instance.PinOption("End Game");
+        SRDebug.Instance.PinOption("Card Generator Mode");
     }
 }

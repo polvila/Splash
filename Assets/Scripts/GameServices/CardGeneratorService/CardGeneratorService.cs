@@ -12,38 +12,39 @@ public class CardGeneratorService : ICardGeneratorService
 	protected const int MaxRange = 12;
 	protected const int MinRange = 1;
 
-	protected IGameStateModel GameStateModel;
-	
 	public int GetMaxRange => MaxRange;
 	public int GetMinRange => MinRange;
 
-	private GameObject _card;
-	private Transform _cardsParent;
+	private RandomGenerator _generator;
 	private DiContainer _container;
 
-	protected CardGeneratorService(GameObject card, Transform cardsParent, DiContainer container)
+	private CardGeneratorMode _generatorMode;
+	public CardGeneratorMode GeneratorMode
 	{
-		_card = card;
-		_cardsParent = cardsParent;
-		_container = container;
-	}
-	
-	[Inject]
-	void Init(IGameStateModel gameStateModel)
-	{
-		GameStateModel = gameStateModel;
-	}
-	
-	public virtual CardView GenerateCard()
-	{
-		return GetNewCardView(() => Random.Range(MinRange, MaxRange+1));
+		get { return _generatorMode; }
+		set
+		{
+			_generatorMode = value;
+			switch (_generatorMode)
+			{
+				case CardGeneratorMode.Random:
+					_generator = _container.Resolve<RandomGenerator>();
+					break;
+				case CardGeneratorMode.RandomExcluding:
+					_generator = _container.Resolve<RandomExcludingGenerator>();
+					break;
+			}
+		}
 	}
 
-	protected CardView GetNewCardView(Func<int> numGenerator)
+	protected CardGeneratorService(DiContainer container, CardGeneratorMode generatorMode)
 	{
-		GameObject instantiatedCard = _container.InstantiatePrefab(_card, _cardsParent);
-		var cardView = instantiatedCard.GetComponent<CardView>();
-		cardView.Num = numGenerator.Invoke();
-		return cardView;
+		_container = container;
+		GeneratorMode = generatorMode;
+	}
+	
+	public CardView GenerateCard()
+	{
+		return _generator.GenerateCard(MinRange, MaxRange);
 	}
 }

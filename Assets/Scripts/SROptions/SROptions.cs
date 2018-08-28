@@ -10,12 +10,24 @@ public partial class SROptions {
 	}
 	
 	[DisplayName("Reset Scene")]
-	public void ResetScene() {
+	public void ResetScene() 
+	{
 		SceneManager.LoadScene("Main");
 	}
 	
 	[DisplayName("End Game")]
-	public void EndGame() {
+	public void EndGame() 
+	{
 		GetContainer().Resolve<IGameStateModel>().State.Property = GameState.Finished;
+	}
+
+	[DisplayName("Card Generator Mode")]
+	public CardGeneratorMode CardGeneratorMode 
+	{
+		get { return GetContainer().Resolve<ICardGeneratorService>().GeneratorMode; }
+		set
+		{
+			GetContainer().Resolve<ICardGeneratorService>().GeneratorMode = value;
+		}
 	}
 }

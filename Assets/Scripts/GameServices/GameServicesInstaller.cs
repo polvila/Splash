@@ -14,37 +14,19 @@ public class GameServicesInstaller : MonoInstaller
     [SerializeField] private Transform[] _boardSlots;
     [SerializeField] private Transform[] _playerSlots;
     
-    public enum CardGeneratorMode
-    {
-        Random,
-        RandomExcluding,
-    }
-
     public override void InstallBindings()
     {
-        BindCardGenerator();
+        Container.Bind<RandomGenerator>().AsSingle().WithArguments(_card, _cardsParent);
+        Container.Bind<RandomExcludingGenerator>().AsSingle().WithArguments(_card, _cardsParent);
+        
+        Container.Bind<ICardGeneratorService>().To<CardGeneratorService>()
+            .AsSingle()
+            .WithArguments(_generatorMode);
 
         Container.Bind<IGameStateModel>().To<GameStateModel>()
             .AsSingle()
             .WithArguments(_enemySlots, _boardSlots, _playerSlots);
         
         Container.Bind<Timer>().FromNewComponentOnNewGameObject().AsTransient();
-    }
-
-    public void BindCardGenerator()
-    {
-        switch (_generatorMode)
-        {
-            case CardGeneratorMode.Random:
-                Container.Rebind<ICardGeneratorService>().To<CardGeneratorService>()
-                    .AsSingle()
-                    .WithArguments(_card, _cardsParent);
-                break;
-            case CardGeneratorMode.RandomExcluding:
-                Container.Rebind<ICardGeneratorService>().To<CardGeneratorExcludingService>()
-                    .AsSingle()
-                    .WithArguments(_card, _cardsParent);
-                break;
-        }
     }
 }
