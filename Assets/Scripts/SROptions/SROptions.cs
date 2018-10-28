@@ -18,16 +18,16 @@ public partial class SROptions {
 	[DisplayName("End Game")]
 	public void EndGame() 
 	{
-		GetContainer().Resolve<IGameStateModel>().State.Property = GameState.Finished;
+		//GetContainer().Resolve<IGameStateModel>().State.Property = GameState.Finished;
 	}
 
-	[DisplayName("Card Generator Mode")]
-	public CardGeneratorMode CardGeneratorMode 
-	{
-		get { return GetContainer().Resolve<ICardGeneratorService>().GeneratorMode; }
-		set
-		{
-			GetContainer().Resolve<ICardGeneratorService>().GeneratorMode = value;
-		}
-	}
+//	[DisplayName("Card Generator Mode")]
+//	public CardGeneratorMode CardGeneratorMode 
+//	{
+//		get { return GetContainer().Resolve<INumberGeneratorService>().GeneratorMode; }
+//		set
+//		{
+//			GetContainer().Resolve<INumberGeneratorService>().GeneratorMode = value;
+//		}
+//	}
 }
