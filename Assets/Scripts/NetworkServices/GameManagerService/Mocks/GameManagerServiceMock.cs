@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections;
+using UniRx;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using Zenject;
 
 public class GameManagerServiceMock : IGameManagerService
 {
+    private static readonly int UpdateTimeMs = 5;
     private const int LeftPilePosition = 4;
     private const int RightPilePosition = 5;
     private GameStateModel _gameStateModel;
     private INumberGeneratorService _numberGeneratorService;
     private CoroutineProxy _coroutineProxy;
-
-    public event Action<int[]> NewBoardReceived;
+    private IDisposable _interval;
+    
+    public event Action<int[], int> NewGameReceived;
     public event Action<int, int, int?> CardUpdate;
+    public event Action<GameResult> GameFinished;
 
     [Inject]
     void Init(INumberGeneratorService numberGeneratorService, CoroutineProxy coroutineProxy)
@@ -29,15 +34,10 @@ public class GameManagerServiceMock : IGameManagerService
             numbers[i] = _numberGeneratorService.GetNumber();
         }
         _gameStateModel = new GameStateModel(numbers);
-        //_gameStateModel.State.PropertyChanged += OnStateChanged;
         _gameStateModel.EnemyCounter = 0;
         _gameStateModel.HumanCounter = 0;
         
-//        _gameStateModel.Timer.TimerEnded += () =>
-//            _gameStateModel.State.Property = GameState.Finished;
-//        _gameStateModel.Timer.Init(_initialTimerSeconds);
-
-        _coroutineProxy.StartCoroutine(DelayedCallback(1, () => NewBoardReceived?.Invoke(_gameStateModel.Numbers)));
+        _coroutineProxy.StartCoroutine(DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers, UpdateTimeMs)));
     }
 
     private IEnumerator DelayedCallback(int seconds, Action callback)
@@ -53,7 +53,8 @@ public class GameManagerServiceMock : IGameManagerService
             var ia = new IA(this, _coroutineProxy);
         }
         
-        //_gameStateModel.Timer.StartTimer();
+        _interval = Observable.Interval(TimeSpan.FromSeconds(UpdateTimeMs))
+            .Subscribe(timeSpan => GameFinished?.Invoke(GetGameResult()));
     }
 
     public void PlayThisCard(int positionCardSelected)
@@ -112,23 +113,11 @@ public class GameManagerServiceMock : IGameManagerService
                && destinationNum == _numberGeneratorService.GetMaxRange;
     }
     
-    void OnStateChanged(GameState gameState)
-    {
-        switch (gameState)
-        {
-            case GameState.Updated:
-                _gameStateModel.State = GameState.Idle;
-                break;
-            case GameState.Finished:
-                //_gameStateModel.EnemyPlayerView.Playable = false;
-                //_gameStateModel.HumanPlayerView.Playable = false;
-                _gameStateModel.Result = GetGameResult();
-                break;
-        }
-    }
 
     private GameResult GetGameResult()
     {
+        _interval.Dispose();
+        
         if (_gameStateModel.EnemyCounter < _gameStateModel.HumanCounter)
         {
             return GameResult.HumanWins;
@@ -140,10 +129,5 @@ public class GameManagerServiceMock : IGameManagerService
         }
 
         return GameResult.Draw;
-    }
-
-    private void OnDestroy()
-    {
-        //_gameStateModel.State.PropertyChanged -= OnStateChanged;
     }
 }

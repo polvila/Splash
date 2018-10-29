@@ -7,6 +7,8 @@ public class ResultView : MonoBehaviour
 {
 	[SerializeField] private TextMeshProUGUI _resultText;
 
+	private IGameManagerService _gameManagerService;
+
 	private Dictionary<GameResult, string> resultTexts = new Dictionary<GameResult, string>()
 	{
 		{ GameResult.HumanWins, "You Win!"},	
@@ -15,14 +17,20 @@ public class ResultView : MonoBehaviour
 	};
 	
 	[Inject]
-	void Init()
+	void Init(IGameManagerService gameManagerService)
 	{
-		//gameStateModel.Result.PropertyChanged += result => SetResultText(resultTexts[result]);
+		_gameManagerService = gameManagerService;
+		_gameManagerService.GameFinished += SetResultText;
 	}
 
-	private void SetResultText(string result)
+	private void SetResultText(GameResult result)
 	{
-		_resultText.text = result;
+		_resultText.text = resultTexts[result];
 		gameObject.SetActive(true);
+	}
+
+	private void OnDestroy()
+	{
+		_gameManagerService.GameFinished -= SetResultText;
 	}
 }

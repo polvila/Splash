@@ -10,8 +10,9 @@ public enum Mode
 
 public interface IGameManagerService
 {
-    event Action<int[]> NewBoardReceived;
+    event Action<int[], int> NewGameReceived;
     event Action<int, int, int?> CardUpdate;
+    event Action<GameResult> GameFinished;
     
     void Initialize();
     void Start(Mode mode);

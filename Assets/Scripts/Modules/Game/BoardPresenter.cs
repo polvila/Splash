@@ -10,13 +10,13 @@ public class BoardPresenter : Presenter<BoardView>
     public override void RegisterView(BoardView view)
     {
         base.RegisterView(view);
-        _gameManagerService.NewBoardReceived += OnNewBoardReceived;
+        _gameManagerService.NewGameReceived += OnNewGameReceived;
         _gameManagerService.CardUpdate += OnCardUpdate;
         view.CardSelected += cardPosition => _gameManagerService.PlayThisCard(cardPosition);
         _gameManagerService.Initialize();
     }
 
-    private void OnNewBoardReceived(int[] numbers)
+    private void OnNewGameReceived(int[] numbers, int seconds)
     {
         for (int i = 0; i < numbers.Length; ++i)
         {
@@ -45,6 +45,6 @@ public class BoardPresenter : Presenter<BoardView>
     public override void Dispose()
     {
         base.Dispose();
-        _gameManagerService.NewBoardReceived -= OnNewBoardReceived;
+        _gameManagerService.NewGameReceived -= OnNewGameReceived;
     }
 }

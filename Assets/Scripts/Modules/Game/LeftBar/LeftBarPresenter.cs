@@ -11,15 +11,15 @@ public class LeftBarPresenter : Presenter<LeftBarView>
     public override void RegisterView(LeftBarView view)
     {
         base.RegisterView(view);
-        _gameManagerService.NewBoardReceived += OnNewBoardReceived;
+        _gameManagerService.NewGameReceived += OnNewGameReceived;
         _gameManagerService.CardUpdate += OnCardUpdate;
     }
     
-    private void OnNewBoardReceived(int[] numbers)
+    private void OnNewGameReceived(int[] numbers, int seconds)
     {
         view.EnemyCounter = 0;
         view.HumanCounter = 0;
-        view.Timer.Init(5);
+        view.Timer.Init(seconds);
         view.Timer.Start();
     }
 
