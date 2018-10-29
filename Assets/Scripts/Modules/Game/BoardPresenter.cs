@@ -12,6 +12,7 @@ public class BoardPresenter : Presenter<BoardView>
         base.RegisterView(view);
         _gameManagerService.NewGameReceived += OnNewGameReceived;
         _gameManagerService.CardUpdate += OnCardUpdate;
+        _gameManagerService.GameFinished += OnGameFinished;
         view.CardSelected += cardPosition => _gameManagerService.PlayThisCard(cardPosition);
         _gameManagerService.Initialize();
     }
@@ -25,7 +26,7 @@ public class BoardPresenter : Presenter<BoardView>
         view.SetInfo("");
         _gameManagerService.Start(Mode.IA);
     }
-
+    
     private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
     {
         if (fromCardPosition == toCardPosition)
@@ -40,6 +41,11 @@ public class BoardPresenter : Presenter<BoardView>
                 view.AddNewCardTo(fromCardPosition, newNumber.Value);
             }
         }
+    }
+
+    private void OnGameFinished(GameResult result)
+    {
+        view.StopPlayableCards();
     }
 
     public override void Dispose()

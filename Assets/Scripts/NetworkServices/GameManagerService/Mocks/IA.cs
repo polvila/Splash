@@ -5,12 +5,13 @@ public class IA
 {
     private IGameManagerService _gameManagerService;
     private CoroutineProxy _coroutineProxy;
+    private Coroutine _currentCoroutine;
     
     public IA(IGameManagerService gameManagerService, CoroutineProxy coroutineProxy)
     {
         _gameManagerService = gameManagerService;
         _coroutineProxy = coroutineProxy;
-        _coroutineProxy.StartCoroutine(Update());
+        _currentCoroutine = _coroutineProxy.StartCoroutine(Update());
     }
 
     IEnumerator Update()
@@ -27,6 +28,6 @@ public class IA
 
     public void Stop()
     {
-        _coroutineProxy.StopCoroutine(Update());
+        _coroutineProxy.StopCoroutine(_currentCoroutine);
     }
 }

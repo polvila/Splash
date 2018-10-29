@@ -11,12 +11,14 @@ public class BoardView : MonoBehaviour
     private Presenter<BoardView> _presenter;
     private CardView[] _cards;
     private DiContainer _container;
+    private bool _cardsArePlayable = true;
 
     [SerializeField] private TMP_Text _infoText;
     [SerializeField] private Transform[] _slots;
 
     [Header("Cards")] [SerializeField] private GameObject _cardPrefab;
     [SerializeField] private Transform _cardsParent;
+
     
     public Action<int> CardSelected;
 
@@ -59,14 +61,21 @@ public class BoardView : MonoBehaviour
         {
             card.gameObject.AddComponent<Button>().onClick.AddListener(() =>
             {
+                if (!_cardsArePlayable && !SROptions.Current.GodMode) return;
+                    
                 CardSelected?.Invoke(cardPosition);
             });
         }
     }
 
+    public void StopPlayableCards()
+    {
+        _cardsArePlayable = false;
+    }
+
     private CardView GetNewCardView(int number)
     {
-        GameObject instantiatedCard = _container.InstantiatePrefab(_cardPrefab, _cardsParent);
+        var instantiatedCard = _container.InstantiatePrefab(_cardPrefab, _cardsParent);
         var cardView = instantiatedCard.GetComponent<CardView>();
         cardView.Num = number;
         return cardView;
@@ -75,5 +84,9 @@ public class BoardView : MonoBehaviour
     private void OnDestroy()
     {
         _presenter?.Dispose();
+        foreach (var card in _cards)
+        {
+            card.GetComponent<Button>()?.onClick.RemoveAllListeners();
+        }
     }
 }

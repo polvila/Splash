@@ -14,6 +14,7 @@ public class GameManagerServiceMock : IGameManagerService
     private INumberGeneratorService _numberGeneratorService;
     private CoroutineProxy _coroutineProxy;
     private IDisposable _interval;
+    private IA _ia;
     
     public event Action<int[], int> NewGameReceived;
     public event Action<int, int, int?> CardUpdate;
@@ -50,11 +51,15 @@ public class GameManagerServiceMock : IGameManagerService
     {
         if (mode == Mode.IA)
         {
-            var ia = new IA(this, _coroutineProxy);
+            _ia = new IA(this, _coroutineProxy);
         }
         
         _interval = Observable.Interval(TimeSpan.FromSeconds(UpdateTimeMs))
-            .Subscribe(timeSpan => GameFinished?.Invoke(GetGameResult()));
+            .Subscribe(timeSpan =>
+            {
+                _ia.Stop();
+                GameFinished?.Invoke(GetGameResult());
+            });
     }
 
     public void PlayThisCard(int positionCardSelected)
