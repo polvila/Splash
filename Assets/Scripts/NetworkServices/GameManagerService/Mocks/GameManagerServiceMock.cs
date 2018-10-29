@@ -7,7 +7,7 @@ using Zenject;
 
 public class GameManagerServiceMock : IGameManagerService
 {
-    private static readonly int UpdateTimeMs = 5;
+    private static readonly int UpdateTimeMs = 120;
     private const int LeftPilePosition = 4;
     private const int RightPilePosition = 5;
     private GameStateModel _gameStateModel;
@@ -19,6 +19,7 @@ public class GameManagerServiceMock : IGameManagerService
     public event Action<int[], int> NewGameReceived;
     public event Action<int, int, int?> CardUpdate;
     public event Action<GameResult> GameFinished;
+    public event Action<bool> Splashed;
 
     [Inject]
     void Init(INumberGeneratorService numberGeneratorService, CoroutineProxy coroutineProxy)
@@ -88,6 +89,27 @@ public class GameManagerServiceMock : IGameManagerService
                 CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
             }
         }
+    }
+
+    public void Splash(bool fromIA = false)
+    {
+        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition]) return;
+        
+        if (fromIA)
+        {
+            _gameStateModel.EnemyCounter += 10;
+            Splashed?.Invoke(false);
+        }
+        else
+        {
+            _gameStateModel.HumanCounter += 10;
+            Splashed?.Invoke(true);
+        }
+    }
+
+    public void HumanSplash()
+    {
+        Splash();
     }
 
     private void MoveCardOnGameState(int selectedNum, int pilePosition, int positionCardSelected, 

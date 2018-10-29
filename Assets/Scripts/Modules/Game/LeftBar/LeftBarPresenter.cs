@@ -13,6 +13,7 @@ public class LeftBarPresenter : Presenter<LeftBarView>
         base.RegisterView(view);
         _gameManagerService.NewGameReceived += OnNewGameReceived;
         _gameManagerService.CardUpdate += OnCardUpdate;
+        _gameManagerService.Splashed += OnSplashed;
     }
     
     private void OnNewGameReceived(int[] numbers, int seconds)
@@ -35,5 +36,24 @@ public class LeftBarPresenter : Presenter<LeftBarView>
         {
             view.EnemyCounter++;
         }
+    }
+
+    private void OnSplashed(bool wasHuman)
+    {
+        if (wasHuman)
+        {
+            view.HumanCounter += 10;
+        }
+        else
+        {
+            view.EnemyCounter += 10;
+        }
+    }
+    
+    public override void Dispose()
+    {
+        _gameManagerService.NewGameReceived -= OnNewGameReceived;
+        _gameManagerService.CardUpdate -= OnCardUpdate;
+        _gameManagerService.Splashed -= OnSplashed;
     }
 }

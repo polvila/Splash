@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class IA
 {
-    private IGameManagerService _gameManagerService;
+    private GameManagerServiceMock _gameManagerService;
     private CoroutineProxy _coroutineProxy;
     private Coroutine _currentCoroutine;
     
-    public IA(IGameManagerService gameManagerService, CoroutineProxy coroutineProxy)
+    public IA(GameManagerServiceMock gameManagerService, CoroutineProxy coroutineProxy)
     {
         _gameManagerService = gameManagerService;
         _coroutineProxy = coroutineProxy;
@@ -23,6 +23,8 @@ public class IA
                 yield return new WaitForSeconds(1);
                 _gameManagerService.PlayThisCard(i);
             }
+            yield return new WaitForSeconds(0.5f);
+            _gameManagerService.Splash();
         }
     }
 

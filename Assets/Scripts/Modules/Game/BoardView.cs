@@ -15,11 +15,12 @@ public class BoardView : MonoBehaviour
 
     [SerializeField] private TMP_Text _infoText;
     [SerializeField] private Transform[] _slots;
+    [SerializeField] private Button SplashZone;
 
     [Header("Cards")] [SerializeField] private GameObject _cardPrefab;
     [SerializeField] private Transform _cardsParent;
 
-    
+    public Action SplashZoneSelected;
     public Action<int> CardSelected;
 
     [Inject]
@@ -31,6 +32,16 @@ public class BoardView : MonoBehaviour
         _cards = new CardView[10];
     
         _presenter.RegisterView(this);
+    }
+
+    private void Awake()
+    {
+        SplashZone.onClick.AddListener(() =>
+        {
+            if (!_cardsArePlayable && !SROptions.Current.GodMode) return;
+            
+            SplashZoneSelected?.Invoke();
+        });
     }
 
     public void SetInfo(string text)
@@ -88,5 +99,6 @@ public class BoardView : MonoBehaviour
         {
             card.GetComponent<Button>()?.onClick.RemoveAllListeners();
         }
+        SplashZone.onClick.RemoveAllListeners();
     }
 }

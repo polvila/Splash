@@ -13,7 +13,9 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.NewGameReceived += OnNewGameReceived;
         _gameManagerService.CardUpdate += OnCardUpdate;
         _gameManagerService.GameFinished += OnGameFinished;
-        view.CardSelected += cardPosition => _gameManagerService.PlayThisCard(cardPosition);
+        _gameManagerService.Splashed += OnSplashed;
+        view.CardSelected += _gameManagerService.PlayThisCard;
+        view.SplashZoneSelected += _gameManagerService.HumanSplash;
         _gameManagerService.Initialize();
     }
 
@@ -48,9 +50,27 @@ public class BoardPresenter : Presenter<BoardView>
         view.StopPlayableCards();
     }
 
+    private void OnSplashed(bool wasHuman)
+    {
+        if (wasHuman)
+        {
+            view.SetInfo("Splash!");
+        }
+        else
+        {
+            view.SetInfo("IA Splash!");
+        }
+    }
+
     public override void Dispose()
     {
         base.Dispose();
         _gameManagerService.NewGameReceived -= OnNewGameReceived;
+        _gameManagerService.CardUpdate -= OnCardUpdate;
+        _gameManagerService.GameFinished -= OnGameFinished;
+        _gameManagerService.Splashed -= OnSplashed;
+
+        view.CardSelected -= _gameManagerService.PlayThisCard;
+        view.SplashZoneSelected -= _gameManagerService.HumanSplash;
     }
 }
