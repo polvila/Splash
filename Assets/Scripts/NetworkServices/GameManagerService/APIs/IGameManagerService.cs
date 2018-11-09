@@ -13,7 +13,7 @@ public interface IGameManagerService
     event Action<int[], int> NewGameReceived;
     event Action<int, int, int?> CardUpdate;
     event Action<GameResult> GameFinished;
-    event Action<bool> Splashed;
+    event Action<bool, int, int> Splashed;
     
     void Initialize();
     void Start(Mode mode);

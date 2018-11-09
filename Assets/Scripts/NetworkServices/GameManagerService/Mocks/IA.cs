@@ -11,6 +11,10 @@ public class IA
     {
         _gameManagerService = gameManagerService;
         _coroutineProxy = coroutineProxy;
+    }
+
+    public void Start()
+    {
         _currentCoroutine = _coroutineProxy.StartCoroutine(Update());
     }
 

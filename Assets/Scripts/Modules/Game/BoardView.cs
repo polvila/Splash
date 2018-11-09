@@ -60,6 +60,11 @@ public class BoardView : MonoBehaviour
             Destroy(oldPileCard.gameObject);
         });
     }
+    
+    public void DestroyCard(int position)
+    {
+        Destroy(_cards[position].gameObject);        
+    }
 
     public virtual void AddNewCardTo(int cardPosition, int number)
     {

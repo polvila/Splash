@@ -38,7 +38,7 @@ public class LeftBarPresenter : Presenter<LeftBarView>
         }
     }
 
-    private void OnSplashed(bool wasHuman)
+    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber)
     {
         if (wasHuman)
         {
