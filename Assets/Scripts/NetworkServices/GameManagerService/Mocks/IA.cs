@@ -34,6 +34,7 @@ public class IA
 
     public void Stop()
     {
+        if(_currentCoroutine == null) return;
         _coroutineProxy.StopCoroutine(_currentCoroutine);
     }
 }

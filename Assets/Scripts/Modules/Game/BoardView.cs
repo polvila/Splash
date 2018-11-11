@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -12,6 +13,7 @@ public class BoardView : MonoBehaviour
     private CardView[] _cards;
     private DiContainer _container;
     private bool _cardsArePlayable = true;
+    private IDisposable _setInfoTimer;
 
     [SerializeField] private TMP_Text _infoText;
     [SerializeField] private Transform[] _slots;
@@ -26,7 +28,7 @@ public class BoardView : MonoBehaviour
     [Inject]
     void Init(Presenter<BoardView> presenter, DiContainer container)
     {
-        SetInfo("Loading...");
+        SetInfo("Loading...", false);
         _presenter = presenter;
         _container = container;
         _cards = new CardView[10];
@@ -44,9 +46,19 @@ public class BoardView : MonoBehaviour
         });
     }
 
-    public void SetInfo(string text)
+    public void SetInfo(string text, bool timed = true)
     {
         _infoText.text = text;
+        
+        if(text == "" || !timed) return;
+        
+        _setInfoTimer?.Dispose();
+        _setInfoTimer = Observable
+            .Timer(TimeSpan.FromSeconds(1))
+            .Subscribe(x =>
+            {
+                SetInfo("");
+            });
     }
 
     public void MoveCard(int from, int to)
@@ -99,9 +111,11 @@ public class BoardView : MonoBehaviour
 
     private void OnDestroy()
     {
+        _setInfoTimer?.Dispose();
         _presenter?.Dispose();
         foreach (var card in _cards)
         {
+            if(card == null) continue;
             card.GetComponent<Button>()?.onClick.RemoveAllListeners();
         }
         SplashZone.onClick.RemoveAllListeners();

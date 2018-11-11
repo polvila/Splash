@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -7,19 +8,23 @@ using Random = UnityEngine.Random;
 
 public class GameManagerServiceMock : IGameManagerService
 {
-    private static readonly int UpdateTimeMs = 120;
+    private static readonly int GameTimeSec = 120;
+    private static readonly int BlockedTimeSec = 4;
+    
     private const int LeftPilePosition = 4;
     private const int RightPilePosition = 5;
     private GameStateModel _gameStateModel;
     private INumberGeneratorService _numberGeneratorService;
     private CoroutineProxy _coroutineProxy;
-    private IDisposable _interval;
+    private IDisposable _gameTime;
+    private IDisposable _blockedTime;
     private IA _ia;
     
     public event Action<int[], int> NewGameReceived;
     public event Action<int, int, int?> CardUpdate;
     public event Action<GameResult> GameFinished;
     public event Action<bool, int, int> Splashed;
+    public event Action<int, int> Unblocked;
 
     [Inject]
     void Init(INumberGeneratorService numberGeneratorService, CoroutineProxy coroutineProxy)
@@ -39,7 +44,7 @@ public class GameManagerServiceMock : IGameManagerService
         _gameStateModel.EnemyCounter = 0;
         _gameStateModel.HumanCounter = 0;
         
-        _coroutineProxy.StartCoroutine(DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers, UpdateTimeMs)));
+        _coroutineProxy.StartCoroutine(DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers, GameTimeSec)));
     }
 
     private IEnumerator DelayedCallback(int seconds, Action callback)
@@ -56,7 +61,8 @@ public class GameManagerServiceMock : IGameManagerService
             _ia.Start();
         }
         
-        _interval = Observable.Interval(TimeSpan.FromSeconds(UpdateTimeMs))
+        _gameTime?.Dispose();
+        _gameTime = Observable.Timer(TimeSpan.FromSeconds(GameTimeSec))
             .Subscribe(timeSpan =>
             {
                 _ia.Stop();
@@ -90,37 +96,48 @@ public class GameManagerServiceMock : IGameManagerService
                 CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
             }
         }
-        
-        if (IsGameBlocked())
-        {
-            //TODO: Unblock the game after X seconds
-        }
     }
 
     public void Splash(bool fromIA = false)
     {
         if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition]) return;
         
-        int newLeftNumber = _numberGeneratorService.GetNumber();
-        int newRightNumber = _numberGeneratorService.GetNumber();
-        _gameStateModel.Numbers[LeftPilePosition] = newLeftNumber;
-        _gameStateModel.Numbers[RightPilePosition] = newRightNumber;
+        _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
+        _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
         
         if (fromIA)
         {
             _gameStateModel.EnemyCounter += 10;
-            Splashed?.Invoke(false, newLeftNumber, newRightNumber);
+            Splashed?.Invoke(false, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
         }
         else
         {
             _gameStateModel.HumanCounter += 10;
-            Splashed?.Invoke(true, newLeftNumber, newRightNumber);
+            Splashed?.Invoke(true, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
         }
 
         if (IsGameBlocked())
         {
-            //TODO: Unblock the game after X seconds
+            UnblockIn(BlockedTimeSec);
         }
+    }
+
+    private void UnblockIn(int seconds)
+    {
+        _blockedTime?.Dispose();
+        _blockedTime = Observable.Timer(TimeSpan.FromSeconds(seconds))
+            .Subscribe(timeSpan =>
+            {
+                _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
+                _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
+                Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
+                    _gameStateModel.Numbers[RightPilePosition]);
+                
+                if (IsGameBlocked())
+                {
+                    UnblockIn(BlockedTimeSec);
+                }
+            });
     }
 
     public void HumanSplash()
@@ -144,6 +161,11 @@ public class GameManagerServiceMock : IGameManagerService
         }
         
         destinationCallback?.Invoke(positionCardSelected, pilePosition, newNumber); 
+        
+        if (IsGameBlocked())
+        {
+            UnblockIn(BlockedTimeSec);
+        }
     }
     
     private bool IsACompatibleMove(int originNum, int destinationNum)
@@ -158,7 +180,8 @@ public class GameManagerServiceMock : IGameManagerService
     
     private GameResult GetGameResult()
     {
-        _interval.Dispose();
+        _blockedTime?.Dispose();
+        _gameTime.Dispose();
         
         if (_gameStateModel.EnemyCounter < _gameStateModel.HumanCounter)
         {
@@ -184,10 +207,10 @@ public class GameManagerServiceMock : IGameManagerService
                 IsACompatibleMove(_gameStateModel.Numbers[RightPilePosition + 1 + i], 
                     _gameStateModel.Numbers[RightPilePosition]))
             {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }

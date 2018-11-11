@@ -20,6 +20,7 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.CardUpdate += OnCardUpdate;
         _gameManagerService.GameFinished += OnGameFinished;
         _gameManagerService.Splashed += OnSplashed;
+        _gameManagerService.Unblocked += OnUnblocked;
         view.CardSelected += _gameManagerService.PlayThisCard;
         view.SplashZoneSelected += _gameManagerService.HumanSplash;
         _gameManagerService.Initialize();
@@ -54,18 +55,23 @@ public class BoardPresenter : Presenter<BoardView>
     private void OnGameFinished(GameResult result)
     {
         view.StopPlayableCards();
+        view.SetInfo("");
     }
 
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber)
     {
         view.SetInfo(wasHuman ? "Splash!" : "IA Splash!");
-        Observable
-            .Timer(TimeSpan.FromSeconds(1))
-            .Subscribe(x =>
-            {
-                view.SetInfo("");
-            });
+        UpdatePiles(newLeftNumber, newRightNumber);
+    }
 
+    private void OnUnblocked(int newLeftNumber, int newRightNumber)
+    {
+        view.SetInfo("Unblocked");
+        UpdatePiles(newLeftNumber, newRightNumber);
+    }
+
+    private void UpdatePiles(int newLeftNumber, int newRightNumber)
+    {
         view.DestroyCard(LeftPilePosition);
         view.DestroyCard(RightPilePosition);
         view.AddNewCardTo(LeftPilePosition, newLeftNumber);
@@ -79,6 +85,7 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.CardUpdate -= OnCardUpdate;
         _gameManagerService.GameFinished -= OnGameFinished;
         _gameManagerService.Splashed -= OnSplashed;
+        _gameManagerService.Unblocked += OnUnblocked;
 
         view.CardSelected -= _gameManagerService.PlayThisCard;
         view.SplashZoneSelected -= _gameManagerService.HumanSplash;
