@@ -86,6 +86,8 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.GameFinished -= OnGameFinished;
         _gameManagerService.Splashed -= OnSplashed;
         _gameManagerService.Unblocked += OnUnblocked;
+        
+        _gameManagerService.Exit();
 
         view.CardSelected -= _gameManagerService.PlayThisCard;
         view.SplashZoneSelected -= _gameManagerService.HumanSplash;

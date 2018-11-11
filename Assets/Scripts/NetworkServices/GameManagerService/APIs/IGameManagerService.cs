@@ -20,4 +20,5 @@ public interface IGameManagerService
     void Start(Mode mode);
     void PlayThisCard(int positionCardSelected);
     void HumanSplash();
+    void Exit();
 }

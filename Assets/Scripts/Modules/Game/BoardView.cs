@@ -75,7 +75,7 @@ public class BoardView : MonoBehaviour
     
     public void DestroyCard(int position)
     {
-        Destroy(_cards[position].gameObject);        
+        Destroy(_cards[position]?.gameObject);        
     }
 
     public virtual void AddNewCardTo(int cardPosition, int number)

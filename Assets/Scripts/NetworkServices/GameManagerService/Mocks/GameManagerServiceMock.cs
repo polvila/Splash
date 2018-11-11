@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -143,6 +143,12 @@ public class GameManagerServiceMock : IGameManagerService
     public void HumanSplash()
     {
         Splash();
+    }
+
+    public void Exit()
+    {
+        _gameTime?.Dispose();
+        _blockedTime?.Dispose();
     }
 
     private void MoveCardOnGameState(int selectedNum, int pilePosition, int positionCardSelected, 
