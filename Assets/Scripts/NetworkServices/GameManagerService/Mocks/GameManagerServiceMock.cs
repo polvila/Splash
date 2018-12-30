@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -100,7 +99,7 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void Splash(bool fromIA = false)
     {
-        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition]) return;
+        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] && fromIA) return;
         
         _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
         _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
@@ -115,9 +114,12 @@ public class GameManagerServiceMock : IGameManagerService
             _gameStateModel.HumanCounter += 10;
             Splashed?.Invoke(true, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
         }
+        Debug.Log(fromIA ? "IA Splash!"  : "Splash!");
+        Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" + _gameStateModel.Numbers[RightPilePosition]);
 
         if (IsGameBlocked())
         {
+            Debug.Log("Unblock by splash " + (fromIA ? " from IA " : "from human"));
             UnblockIn(BlockedTimeSec);
         }
     }
@@ -132,9 +134,12 @@ public class GameManagerServiceMock : IGameManagerService
                 _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
                 Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
                     _gameStateModel.Numbers[RightPilePosition]);
+                Debug.Log("Unblocked");
+                Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" + _gameStateModel.Numbers[RightPilePosition]);
                 
                 if (IsGameBlocked())
                 {
+                    Debug.Log("Unblock by unblock");
                     UnblockIn(BlockedTimeSec);
                 }
             });
@@ -154,6 +159,9 @@ public class GameManagerServiceMock : IGameManagerService
     private void MoveCardOnGameState(int selectedNum, int pilePosition, int positionCardSelected, 
         Action<int, int, int?> destinationCallback)
     {
+        string log = "Move card " + selectedNum + ":" + positionCardSelected +
+                     " to " + _gameStateModel.Numbers[pilePosition] + ":" + pilePosition;
+        
         int newNumber = _numberGeneratorService.GetNumber();
         _gameStateModel.Numbers[pilePosition] = selectedNum;
         _gameStateModel.Numbers[positionCardSelected] = newNumber;
@@ -166,10 +174,15 @@ public class GameManagerServiceMock : IGameManagerService
             _gameStateModel.EnemyCounter++;
         }
         
+        Debug.Log(log + " -> " +
+                  _gameStateModel.Numbers[LeftPilePosition] + " " + 
+                  _gameStateModel.Numbers[RightPilePosition]);
+
         destinationCallback?.Invoke(positionCardSelected, pilePosition, newNumber); 
         
         if (IsGameBlocked())
         {
+            Debug.Log("Unblock by move card");
             UnblockIn(BlockedTimeSec);
         }
     }
@@ -204,14 +217,17 @@ public class GameManagerServiceMock : IGameManagerService
 
     private bool IsGameBlocked()
     {
+        int firstHumanPosition = RightPilePosition + 1;
         for (int i = 0; i < LeftPilePosition; ++i)
         {
             if (IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[LeftPilePosition]) || 
                 IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[RightPilePosition]) ||
-                IsACompatibleMove(_gameStateModel.Numbers[RightPilePosition + 1 + i], 
+                IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i], 
                     _gameStateModel.Numbers[LeftPilePosition]) ||
-                IsACompatibleMove(_gameStateModel.Numbers[RightPilePosition + 1 + i], 
-                    _gameStateModel.Numbers[RightPilePosition]))
+                IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i], 
+                    _gameStateModel.Numbers[RightPilePosition]) ||
+                    _gameStateModel.Numbers[LeftPilePosition] == _gameStateModel.Numbers[RightPilePosition]
+                )
             {
                 return false;
             }

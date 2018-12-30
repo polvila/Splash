@@ -1,6 +1,3 @@
-using System;
-using UniRx;
-
 public class BoardPresenter : Presenter<BoardView>
 {
     private const int LeftPilePosition = 4;
