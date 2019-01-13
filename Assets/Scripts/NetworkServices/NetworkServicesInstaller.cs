@@ -18,5 +18,7 @@ public class NetworkServicesInstaller : MonoInstaller
 
         Container.Bind<IGameManagerService>().To<GameManagerServiceMock>()
             .AsSingle();
+
+        Container.Bind<IAuthenticationService>().To<AuthenticationService>().AsSingle();
     }
 }

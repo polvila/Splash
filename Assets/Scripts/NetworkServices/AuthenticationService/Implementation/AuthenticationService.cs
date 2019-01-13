@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class AuthenticationService
+public class AuthenticationService : IAuthenticationService
 {
     public void DeviceAuthentication(Action onComplete)
     {
