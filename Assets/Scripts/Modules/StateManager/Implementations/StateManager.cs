@@ -21,11 +21,15 @@ public class StateManager : MonoBehaviour, IStateManager
 	{
 		_gameCanvasInstances = new GameObject[_gameCanvas.Length];
 		
-		GS.GameSparksAvailable += (isAvailable) => {
-			if(isAvailable){
+		GS.GameSparksAvailable += (isAvailable) =>
+		{
+			if(isAvailable)
+			{
 				Debug.Log("GameSparks Connected...");
-				_mainFsm.enabled = true;	
-			}else{
+				MoveToNextState();
+			}
+			else
+			{
 				Debug.Log("GameSparks Disconnected...");
 			}
 		};
@@ -68,5 +72,10 @@ public class StateManager : MonoBehaviour, IStateManager
 	public void MoveToNextState()
 	{
 		_mainFsm.SendEvent("next");
+	}
+
+	public void TriggerEvent(string eventKey)
+	{
+		_mainFsm.SendEvent(eventKey);
 	}
 }

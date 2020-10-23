@@ -9,10 +9,10 @@ public partial class SROptions {
 		set;
 	}
 	
-	[DisplayName("Reset Scene")]
-	public void ResetScene() 
+	[DisplayName("Main Menu")]
+	public void MainMenu() 
 	{
-		SceneManager.LoadScene("Main");
+		GetContainer().Resolve<IStateManager>().TriggerEvent(States.MAIN_MENU);
 	}
 	
 	[DisplayName("End Game")]
