@@ -12,6 +12,7 @@
 #endif
 
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -62,14 +63,14 @@ namespace HutongGames.PlayMaker.Actions
 		#if UNITY_2017_2_OR_NEWER
 		#pragma warning disable CS0618 
         #endif
-        protected GUIText guiText
+        protected Text guiText
         {
-            get { return cachedComponent as GUIText; }
+            get { return cachedComponent as Text; }
         }
 
-        protected GUITexture guiTexture
+        protected RawImage guiTexture
         {
-            get { return cachedComponent as GUITexture; }
+            get { return cachedComponent as RawImage; }
         }
         #if UNITY_2017_2_OR_NEWER
         #pragma warning restore CS0618 

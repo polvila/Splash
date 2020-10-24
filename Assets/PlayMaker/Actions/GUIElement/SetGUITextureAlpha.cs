@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -11,7 +12,7 @@ namespace HutongGames.PlayMaker.Actions
 	#pragma warning disable CS0618  
 	[Obsolete("GUITexture is part of the legacy UI system and will be removed in a future release")]
 	#endif
-	public class SetGUITextureAlpha : ComponentAction<GUITexture>
+	public class SetGUITextureAlpha : ComponentAction<Image>
 	{
 		[RequiredField]
 		[CheckForComponent(typeof(GUITexture))]

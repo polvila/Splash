@@ -2,6 +2,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -11,7 +12,7 @@ namespace HutongGames.PlayMaker.Actions
 	#pragma warning disable CS0618  
 	[Obsolete("GUIText is part of the legacy UI system and will be removed in a future release")]
 	#endif
-	public class SetGUIText : ComponentAction<GUIText>
+	public class SetGUIText : ComponentAction<Text>
 	{
 		[RequiredField]
 		[CheckForComponent(typeof(GUIText))]

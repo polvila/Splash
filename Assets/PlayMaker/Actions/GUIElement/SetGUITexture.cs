@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -11,10 +12,10 @@ namespace HutongGames.PlayMaker.Actions
 	#pragma warning disable CS0618  
 	[Obsolete("GUITexture is part of the legacy UI system and will be removed in a future release")]
 	#endif
-	public class SetGUITexture : ComponentAction<GUITexture>
+	public class SetGUITexture : ComponentAction<RawImage>
 	{
 		[RequiredField]
-		[CheckForComponent(typeof(GUITexture))]
+		[CheckForComponent(typeof(RawImage))]
 		[Tooltip("The GameObject that owns the GUITexture.")]
         public FsmOwnerDefault gameObject;
 
