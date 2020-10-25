@@ -141,23 +141,23 @@ namespace HutongGames.PlayMakerEditor
                 Debug.Log("Repaint");
             }*/
 
-            if (Event.current.type == EventType.ValidateCommand)
+            if (UnityEngine.Event.current.type == EventType.ValidateCommand)
             {
-                switch (Event.current.commandName)
+                switch (UnityEngine.Event.current.commandName)
                 {
                     case "UndoRedoPerformed":
                     case "Cut":
                     case "Copy":
                     case "Paste":
                     case "SelectAll":
-                        Event.current.Use();
+                        UnityEngine.Event.current.Use();
                         break;
                 }
             }
 
-            if (Event.current.type == EventType.ExecuteCommand)
+            if (UnityEngine.Event.current.type == EventType.ExecuteCommand)
             {
-                switch (Event.current.commandName)
+                switch (UnityEngine.Event.current.commandName)
                 {
                     /* replaced with Undo.undoRedoPerformed callback added in Unity 4.3
                     case "UndoRedoPerformed":

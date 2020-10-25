@@ -12,7 +12,7 @@ public partial class SROptions {
 	[DisplayName("Main Menu")]
 	public void MainMenu() 
 	{
-		GetContainer().Resolve<IStateManager>().TriggerEvent(States.MAIN_MENU);
+		GetContainer().Resolve<IStateManager>().TriggerEvent(Event.SHOW_MAIN_MENU);
 	}
 	
 	[DisplayName("End Game")]

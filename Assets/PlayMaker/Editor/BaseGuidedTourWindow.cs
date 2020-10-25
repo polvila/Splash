@@ -122,8 +122,8 @@ namespace HutongGames.PlayMakerEditor
 
             // mouse event not used by other UI 
             // so must have clicked on empty area
-            if (Event.current.type == EventType.MouseDown && 
-                Event.current.mousePosition.y < position.height - helpHeight)
+            if (UnityEngine.Event.current.type == EventType.MouseDown && 
+                UnityEngine.Event.current.mousePosition.y < position.height - helpHeight)
             {
                 ClearHighlight();
             }
@@ -135,7 +135,7 @@ namespace HutongGames.PlayMakerEditor
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-            if (Event.current.type == EventType.Layout)
+            if (UnityEngine.Event.current.type == EventType.Layout)
             {
                 guidedTour.UpdateTopicTree();
             }
@@ -205,7 +205,7 @@ namespace HutongGames.PlayMakerEditor
 
         protected void HandleKeyboardInput()
         {
-            switch (Event.current.keyCode)
+            switch (UnityEngine.Event.current.keyCode)
             {
                 case KeyCode.Escape:
                     ClearHighlight();
@@ -254,7 +254,7 @@ namespace HutongGames.PlayMakerEditor
 
             // Store selectedRect for auto scroll
 
-            if (isSelected && Event.current.type == EventType.Repaint)
+            if (isSelected && UnityEngine.Event.current.type == EventType.Repaint)
             {
                 selectedRect = GUILayoutUtility.GetLastRect();
                 selectedRect.y -= scrollPosition.y + 20;
@@ -268,7 +268,7 @@ namespace HutongGames.PlayMakerEditor
             // Should be called right after GUILayout.EndScrollView();
             // Set autoScroll = true
 
-            if (Event.current.type == EventType.Repaint)
+            if (UnityEngine.Event.current.type == EventType.Repaint)
             {
                 //Debug.Log("AutoScroll");
 
