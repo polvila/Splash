@@ -121,6 +121,182 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &752221591
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3146919800238924161, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 952202791}
+    - target: {fileID: 3445264249801934480, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_Name
+      value: LoadingCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3445264249801934480, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371522738156378364, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371522738156378364, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371522738156378364, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371522738156378364, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d3b072a678fd95f4087631782bfa3bba, type: 3}
+--- !u!114 &752221592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 992857169110073146, guid: d3b072a678fd95f4087631782bfa3bba,
+    type: 3}
+  m_PrefabInstance: {fileID: 752221591}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3318f19898694cfaa8cbb23c1600ef35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &760545031
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +311,7 @@ GameObject:
   - component: {fileID: 760545035}
   - component: {fileID: 760545036}
   - component: {fileID: 760545037}
+  - component: {fileID: 760545038}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -173,6 +350,7 @@ MonoBehaviour:
   - {fileID: 760545035}
   - {fileID: 760545036}
   - {fileID: 760545037}
+  - {fileID: 760545038}
   _installerPrefabs: []
   _scriptableObjectInstallers: []
   _autoRun: 1
@@ -230,6 +408,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stateManager: {fileID: 2096037770}
+--- !u!114 &760545038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760545031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fade4662642d45cba0230f583b461e9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spinner: {fileID: 752221592}
+  _screens:
+  - {fileID: 8470520886826039732, guid: 2e1b6528a58a7a64e810ca8263b09518, type: 3}
+  _sceneContext: {fileID: 760545033}
+  _parent: {fileID: 0}
+  _worldPositionStays: 0
+  _renderCamera: {fileID: 952202791}
 --- !u!1 &952202790
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,6 +535,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3633998384086078183, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4371522738156378364, guid: d3b072a678fd95f4087631782bfa3bba,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -395,26 +597,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
         type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
-        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -462,6 +644,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794830291163103052, guid: d3b072a678fd95f4087631782bfa3bba,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3b072a678fd95f4087631782bfa3bba, type: 3}
@@ -682,7 +884,7 @@ MonoBehaviour:
     dataVersion: 2
     usedInTemplate: {fileID: 0}
     name: MainFSM
-    startState: Bootstrap
+    startState: Init
     states:
     - name: Bootstrap
       description: 
@@ -690,7 +892,7 @@ MonoBehaviour:
       position:
         serializedVersion: 2
         x: 86.921875
-        y: 180.63281
+        y: 164.63281
         width: 142
         height: 32
       isBreakpoint: 0
@@ -708,22 +910,18 @@ MonoBehaviour:
       actionData:
         actionNames:
         - HutongGames.PlayMaker.Actions.CallMethod
-        - HutongGames.PlayMaker.Actions.RunFSM
         customNames:
         - 
-        - 
-        actionEnabled: 0101
-        actionIsOpen: 0101
-        actionStartIndex: 0000000006000000
-        actionHashCodes: ca51e900fe058700
+        actionEnabled: 01
+        actionIsOpen: 01
+        actionStartIndex: 00000000
+        actionHashCodes: ca51e900
         unityObjectParams: []
         fsmGameObjectParams: []
         fsmOwnerDefaultParams: []
         animationCurveParams: []
         functionCallParams: []
-        fsmTemplateControlParams:
-        - fsmTemplate: {fileID: 0}
-          fsmVarOverrides: []
+        fsmTemplateControlParams: []
         fsmEventTargetParams: []
         fsmPropertyParams: []
         layoutOptionParams: []
@@ -770,28 +968,21 @@ MonoBehaviour:
         fsmArrayParams: []
         fsmEnumParams: []
         fsmFloatParams: []
-        fsmIntParams:
-        - useVariable: 0
-          name: 
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: 0
+        fsmIntParams: []
         fsmBoolParams: []
         fsmVector2Params: []
         fsmVector3Params: []
         fsmColorParams: []
         fsmRectParams: []
         fsmQuaternionParams: []
-        stringParams:
-        - 
+        stringParams: []
         byteData: 0000
         arrayParamSizes: 00000000
         arrayParamTypes:
         - HutongGames.PlayMaker.FsmVar
         customTypeSizes: 
         customTypeNames: []
-        paramDataType: 18000000120000000c000000270000000100000001000000260000001000000017000000
+        paramDataType: 18000000120000000c000000270000000100000001000000
         paramName:
         - behaviour
         - methodName
@@ -799,18 +990,15 @@ MonoBehaviour:
         - storeResult
         - everyFrame
         - manualUI
-        - fsmTemplateControl
-        - storeID
-        - finishEvent
-        paramDataPos: 000000000000000000000000000000000000000001000000000000000000000000000000
-        paramByteDataSize: 000000000000000000000000000000000100000001000000000000000000000000000000
+        paramDataPos: 000000000000000000000000000000000000000001000000
+        paramByteDataSize: 000000000000000000000000000000000100000001000000
     - name: MainMenu
       description: 
       colorIndex: 0
       position:
         serializedVersion: 2
         x: 83.234375
-        y: 251.74219
+        y: 235.74219
         width: 102.8
         height: 32
       isBreakpoint: 0
@@ -916,7 +1104,7 @@ MonoBehaviour:
       position:
         serializedVersion: 2
         x: 54.234375
-        y: 325.7422
+        y: 309.7422
         width: 112.4
         height: 32
       isBreakpoint: 0
@@ -1022,7 +1210,7 @@ MonoBehaviour:
       position:
         serializedVersion: 2
         x: 284.23438
-        y: 284.7422
+        y: 268.7422
         width: 142
         height: 32
       isBreakpoint: 0
@@ -1122,6 +1310,66 @@ MonoBehaviour:
         - manualUI
         paramDataPos: 000000000000000000000000000000000000000001000000
         paramByteDataSize: 000000000000000000000000000000000100000001000000
+    - name: Init
+      description: 
+      colorIndex: 0
+      position:
+        serializedVersion: 2
+        x: 113
+        y: 108
+        width: 148.4
+        height: 32
+      isBreakpoint: 0
+      isSequence: 0
+      hideUnused: 0
+      transitions:
+      - fsmEvent:
+          name: START BOOTSTRAP
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: Bootstrap
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
+      actionData:
+        actionNames: []
+        customNames: []
+        actionEnabled: 
+        actionIsOpen: 
+        actionStartIndex: 
+        actionHashCodes: 
+        unityObjectParams: []
+        fsmGameObjectParams: []
+        fsmOwnerDefaultParams: []
+        animationCurveParams: []
+        functionCallParams: []
+        fsmTemplateControlParams: []
+        fsmEventTargetParams: []
+        fsmPropertyParams: []
+        layoutOptionParams: []
+        fsmStringParams: []
+        fsmObjectParams: []
+        fsmVarParams: []
+        fsmArrayParams: []
+        fsmEnumParams: []
+        fsmFloatParams: []
+        fsmIntParams: []
+        fsmBoolParams: []
+        fsmVector2Params: []
+        fsmVector3Params: []
+        fsmColorParams: []
+        fsmRectParams: []
+        fsmQuaternionParams: []
+        stringParams: []
+        byteData: 
+        arrayParamSizes: 
+        arrayParamTypes: []
+        customTypeSizes: 
+        customTypeNames: []
+        paramDataType: 
+        paramName: []
+        paramDataPos: 
+        paramByteDataSize: 
     events:
     - name: LOAD GAME
       isSystemEvent: 0
@@ -1132,7 +1380,7 @@ MonoBehaviour:
     - name: SHOW MAIN MENU
       isSystemEvent: 0
       isGlobal: 1
-    - name: START BOOSTRAP
+    - name: START BOOTSTRAP
       isSystemEvent: 0
       isGlobal: 0
     globalTransitions: []
@@ -1215,10 +1463,6 @@ MonoBehaviour:
   _mainMenuCanvas: {fileID: 8470520886826039732, guid: 2e1b6528a58a7a64e810ca8263b09518,
     type: 3}
   _titleCanvas: {fileID: 1128354470691460979}
-  _loadingCanvas: {fileID: 3445264249801934480, guid: d3b072a678fd95f4087631782bfa3bba,
-    type: 3}
-  _gameLoadingCanvas: {fileID: 1004630043112878, guid: 8702526080ddd4840931a2c69d1afbc3,
-    type: 3}
   _gameCanvas:
   - {fileID: 1930709413304466, guid: ab390c3c6312df249b548d10bf530f88, type: 3}
   - {fileID: 1779888771035788, guid: 6805ba380ed21694e8853f90fa39439b, type: 3}

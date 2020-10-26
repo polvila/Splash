@@ -1,5 +1,4 @@
-﻿using GameSparks.Core;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 public class MainMenuView : MonoBehaviour

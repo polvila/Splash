@@ -1,11 +1,16 @@
 using UnityEngine;
 using Zenject;
 
-public class StateManagerInstaller : MonoInstaller<StateManagerInstaller>
+namespace Core.StateManager
 {
-    [SerializeField] private StateManager _stateManager;
-    public override void InstallBindings()
+    public class StateManagerInstaller : MonoInstaller<StateManagerInstaller>
     {
-        Container.Bind<IStateManager>().FromInstance(_stateManager).AsSingle();
+        [SerializeField] private global::StateManager _stateManager;
+
+        public override void InstallBindings()
+        {
+            //Container.Bind<IStateManager>().FromInstance(_stateManager).AsSingle();
+            Container.BindInterfacesTo<global::StateManager>().FromInstance(_stateManager).AsSingle();
+        }
     }
 }
