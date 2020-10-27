@@ -43,7 +43,8 @@ public class GameManagerServiceMock : IGameManagerService
         _gameStateModel.EnemyCounter = 0;
         _gameStateModel.HumanCounter = 0;
         
-        _coroutineProxy.StartCoroutine(DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers, GameTimeSec)));
+        _coroutineProxy.StartCoroutine(
+            DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers, GameTimeSec)));
     }
 
     private IEnumerator DelayedCallback(int seconds, Action callback)

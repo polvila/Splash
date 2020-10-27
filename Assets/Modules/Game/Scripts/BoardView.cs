@@ -8,15 +8,18 @@ using Zenject;
 public class BoardView : MonoBehaviour
 {
     private const int FirstPositionHumanCards = 6;
-
+    private const int LeftMiddlePositionCard = 4;
+    private const int RightMiddlePositionCard = 5;
+    
     private Presenter<BoardView> _presenter;
     private CardView[] _cards;
     private DiContainer _container;
     private bool _cardsArePlayable = true;
     private IDisposable _setInfoTimer;
+    private Transform[] _slots;
 
     [SerializeField] private TMP_Text _infoText;
-    [SerializeField] private Transform[] _slots;
+    [SerializeField] private Transform[] _slotContainers;
     [SerializeField] private Button SplashZone;
 
     [Header("Cards")] [SerializeField] private GameObject _cardPrefab;
@@ -28,10 +31,20 @@ public class BoardView : MonoBehaviour
     [Inject]
     void Init(Presenter<BoardView> presenter, DiContainer container)
     {
-        SetInfo("Loading...", false);
         _presenter = presenter;
         _container = container;
         _cards = new CardView[10];
+        _slots = new Transform[10];
+        
+        foreach (var _slotContainer in _slotContainers)
+        {
+            var i = 0;
+            foreach (Transform slot in _slotContainer)
+            {
+                _slots[i] = slot;
+                ++i;
+            }
+        }
     
         _presenter.RegisterView(this);
     }
@@ -85,6 +98,7 @@ public class BoardView : MonoBehaviour
         card.transform.SetAsFirstSibling();
         card.Index = cardPosition;
         _cards[cardPosition] = card;
+
         if (cardPosition >= FirstPositionHumanCards)
         {
             card.gameObject.AddComponent<Button>().onClick.AddListener(() =>

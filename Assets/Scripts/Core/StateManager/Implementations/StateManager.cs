@@ -4,13 +4,7 @@ using Zenject;
 public class StateManager : MonoBehaviour, IStateManager, IInitializable
 {
     [SerializeField] private PlayMakerFSM _mainFsm;
-    [SerializeField] private GameObject _mainMenuCanvas;
     [SerializeField] private GameObject _titleCanvas;
-    [SerializeField] private GameObject[] _gameCanvas;
-    [SerializeField] private SceneContext _sceneContext;
-
-    private GameObject _gameLoadingCanvasInstance;
-    private GameObject[] _gameCanvasInstances;
 
     private IAuthenticationService _authenticationService;
     private IScreenManager _screenManager;
@@ -29,11 +23,6 @@ public class StateManager : MonoBehaviour, IStateManager, IInitializable
         TriggerEvent(Event.START_BOOTSTRAP);
     }
 
-    private void Start()
-    {
-        _gameCanvasInstances = new GameObject[_gameCanvas.Length];
-    }
-
     public void OnBoostrap()
     {
         _authenticationService.InitService(() =>
@@ -49,28 +38,11 @@ public class StateManager : MonoBehaviour, IStateManager, IInitializable
     public void OnMainMenu()
     {
         _screenManager.ShowScreen("MainMenuScreen");
-        _sceneContext.Container.InstantiatePrefab(_mainMenuCanvas);
-
-        foreach (var gameCanvasInstance in _gameCanvasInstances)
-        {
-            Destroy(gameCanvasInstance);
-        }
-    }
-
-    public void OnLoadingGame()
-    {
-        _screenManager.ShowSpinner();
-        //TODO: Move to next state once I find a match using GS
-        TriggerEvent(Event.SHOW_GAME);
     }
 
     public void OnGame()
     {
-        _screenManager.HideSpinner();
-        for (int i = 0; i < _gameCanvas.Length; ++i)
-        {
-            _gameCanvasInstances[i] = _sceneContext.Container.InstantiatePrefab(_gameCanvas[i]);
-        }
+        _screenManager.ShowScreen("GameScreen");
     }
 
     public void TriggerEvent(string eventKey)

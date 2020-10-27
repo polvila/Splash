@@ -423,6 +423,7 @@ MonoBehaviour:
   _spinner: {fileID: 752221592}
   _screens:
   - {fileID: 8470520886826039732, guid: 2e1b6528a58a7a64e810ca8263b09518, type: 3}
+  - {fileID: 1930709413304466, guid: ab390c3c6312df249b548d10bf530f88, type: 3}
   _sceneContext: {fileID: 760545033}
   _parent: {fileID: 0}
   _worldPositionStays: 0
@@ -891,7 +892,7 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 86.921875
+        x: 54.921875
         y: 164.63281
         width: 142
         height: 32
@@ -997,19 +998,19 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 83.234375
+        x: 51.234375
         y: 235.74219
-        width: 102.8
+        width: 106.8
         height: 32
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
       transitions:
       - fsmEvent:
-          name: LOAD GAME
+          name: SHOW GAME
           isSystemEvent: 0
           isGlobal: 0
-        toState: LoadingGame
+        toState: Game
         linkStyle: 0
         linkConstraint: 0
         colorIndex: 0
@@ -1098,119 +1099,13 @@ MonoBehaviour:
         - manualUI
         paramDataPos: 000000000000000000000000000000000000000001000000
         paramByteDataSize: 000000000000000000000000000000000100000001000000
-    - name: LoadingGame
-      description: 
-      colorIndex: 0
-      position:
-        serializedVersion: 2
-        x: 54.234375
-        y: 309.7422
-        width: 112.4
-        height: 32
-      isBreakpoint: 0
-      isSequence: 0
-      hideUnused: 0
-      transitions:
-      - fsmEvent:
-          name: SHOW GAME
-          isSystemEvent: 0
-          isGlobal: 0
-        toState: Game
-        linkStyle: 0
-        linkConstraint: 0
-        colorIndex: 0
-      actionData:
-        actionNames:
-        - HutongGames.PlayMaker.Actions.CallMethod
-        customNames:
-        - 
-        actionEnabled: 01
-        actionIsOpen: 01
-        actionStartIndex: 00000000
-        actionHashCodes: ca51e900
-        unityObjectParams: []
-        fsmGameObjectParams: []
-        fsmOwnerDefaultParams: []
-        animationCurveParams: []
-        functionCallParams: []
-        fsmTemplateControlParams: []
-        fsmEventTargetParams: []
-        fsmPropertyParams: []
-        layoutOptionParams: []
-        fsmStringParams:
-        - useVariable: 0
-          name: 
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: OnLoadingGame
-        fsmObjectParams:
-        - useVariable: 0
-          name: 
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          typeName: StateManager
-          value: {fileID: 2096037770}
-        fsmVarParams:
-        - variableName: 
-          objectType: 
-          useVariable: 0
-          type: -1
-          floatValue: 0
-          intValue: 0
-          boolValue: 0
-          stringValue: 
-          vector4Value: {x: 0, y: 0, z: 0, w: 0}
-          objectReference: {fileID: 0}
-          arrayValue:
-            useVariable: 0
-            name: 
-            tooltip: 
-            showInInspector: 0
-            networkSync: 0
-            type: -1
-            objectTypeName: 
-            floatValues: []
-            intValues: 
-            boolValues: 
-            stringValues: []
-            vector4Values: []
-            objectReferences: []
-        fsmArrayParams: []
-        fsmEnumParams: []
-        fsmFloatParams: []
-        fsmIntParams: []
-        fsmBoolParams: []
-        fsmVector2Params: []
-        fsmVector3Params: []
-        fsmColorParams: []
-        fsmRectParams: []
-        fsmQuaternionParams: []
-        stringParams: []
-        byteData: 0000
-        arrayParamSizes: 00000000
-        arrayParamTypes:
-        - HutongGames.PlayMaker.FsmVar
-        customTypeSizes: 
-        customTypeNames: []
-        paramDataType: 18000000120000000c000000270000000100000001000000
-        paramName:
-        - behaviour
-        - methodName
-        - parameters
-        - storeResult
-        - everyFrame
-        - manualUI
-        paramDataPos: 000000000000000000000000000000000000000001000000
-        paramByteDataSize: 000000000000000000000000000000000100000001000000
     - name: Game
       description: 
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 284.23438
-        y: 268.7422
+        x: 254.23438
+        y: 236.74219
         width: 142
         height: 32
       isBreakpoint: 0
@@ -1315,7 +1210,7 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 113
+        x: 81
         y: 108
         width: 148.4
         height: 32
@@ -1371,9 +1266,6 @@ MonoBehaviour:
         paramDataPos: 
         paramByteDataSize: 
     events:
-    - name: LOAD GAME
-      isSystemEvent: 0
-      isGlobal: 0
     - name: SHOW GAME
       isSystemEvent: 0
       isGlobal: 0
@@ -1460,14 +1352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainFsm: {fileID: 2096037769}
-  _mainMenuCanvas: {fileID: 8470520886826039732, guid: 2e1b6528a58a7a64e810ca8263b09518,
-    type: 3}
   _titleCanvas: {fileID: 1128354470691460979}
-  _gameCanvas:
-  - {fileID: 1930709413304466, guid: ab390c3c6312df249b548d10bf530f88, type: 3}
-  - {fileID: 1779888771035788, guid: 6805ba380ed21694e8853f90fa39439b, type: 3}
-  - {fileID: 1144589517885308, guid: c9a540db3fc108a4fb0ed70cea4457a0, type: 3}
-  _sceneContext: {fileID: 760545033}
 --- !u!1 &1128354470548898738
 GameObject:
   m_ObjectHideFlags: 0
@@ -1675,7 +1560,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 2732, y: 2048}
+  m_ReferenceResolution: {x: 2048, y: 2732}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3

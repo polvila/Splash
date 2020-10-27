@@ -4,10 +4,14 @@ public class BoardPresenter : Presenter<BoardView>
     private const int RightPilePosition = 5;
 
     private IGameManagerService _gameManagerService;
+    private IScreenManager _screenManager;
 
-    public BoardPresenter(IGameManagerService gameManagerService)
+    public BoardPresenter(
+        IGameManagerService gameManagerService,
+        IScreenManager screenManager)
     {
         _gameManagerService = gameManagerService;
+        _screenManager = screenManager;
     }
 
     public override void RegisterView(BoardView view)
@@ -20,6 +24,7 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.Unblocked += OnUnblocked;
         view.CardSelected += _gameManagerService.PlayThisCard;
         view.SplashZoneSelected += _gameManagerService.HumanSplash;
+        _screenManager.ShowSpinner();
         _gameManagerService.Initialize();
     }
 
@@ -30,8 +35,8 @@ public class BoardPresenter : Presenter<BoardView>
             view.AddNewCardTo(i, numbers[i]);
         }
 
-        view.SetInfo("");
         _gameManagerService.Start(Mode.IA);
+        _screenManager.HideSpinner();
     }
 
     private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)

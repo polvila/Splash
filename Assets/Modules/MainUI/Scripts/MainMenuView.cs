@@ -16,6 +16,6 @@ public class MainMenuView : MonoBehaviour
 
     public void OnPlay()
     {
-        _stateManager.TriggerEvent(Event.LOAD_GAME);
+        _stateManager.TriggerEvent(Event.SHOW_GAME);
     }
 }
