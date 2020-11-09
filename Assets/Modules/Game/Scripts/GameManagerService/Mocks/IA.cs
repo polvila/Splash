@@ -13,7 +13,7 @@ public class IA
         _coroutineProxy = coroutineProxy;
     }
 
-    public void Start()
+    public void StartPlaying()
     {
         _currentCoroutine = _coroutineProxy.StartCoroutine(Update());
     }

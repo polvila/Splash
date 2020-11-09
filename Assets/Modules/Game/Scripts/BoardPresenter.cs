@@ -30,13 +30,24 @@ public class BoardPresenter : Presenter<BoardView>
 
     private void OnNewGameReceived(int[] numbers, int seconds)
     {
-        for (int i = 0; i < numbers.Length; ++i)
+        for (int i = 0; i < LeftPilePosition; ++i)
         {
             view.AddNewCardTo(i, numbers[i]);
         }
-
-        _gameManagerService.Start(Mode.IA);
+        
+        for (int i = RightPilePosition + 1; i < numbers.Length; ++i)
+        {
+            view.AddNewCardTo(i, numbers[i]);
+        }
+        
         _screenManager.HideSpinner();
+        
+        view.StartCountdown(() =>
+        {
+            view.AddNewCardTo(LeftPilePosition, numbers[LeftPilePosition]);
+            view.AddNewCardTo(RightPilePosition, numbers[RightPilePosition]);
+            _gameManagerService.StartGame(Mode.IA);
+        });
     }
 
     private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)

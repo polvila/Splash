@@ -53,19 +53,22 @@ public class GameManagerServiceMock : IGameManagerService
         callback?.Invoke();
     }
 
-    public void Start(Mode mode)
+    public void StartGame(Mode mode)
     {
         if (mode == Mode.IA)
         {
             _ia = new IA(this, _coroutineProxy);
-            _ia.Start();
+            _ia.StartPlaying();
         }
         
         _gameTime?.Dispose();
         _gameTime = Observable.Timer(TimeSpan.FromSeconds(GameTimeSec))
             .Subscribe(timeSpan =>
             {
-                _ia.Stop();
+                if (mode == Mode.IA)
+                {
+                    _ia.Stop();
+                }
                 GameFinished?.Invoke(GetGameResult());
             });
     }

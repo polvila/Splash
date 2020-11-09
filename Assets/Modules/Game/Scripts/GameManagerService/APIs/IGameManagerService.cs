@@ -17,7 +17,7 @@ public interface IGameManagerService
     event Action<int, int> Unblocked;
     
     void Initialize();
-    void Start(Mode mode);
+    void StartGame(Mode mode);
     void PlayThisCard(int positionCardSelected);
     void HumanSplash();
     void Exit();

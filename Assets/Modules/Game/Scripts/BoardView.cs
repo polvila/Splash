@@ -19,6 +19,7 @@ public class BoardView : MonoBehaviour
     private Transform[] _slots;
 
     [SerializeField] private TMP_Text _infoText;
+    [SerializeField] private TMP_Text _countdownText;
     [SerializeField] private Transform[] _slotContainers;
     [SerializeField] private Button SplashZone;
 
@@ -36,9 +37,9 @@ public class BoardView : MonoBehaviour
         _cards = new CardView[10];
         _slots = new Transform[10];
         
+        var i = 0;
         foreach (var _slotContainer in _slotContainers)
         {
-            var i = 0;
             foreach (Transform slot in _slotContainer)
             {
                 _slots[i] = slot;
@@ -94,7 +95,26 @@ public class BoardView : MonoBehaviour
     public virtual void AddNewCardTo(int cardPosition, int number)
     {
         var card = GetNewCardView(number);
-        card.transform.position = _slots[cardPosition].position;
+
+        Vector2 edgeVector = GetComponent<Canvas>().worldCamera.ViewportToWorldPoint(new Vector2(1, 0.5f));
+
+        if(cardPosition == LeftMiddlePositionCard)
+        {
+            card.transform.position =
+                new Vector2(_slots[cardPosition].position.x - edgeVector.x, _slots[cardPosition].position.y);
+            LeanTween.move(card.gameObject, _slots[cardPosition], 0.2f);
+        }
+        else if (cardPosition == RightMiddlePositionCard)
+        {
+            card.transform.position =
+                new Vector2(_slots[cardPosition].position.x + edgeVector.x, _slots[cardPosition].position.y);
+            LeanTween.move(card.gameObject, _slots[cardPosition], 0.2f);
+        }
+        else
+        {
+            card.transform.position = _slots[cardPosition].position;
+        }
+        
         card.transform.SetAsFirstSibling();
         card.Index = cardPosition;
         _cards[cardPosition] = card;
@@ -113,6 +133,31 @@ public class BoardView : MonoBehaviour
     public void StopPlayableCards()
     {
         _cardsArePlayable = false;
+    }
+
+    public void StartCountdown(Action onComplete)
+    {
+        var seq = LeanTween.sequence();
+        seq.append( () =>
+        {
+            _countdownText.text = "3";
+        });
+        seq.append(1f);
+        seq.append( () =>
+        {
+            _countdownText.text = "2";
+        });
+        seq.append(1f);
+        seq.append( () =>
+        {
+            _countdownText.text = "1";
+        });
+        seq.append(1f);
+        seq.append( () =>
+        {
+            _countdownText.text = "";
+            onComplete?.Invoke();
+        });
     }
 
     private CardView GetNewCardView(int number)
