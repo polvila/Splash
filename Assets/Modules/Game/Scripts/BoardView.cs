@@ -24,6 +24,7 @@ public class BoardView : MonoBehaviour
     [SerializeField] private Button SplashZone;
 
     [Header("Cards")] [SerializeField] private GameObject _cardPrefab;
+    [SerializeField] private GameObject _enemyCardPrefab;
     [SerializeField] private Transform _cardsParent;
 
     public Action SplashZoneSelected;
@@ -87,37 +88,33 @@ public class BoardView : MonoBehaviour
         });
     }
     
-    public void DestroyCard(int position)
+    public void DestroyCard(int position, float delay = 0)
     {
-        Destroy(_cards[position]?.gameObject);        
+        Destroy(_cards[position]?.gameObject, delay);        
     }
 
     public virtual void AddNewCardTo(int cardPosition, int number)
     {
-        var card = GetNewCardView(number);
+        var card = GetNewCardView(cardPosition <= LeftMiddlePositionCard, number);
+        
+        card.Index = cardPosition;
+        _cards[cardPosition] = card;
 
         Vector2 edgeVector = GetComponent<Canvas>().worldCamera.ViewportToWorldPoint(new Vector2(1, 0.5f));
 
-        if(cardPosition == LeftMiddlePositionCard)
+        if(cardPosition == LeftMiddlePositionCard || cardPosition == RightMiddlePositionCard)
         {
+            var offset = edgeVector.x * (cardPosition == LeftMiddlePositionCard ? -1 : 1);
             card.transform.position =
-                new Vector2(_slots[cardPosition].position.x - edgeVector.x, _slots[cardPosition].position.y);
+                new Vector2(_slots[cardPosition].position.x + offset, _slots[cardPosition].position.y);
             LeanTween.move(card.gameObject, _slots[cardPosition], 0.2f);
-        }
-        else if (cardPosition == RightMiddlePositionCard)
-        {
-            card.transform.position =
-                new Vector2(_slots[cardPosition].position.x + edgeVector.x, _slots[cardPosition].position.y);
-            LeanTween.move(card.gameObject, _slots[cardPosition], 0.2f);
+            card.transform.SetAsLastSibling();
         }
         else
         {
             card.transform.position = _slots[cardPosition].position;
+            card.transform.SetAsFirstSibling();
         }
-        
-        card.transform.SetAsFirstSibling();
-        card.Index = cardPosition;
-        _cards[cardPosition] = card;
 
         if (cardPosition >= FirstPositionHumanCards)
         {
@@ -160,9 +157,9 @@ public class BoardView : MonoBehaviour
         });
     }
 
-    private CardView GetNewCardView(int number)
+    private CardView GetNewCardView(bool enemyCard, int number)
     {
-        var instantiatedCard = _container.InstantiatePrefab(_cardPrefab, _cardsParent);
+        var instantiatedCard = _container.InstantiatePrefab(enemyCard ? _enemyCardPrefab : _cardPrefab, _cardsParent);
         var cardView = instantiatedCard.GetComponent<CardView>();
         cardView.Num = number;
         return cardView;

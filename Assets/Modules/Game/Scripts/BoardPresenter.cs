@@ -85,8 +85,8 @@ public class BoardPresenter : Presenter<BoardView>
 
     private void UpdatePiles(int newLeftNumber, int newRightNumber)
     {
-        view.DestroyCard(LeftPilePosition);
-        view.DestroyCard(RightPilePosition);
+        view.DestroyCard(LeftPilePosition, 0.3f);
+        view.DestroyCard(RightPilePosition, 0.3f);
         view.AddNewCardTo(LeftPilePosition, newLeftNumber);
         view.AddNewCardTo(RightPilePosition, newRightNumber);
     }

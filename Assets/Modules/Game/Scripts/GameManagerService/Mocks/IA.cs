@@ -26,7 +26,7 @@ public class IA
             {
                 yield return new WaitForSeconds(0.5f);
                 _gameManagerService.PlayThisCard(i);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1.5f);
                 _gameManagerService.Splash(true);
             }
         }
