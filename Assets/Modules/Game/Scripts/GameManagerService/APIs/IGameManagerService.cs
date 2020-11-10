@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.Networking.NetworkSystem;
 
 public enum Mode
 {
@@ -10,12 +9,14 @@ public enum Mode
 
 public interface IGameManagerService
 {
-    event Action<int[], int> NewGameReceived;
+    event Action<int[]> NewGameReceived;
     event Action<int, int, int?> CardUpdate;
-    event Action<GameResult> GameFinished;
+    event Action<int, bool> GameFinished;
     event Action<bool, int, int> Splashed;
     event Action<int, int> Unblocked;
-    
+
+    int HumanRecord { get; }
+
     void Initialize();
     void StartGame(Mode mode);
     void PlayThisCard(int positionCardSelected);

@@ -7,24 +7,41 @@ using Random = UnityEngine.Random;
 
 public class GameManagerServiceMock : IGameManagerService
 {
-    private static readonly int GameTimeSec = 120;
     private static readonly int BlockedTimeSec = 4;
+    private static readonly string HumanRecordKey = "HumanRecord";
     
     private const int LeftPilePosition = 4;
     private const int RightPilePosition = 5;
     private GameStateModel _gameStateModel;
     private INumberGeneratorService _numberGeneratorService;
     private CoroutineProxy _coroutineProxy;
-    private IDisposable _gameTime;
     private IDisposable _blockedTime;
     private IA _ia;
-    
-    public event Action<int[], int> NewGameReceived;
+    private int _humanRecord = -1;
+
+    public event Action<int[]> NewGameReceived;
     public event Action<int, int, int?> CardUpdate;
-    public event Action<GameResult> GameFinished;
+    public event Action<int, bool> GameFinished;
     public event Action<bool, int, int> Splashed;
     public event Action<int, int> Unblocked;
-
+    
+    public int HumanRecord
+    {
+        get {
+            if (_humanRecord == -1)
+            {
+                _humanRecord = PlayerPrefs.GetInt(HumanRecordKey);
+            }
+            return _humanRecord;
+        }
+        private set
+        {
+            _humanRecord = value;
+            PlayerPrefs.SetInt(HumanRecordKey, _humanRecord); 
+            PlayerPrefs.Save();
+        }
+    }
+    
     [Inject]
     void Init(INumberGeneratorService numberGeneratorService, CoroutineProxy coroutineProxy)
     {
@@ -40,11 +57,11 @@ public class GameManagerServiceMock : IGameManagerService
             numbers[i] = _numberGeneratorService.GetNumber();
         }
         _gameStateModel = new GameStateModel(numbers);
-        _gameStateModel.EnemyCounter = 0;
-        _gameStateModel.HumanCounter = 0;
+        _gameStateModel.HumanLifePoints = 100;
+        _gameStateModel.HumanPointsCounter = 0;
         
         _coroutineProxy.StartCoroutine(
-            DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers, GameTimeSec)));
+            DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers)));
     }
 
     private IEnumerator DelayedCallback(int seconds, Action callback)
@@ -60,17 +77,6 @@ public class GameManagerServiceMock : IGameManagerService
             _ia = new IA(this, _coroutineProxy);
             _ia.StartPlaying();
         }
-        
-        _gameTime?.Dispose();
-        _gameTime = Observable.Timer(TimeSpan.FromSeconds(GameTimeSec))
-            .Subscribe(timeSpan =>
-            {
-                if (mode == Mode.IA)
-                {
-                    _ia.Stop();
-                }
-                GameFinished?.Invoke(GetGameResult());
-            });
     }
 
     public void PlayThisCard(int positionCardSelected)
@@ -110,12 +116,12 @@ public class GameManagerServiceMock : IGameManagerService
         
         if (fromIA)
         {
-            _gameStateModel.EnemyCounter += 10;
+            _gameStateModel.HumanLifePoints -= 10;
             Splashed?.Invoke(false, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
         }
         else
         {
-            _gameStateModel.HumanCounter += 10;
+            _gameStateModel.HumanPointsCounter += 10;
             Splashed?.Invoke(true, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
         }
         Debug.Log(fromIA ? "IA Splash!"  : "Splash!");
@@ -156,7 +162,6 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void Exit()
     {
-        _gameTime?.Dispose();
         _blockedTime?.Dispose();
     }
 
@@ -171,18 +176,31 @@ public class GameManagerServiceMock : IGameManagerService
         _gameStateModel.Numbers[positionCardSelected] = newNumber;
         if (positionCardSelected > RightPilePosition)
         {
-            _gameStateModel.HumanCounter++;
+            _gameStateModel.HumanPointsCounter++;
         }
         else
         {
-            _gameStateModel.EnemyCounter++;
+            _gameStateModel.HumanLifePoints--;
         }
         
         Debug.Log(log + " -> " +
                   _gameStateModel.Numbers[LeftPilePosition] + " " + 
                   _gameStateModel.Numbers[RightPilePosition]);
 
-        destinationCallback?.Invoke(positionCardSelected, pilePosition, newNumber); 
+        destinationCallback?.Invoke(positionCardSelected, pilePosition, newNumber);
+
+        if (_gameStateModel.HumanLifePoints == 0) //GAME ENDS
+        {
+            _ia.Stop();
+            _blockedTime?.Dispose();
+            bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;
+            if (isNewHumanRecord)
+            {
+                HumanRecord = _gameStateModel.HumanPointsCounter;
+            }
+            GameFinished?.Invoke(_gameStateModel.HumanPointsCounter, isNewHumanRecord);
+            return;
+        }
         
         if (IsGameBlocked())
         {
@@ -199,24 +217,6 @@ public class GameManagerServiceMock : IGameManagerService
                && destinationNum == _numberGeneratorService.GetMinRange
                || originNum == _numberGeneratorService.GetMinRange 
                && destinationNum == _numberGeneratorService.GetMaxRange;
-    }
-    
-    private GameResult GetGameResult()
-    {
-        _blockedTime?.Dispose();
-        _gameTime.Dispose();
-        
-        if (_gameStateModel.EnemyCounter < _gameStateModel.HumanCounter)
-        {
-            return GameResult.HumanWins;
-        }
-
-        if (_gameStateModel.EnemyCounter > _gameStateModel.HumanCounter)
-        {
-            return GameResult.EnemyWins;
-        }
-
-        return GameResult.Draw;
     }
 
     private bool IsGameBlocked()

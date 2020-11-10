@@ -64,6 +64,13 @@ namespace Core.ScreenManagement
             SetParent(_currentScreen);
         }
 
+        public void ShowPopup(string popupName)
+        {
+            var screen = _sceneContext.Container.InstantiatePrefab(_screens[popupName]);
+            AssignWorldCamera(screen);
+            SetParent(screen);
+        }
+
         public void ShowSpinner(string text = "")
         {
             if (_spinnerActive) return;

@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using Zenject;
 
 public class ResultView : MonoBehaviour
 {
 	[SerializeField] private TextMeshProUGUI _resultText;
+	[SerializeField] private GameObject _newRecordBanner;
 
 	private IGameManagerService _gameManagerService;
 
-	private Dictionary<GameResult, string> resultTexts = new Dictionary<GameResult, string>()
-	{
-		{ GameResult.HumanWins, "You Win!"},	
-		{ GameResult.EnemyWins, "You Lose!"},
-		{ GameResult.Draw, "DRAW!"}
-	};
-	
 	[Inject]
 	void Init(IGameManagerService gameManagerService)
 	{
@@ -23,9 +16,10 @@ public class ResultView : MonoBehaviour
 		_gameManagerService.GameFinished += SetResultText;
 	}
 
-	private void SetResultText(GameResult result)
+	private void SetResultText(int result, bool newRecord)
 	{
-		_resultText.text = resultTexts[result];
+		_resultText.text = $"{result} points";
+		_newRecordBanner.SetActive(newRecord);
 		gameObject.SetActive(true);
 	}
 

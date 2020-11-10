@@ -5,13 +5,16 @@ public class BoardPresenter : Presenter<BoardView>
 
     private IGameManagerService _gameManagerService;
     private IScreenManager _screenManager;
+    private IStateManager _stateManager;
 
     public BoardPresenter(
         IGameManagerService gameManagerService,
-        IScreenManager screenManager)
+        IScreenManager screenManager,
+        IStateManager stateManager)
     {
         _gameManagerService = gameManagerService;
         _screenManager = screenManager;
+        _stateManager = stateManager;
     }
 
     public override void RegisterView(BoardView view)
@@ -28,7 +31,7 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.Initialize();
     }
 
-    private void OnNewGameReceived(int[] numbers, int seconds)
+    private void OnNewGameReceived(int[] numbers)
     {
         for (int i = 0; i < LeftPilePosition; ++i)
         {
@@ -65,10 +68,11 @@ public class BoardPresenter : Presenter<BoardView>
         }
     }
 
-    private void OnGameFinished(GameResult result)
+    private void OnGameFinished(int result, bool newRecord)
     {
         view.StopPlayableCards();
         view.SetInfo("");
+        _stateManager.TriggerEvent(Event.SHOW_RESULT);
     }
 
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber)

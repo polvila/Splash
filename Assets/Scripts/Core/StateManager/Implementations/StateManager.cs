@@ -45,6 +45,11 @@ public class StateManager : MonoBehaviour, IStateManager, IInitializable
         _screenManager.ShowScreen("GameScreen");
     }
 
+    public void OnResult()
+    {
+        _screenManager.ShowPopup("ResultPopup");
+    }
+
     public void TriggerEvent(string eventKey)
     {
         _mainFsm.SendEvent(eventKey);
