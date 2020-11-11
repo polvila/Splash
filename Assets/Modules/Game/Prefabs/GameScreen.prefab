@@ -956,6 +956,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1775176389662680899}
+  - component: {fileID: 7858728018485722176}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -986,6 +987,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0.02501, y: -224.99}
   m_SizeDelta: {x: 2048, y: 450.0221}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7858728018485722176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026027671701600389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252cc9590947c1247a9a8eb5a2333ed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pointsText: {fileID: 3036276247409058290}
+  _maxRecordText: {fileID: 8749647915966994888}
 --- !u!1 &5096087488630486083
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1243,7 @@ GameObject:
   - component: {fileID: 4188794103546958390}
   - component: {fileID: 6141593720587693342}
   - component: {fileID: 6312591909991590009}
+  - component: {fileID: 5864447961839112655}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1308,6 +1324,20 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 10, y: 10}
   m_UseGraphicAlpha: 1
+--- !u!114 &5864447961839112655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6782729108686922200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e13fa1b1360fcac4fb3735534524ccca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _life: {fileID: 1569501854488511249}
+  _totalPointsText: {fileID: 4845435485380040489}
 --- !u!1 &7062187508747257739
 GameObject:
   m_ObjectHideFlags: 0

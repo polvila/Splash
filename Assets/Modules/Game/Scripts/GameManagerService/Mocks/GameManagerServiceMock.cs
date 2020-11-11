@@ -9,7 +9,7 @@ public class GameManagerServiceMock : IGameManagerService
 {
     private static readonly int BlockedTimeSec = 4;
     private static readonly string HumanRecordKey = "HumanRecord";
-    
+
     private const int LeftPilePosition = 4;
     private const int RightPilePosition = 5;
     private GameStateModel _gameStateModel;
@@ -24,24 +24,26 @@ public class GameManagerServiceMock : IGameManagerService
     public event Action<int, bool> GameFinished;
     public event Action<bool, int, int> Splashed;
     public event Action<int, int> Unblocked;
-    
+
     public int HumanRecord
     {
-        get {
+        get
+        {
             if (_humanRecord == -1)
             {
                 _humanRecord = PlayerPrefs.GetInt(HumanRecordKey);
             }
+
             return _humanRecord;
         }
         private set
         {
             _humanRecord = value;
-            PlayerPrefs.SetInt(HumanRecordKey, _humanRecord); 
+            PlayerPrefs.SetInt(HumanRecordKey, _humanRecord);
             PlayerPrefs.Save();
         }
     }
-    
+
     [Inject]
     void Init(INumberGeneratorService numberGeneratorService, CoroutineProxy coroutineProxy)
     {
@@ -56,10 +58,11 @@ public class GameManagerServiceMock : IGameManagerService
         {
             numbers[i] = _numberGeneratorService.GetNumber();
         }
+
         _gameStateModel = new GameStateModel(numbers);
         _gameStateModel.HumanLifePoints = 100;
         _gameStateModel.HumanPointsCounter = 0;
-        
+
         _coroutineProxy.StartCoroutine(
             DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers)));
     }
@@ -87,18 +90,18 @@ public class GameManagerServiceMock : IGameManagerService
 
         if (IsACompatibleMove(selectedNum, destinationNum1))
         {
-            MoveCardOnGameState(selectedNum, LeftPilePosition, positionCardSelected, CardUpdate);
+            MoveCard(selectedNum, LeftPilePosition, positionCardSelected, CardUpdate);
         }
         else if (IsACompatibleMove(selectedNum, destinationNum2))
         {
-            MoveCardOnGameState(selectedNum, RightPilePosition, positionCardSelected, CardUpdate);
+            MoveCard(selectedNum, RightPilePosition, positionCardSelected, CardUpdate);
         }
         else
         {
             if (SROptions.Current.GodMode)
             {
                 int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
-                MoveCardOnGameState(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
+                MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
             }
             else
             {
@@ -110,22 +113,32 @@ public class GameManagerServiceMock : IGameManagerService
     public void Splash(bool fromIA = false)
     {
         if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] && fromIA) return;
-        
+
         _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
         _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
-        
+
         if (fromIA)
         {
             _gameStateModel.HumanLifePoints -= 10;
-            Splashed?.Invoke(false, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
+            Splashed?.Invoke(false, _gameStateModel.Numbers[LeftPilePosition],
+                _gameStateModel.Numbers[RightPilePosition]);
         }
         else
         {
             _gameStateModel.HumanPointsCounter += 10;
-            Splashed?.Invoke(true, _gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
+            Splashed?.Invoke(true, _gameStateModel.Numbers[LeftPilePosition],
+                _gameStateModel.Numbers[RightPilePosition]);
         }
-        Debug.Log(fromIA ? "IA Splash!"  : "Splash!");
-        Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" + _gameStateModel.Numbers[RightPilePosition]);
+
+        Debug.Log(fromIA ? "IA Splash!" : "Splash!");
+        Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" +
+                  _gameStateModel.Numbers[RightPilePosition]);
+        
+        if (_gameStateModel.HumanLifePoints <= 0)
+        {
+            GameOver();
+            return;
+        }
 
         if (IsGameBlocked())
         {
@@ -145,8 +158,9 @@ public class GameManagerServiceMock : IGameManagerService
                 Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
                     _gameStateModel.Numbers[RightPilePosition]);
                 Debug.Log("Unblocked");
-                Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" + _gameStateModel.Numbers[RightPilePosition]);
-                
+                Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" +
+                          _gameStateModel.Numbers[RightPilePosition]);
+
                 if (IsGameBlocked())
                 {
                     Debug.Log("Unblock by unblock");
@@ -165,12 +179,12 @@ public class GameManagerServiceMock : IGameManagerService
         _blockedTime?.Dispose();
     }
 
-    private void MoveCardOnGameState(int selectedNum, int pilePosition, int positionCardSelected, 
+    private void MoveCard(int selectedNum, int pilePosition, int positionCardSelected,
         Action<int, int, int?> destinationCallback)
     {
         string log = "Move card " + selectedNum + ":" + positionCardSelected +
                      " to " + _gameStateModel.Numbers[pilePosition] + ":" + pilePosition;
-        
+
         int newNumber = _numberGeneratorService.GetNumber();
         _gameStateModel.Numbers[pilePosition] = selectedNum;
         _gameStateModel.Numbers[positionCardSelected] = newNumber;
@@ -182,40 +196,46 @@ public class GameManagerServiceMock : IGameManagerService
         {
             _gameStateModel.HumanLifePoints--;
         }
-        
+
         Debug.Log(log + " -> " +
-                  _gameStateModel.Numbers[LeftPilePosition] + " " + 
+                  _gameStateModel.Numbers[LeftPilePosition] + " " +
                   _gameStateModel.Numbers[RightPilePosition]);
 
         destinationCallback?.Invoke(positionCardSelected, pilePosition, newNumber);
 
-        if (_gameStateModel.HumanLifePoints == 0) //GAME ENDS
+        if (_gameStateModel.HumanLifePoints <= 0)
         {
-            _ia.Stop();
-            _blockedTime?.Dispose();
-            bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;
-            if (isNewHumanRecord)
-            {
-                HumanRecord = _gameStateModel.HumanPointsCounter;
-            }
-            GameFinished?.Invoke(_gameStateModel.HumanPointsCounter, isNewHumanRecord);
+            GameOver();
             return;
         }
-        
+
         if (IsGameBlocked())
         {
             Debug.Log("Unblock by move card");
             UnblockIn(BlockedTimeSec);
         }
     }
-    
+
+    private void GameOver()
+    {
+        _ia.Stop();
+        _blockedTime?.Dispose();
+        bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;
+        if (isNewHumanRecord)
+        {
+            HumanRecord = _gameStateModel.HumanPointsCounter;
+        }
+
+        GameFinished?.Invoke(_gameStateModel.HumanPointsCounter, isNewHumanRecord);
+    }
+
     private bool IsACompatibleMove(int originNum, int destinationNum)
     {
-        return originNum == destinationNum + 1 
+        return originNum == destinationNum + 1
                || originNum == destinationNum - 1
-               || originNum == _numberGeneratorService.GetMaxRange 
+               || originNum == _numberGeneratorService.GetMaxRange
                && destinationNum == _numberGeneratorService.GetMinRange
-               || originNum == _numberGeneratorService.GetMinRange 
+               || originNum == _numberGeneratorService.GetMinRange
                && destinationNum == _numberGeneratorService.GetMaxRange;
     }
 
@@ -224,14 +244,14 @@ public class GameManagerServiceMock : IGameManagerService
         int firstHumanPosition = RightPilePosition + 1;
         for (int i = 0; i < LeftPilePosition; ++i)
         {
-            if (IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[LeftPilePosition]) || 
+            if (IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[LeftPilePosition]) ||
                 IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[RightPilePosition]) ||
-                IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i], 
+                IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i],
                     _gameStateModel.Numbers[LeftPilePosition]) ||
-                IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i], 
+                IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i],
                     _gameStateModel.Numbers[RightPilePosition]) ||
-                    _gameStateModel.Numbers[LeftPilePosition] == _gameStateModel.Numbers[RightPilePosition]
-                )
+                _gameStateModel.Numbers[LeftPilePosition] == _gameStateModel.Numbers[RightPilePosition]
+            )
             {
                 return false;
             }
