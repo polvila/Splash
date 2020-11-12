@@ -11,6 +11,7 @@ public class GameStateModel
     public GameState State;
     public int HumanPointsCounter;
     public int HumanLifePoints;
+    public int SplashPot;
 
     public GameStateModel(int[] numbers)
     {

@@ -22,7 +22,7 @@ public class GameManagerServiceMock : IGameManagerService
     public event Action<int[]> NewGameReceived;
     public event Action<int, int, int?> CardUpdate;
     public event Action<int, bool> GameFinished;
-    public event Action<bool, int, int> Splashed;
+    public event Action<bool, int, int, int> Splashed;
     public event Action<int, int> Unblocked;
 
     public int HumanRecord
@@ -62,6 +62,7 @@ public class GameManagerServiceMock : IGameManagerService
         _gameStateModel = new GameStateModel(numbers);
         _gameStateModel.HumanLifePoints = 100;
         _gameStateModel.HumanPointsCounter = 0;
+        _gameStateModel.SplashPot = 2;
 
         _coroutineProxy.StartCoroutine(
             DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers)));
@@ -110,40 +111,50 @@ public class GameManagerServiceMock : IGameManagerService
         }
     }
 
-    public void Splash(bool fromIA = false)
+    public void TryDoSplash(bool fromIA = false)
     {
-        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] && fromIA) return;
+        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
+            _gameStateModel.Numbers[LeftPilePosition] == -1 && 
+            _gameStateModel.Numbers[RightPilePosition] == -1) return;
 
-        _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
-        _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
+        _gameStateModel.Numbers[LeftPilePosition] = -1;
+        _gameStateModel.Numbers[RightPilePosition] = -1;
+
+        var newLeftNumber = _numberGeneratorService.GetNumber();
+        var newRightNumber = _numberGeneratorService.GetNumber();
+        
+        LeanTween.delayedCall(2f, () =>
+        {
+            Debug.Log("Update piles " + newLeftNumber + ":" + newRightNumber);
+            _gameStateModel.Numbers[LeftPilePosition] = newLeftNumber;
+            _gameStateModel.Numbers[RightPilePosition] = newRightNumber;
+            Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
+            
+            if (IsGameBlocked())
+            {
+                Debug.Log("Unblock by splash " + (fromIA ? " from IA " : "from human"));
+                UnblockIn(BlockedTimeSec);
+            }
+        });
 
         if (fromIA)
         {
-            _gameStateModel.HumanLifePoints -= 10;
-            Splashed?.Invoke(false, _gameStateModel.Numbers[LeftPilePosition],
-                _gameStateModel.Numbers[RightPilePosition]);
+            _gameStateModel.HumanLifePoints -= _gameStateModel.SplashPot;
+            Splashed?.Invoke(false, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
         }
         else
         {
-            _gameStateModel.HumanPointsCounter += 10;
-            Splashed?.Invoke(true, _gameStateModel.Numbers[LeftPilePosition],
-                _gameStateModel.Numbers[RightPilePosition]);
+            _gameStateModel.HumanPointsCounter += _gameStateModel.SplashPot;
+            Splashed?.Invoke(true, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
         }
-
-        Debug.Log(fromIA ? "IA Splash!" : "Splash!");
-        Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" +
-                  _gameStateModel.Numbers[RightPilePosition]);
         
+        Debug.Log((fromIA ? "IA Splash!" : "Splash!") + " with " + _gameStateModel.SplashPot + "points");
+        
+        _gameStateModel.SplashPot = 2;
+
         if (_gameStateModel.HumanLifePoints <= 0)
         {
             GameOver();
-            return;
-        }
-
-        if (IsGameBlocked())
-        {
-            Debug.Log("Unblock by splash " + (fromIA ? " from IA " : "from human"));
-            UnblockIn(BlockedTimeSec);
         }
     }
 
@@ -155,6 +166,7 @@ public class GameManagerServiceMock : IGameManagerService
             {
                 _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
                 _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
+                _gameStateModel.SplashPot += 2;
                 Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
                     _gameStateModel.Numbers[RightPilePosition]);
                 Debug.Log("Unblocked");
@@ -171,7 +183,7 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void HumanSplash()
     {
-        Splash();
+        TryDoSplash();
     }
 
     public void Exit()
@@ -188,6 +200,7 @@ public class GameManagerServiceMock : IGameManagerService
         int newNumber = _numberGeneratorService.GetNumber();
         _gameStateModel.Numbers[pilePosition] = selectedNum;
         _gameStateModel.Numbers[positionCardSelected] = newNumber;
+        ++_gameStateModel.SplashPot;
         if (positionCardSelected > RightPilePosition)
         {
             _gameStateModel.HumanPointsCounter++;

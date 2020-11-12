@@ -12,7 +12,7 @@ public interface IGameManagerService
     event Action<int[]> NewGameReceived;
     event Action<int, int, int?> CardUpdate;
     event Action<int, bool> GameFinished;
-    event Action<bool, int, int> Splashed;
+    event Action<bool, int, int, int> Splashed;
     event Action<int, int> Unblocked;
 
     int HumanRecord { get; }

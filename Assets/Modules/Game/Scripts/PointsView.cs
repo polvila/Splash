@@ -24,11 +24,11 @@ public class PointsView : MonoBehaviour
         _maxRecordText.text = _gameManagerService.HumanRecord.ToString(PointsFormat);
     }
     
-    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber)
+    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
         if (wasHuman)
         {
-            AddPoints(10);
+            AddPoints(points);
         }
     }
     

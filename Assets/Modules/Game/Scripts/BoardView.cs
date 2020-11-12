@@ -88,7 +88,10 @@ public class BoardView : MonoBehaviour
 
     public void DestroyCard(int position, float delay = 0)
     {
-        Destroy(_cards[position]?.gameObject, delay);
+        if (_cards[position] == null) return;
+        
+        Destroy(_cards[position].gameObject, delay);
+        _cards[position] = null;
     }
 
     public virtual void AddNewCardTo(int cardPosition, int number)
@@ -154,10 +157,10 @@ public class BoardView : MonoBehaviour
         return cardView;
     }
 
-    private void ShowSplash(bool fromHumanPlayer, int totalPoints, Action onComplete)
+    public void ShowSplash(bool fromHumanPlayer, int totalPoints)
     {
         var splash = fromHumanPlayer ? _humanSplash : _enemySplash;
-        splash.Show(totalPoints, onComplete);
+        splash.Show(totalPoints);
     }
 
     private void OnDestroy()

@@ -25,11 +25,11 @@ public class HumanLifeView : MonoBehaviour
         _pointsToLifeWidth = _life.sizeDelta.x / TotalPoints;
     }
     
-    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber)
+    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
         if (!wasHuman)
         {
-            Damage(10);
+            Damage(points);
         }
     }
     

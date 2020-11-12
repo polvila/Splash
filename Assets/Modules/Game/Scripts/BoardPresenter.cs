@@ -75,10 +75,12 @@ public class BoardPresenter : Presenter<BoardView>
         _stateManager.TriggerEvent(Event.SHOW_RESULT);
     }
 
-    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber)
+    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
         view.SetInfo(wasHuman ? "Splash!" : "IA Splash!");
-        UpdatePiles(newLeftNumber, newRightNumber);
+        view.ShowSplash(wasHuman, points);
+        view.DestroyCard(LeftPilePosition);
+        view.DestroyCard(RightPilePosition);
     }
 
     private void OnUnblocked(int newLeftNumber, int newRightNumber)
