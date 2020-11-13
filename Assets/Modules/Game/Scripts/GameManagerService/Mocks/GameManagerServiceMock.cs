@@ -76,45 +76,64 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void StartGame(Mode mode)
     {
+        _gameStateModel.GamePaused = false;
         if (mode == Mode.IA)
         {
             _ia = new IA(this, _coroutineProxy);
             _ia.StartPlaying();
         }
+
+        if (IsGameBlocked())
+        {
+            Debug.Log("Unblock by Start Game");
+            UnblockIn(BlockedTimeSec);
+        }
     }
 
     public void PlayThisCard(int positionCardSelected)
     {
-        var selectedNum = _gameStateModel.Numbers[positionCardSelected];
-        var destinationNum1 = _gameStateModel.Numbers[LeftPilePosition];
-        var destinationNum2 = _gameStateModel.Numbers[RightPilePosition];
+        if (_gameStateModel.GamePaused) return;
 
-        if (IsACompatibleMove(selectedNum, destinationNum1))
-        {
-            MoveCard(selectedNum, LeftPilePosition, positionCardSelected, CardUpdate);
-        }
-        else if (IsACompatibleMove(selectedNum, destinationNum2))
+        var selectedNum = _gameStateModel.Numbers[positionCardSelected];
+        var leftPileNum = _gameStateModel.Numbers[LeftPilePosition];
+        var rightPileNum = _gameStateModel.Numbers[RightPilePosition];
+
+        if (IsACompatibleMove(selectedNum, rightPileNum))
         {
             MoveCard(selectedNum, RightPilePosition, positionCardSelected, CardUpdate);
         }
+        else if (IsACompatibleMove(selectedNum, leftPileNum))
+        {
+            MoveCard(selectedNum, LeftPilePosition, positionCardSelected, CardUpdate);
+        }
         else
         {
-            if (SROptions.Current.GodMode)
+            if (positionCardSelected > RightPilePosition) //is the main player
             {
-                int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
-                MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
-            }
-            else
-            {
-                CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
+                if (SROptions.Current.GodMode)
+                {
+                    int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
+                    MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
+                }
+                else
+                {
+                    --_gameStateModel.HumanLifePoints;
+                    CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
+                    
+                    if (_gameStateModel.HumanLifePoints <= 0)
+                    {
+                        GameOver();
+                    }
+                }
             }
         }
     }
 
     public void TryDoSplash(bool fromIA = false)
     {
-        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
-            _gameStateModel.Numbers[LeftPilePosition] == -1 && 
+        if (_gameStateModel.GamePaused ||
+            _gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
+            _gameStateModel.Numbers[LeftPilePosition] == -1 &&
             _gameStateModel.Numbers[RightPilePosition] == -1) return;
 
         _gameStateModel.Numbers[LeftPilePosition] = -1;
@@ -122,14 +141,14 @@ public class GameManagerServiceMock : IGameManagerService
 
         var newLeftNumber = _numberGeneratorService.GetNumber();
         var newRightNumber = _numberGeneratorService.GetNumber();
-        
+
         LeanTween.delayedCall(2f, () =>
         {
             Debug.Log("Update piles " + newLeftNumber + ":" + newRightNumber);
             _gameStateModel.Numbers[LeftPilePosition] = newLeftNumber;
             _gameStateModel.Numbers[RightPilePosition] = newRightNumber;
             Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
-            
+
             if (IsGameBlocked())
             {
                 Debug.Log("Unblock by splash " + (fromIA ? " from IA " : "from human"));
@@ -147,9 +166,9 @@ public class GameManagerServiceMock : IGameManagerService
             _gameStateModel.HumanPointsCounter += _gameStateModel.SplashPot;
             Splashed?.Invoke(true, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
         }
-        
+
         Debug.Log((fromIA ? "IA Splash!" : "Splash!") + " with " + _gameStateModel.SplashPot + "points");
-        
+
         _gameStateModel.SplashPot = 2;
 
         if (_gameStateModel.HumanLifePoints <= 0)
@@ -232,6 +251,7 @@ public class GameManagerServiceMock : IGameManagerService
     private void GameOver()
     {
         _ia.Stop();
+        _gameStateModel.GamePaused = true;
         _blockedTime?.Dispose();
         bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;
         if (isNewHumanRecord)

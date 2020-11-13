@@ -57,7 +57,7 @@ public class BoardPresenter : Presenter<BoardView>
     {
         if (fromCardPosition == toCardPosition)
         {
-            //TODO: Card not playable
+            view.ShowCardMiss(fromCardPosition);
             return;
         }
 

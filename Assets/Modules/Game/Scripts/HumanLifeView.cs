@@ -35,7 +35,7 @@ public class HumanLifeView : MonoBehaviour
     
     private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
     {
-        if (fromCardPosition < toCardPosition)
+        if (fromCardPosition < toCardPosition || newNumber == null)
         {
             Damage(1);
         }

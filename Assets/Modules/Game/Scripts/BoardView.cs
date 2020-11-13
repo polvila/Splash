@@ -82,8 +82,14 @@ public class BoardView : MonoBehaviour
         _cards[from].transform.SetAsLastSibling();
         CardView oldPileCard = _cards[to];
         _cards[to] = _cards[from];
+        _cards[to].Index = to;
         LeanTween.move(_cards[from].gameObject,
             _slots[to], 0.2f).setOnComplete(() => { Destroy(oldPileCard.gameObject); });
+    }
+
+    public void ShowCardMiss(int position)
+    {
+        _cards[position].TriggerMissAnimationFrom(_slots[position].position);
     }
 
     public void DestroyCard(int position, float delay = 0)
