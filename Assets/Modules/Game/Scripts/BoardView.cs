@@ -17,7 +17,7 @@ public class BoardView : MonoBehaviour
     private IDisposable _setInfoTimer;
     private Transform[] _slots;
 
-    [SerializeField] private TMP_Text _countdownText;
+    [SerializeField] private CountdownView _countdownView;
     [SerializeField] private Transform[] _slotContainers;
 
     [Header("Splash")] [SerializeField] private Button _splashZone;
@@ -125,20 +125,9 @@ public class BoardView : MonoBehaviour
 
     public void StartCountdown(Action onComplete)
     {
-        var seq = LeanTween.sequence();
-        seq.append(() => { _countdownText.text = "3"; });
-        seq.append(1f);
-        seq.append(() => { _countdownText.text = "2"; });
-        seq.append(1f);
-        seq.append(() => { _countdownText.text = "1"; });
-        seq.append(1f);
-        seq.append(() =>
-        {
-            _countdownText.text = "";
-            onComplete?.Invoke();
-        });
+        _countdownView.StartCountdown(onComplete);
     }
-
+    
     private CardView GetNewCardView(bool enemyCard, int number)
     {
         var instantiatedCard = _container.InstantiatePrefab(enemyCard ? _enemyCardPrefab : _cardPrefab, _cardsParent);

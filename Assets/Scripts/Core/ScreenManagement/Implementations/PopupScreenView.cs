@@ -10,6 +10,8 @@ namespace Core.ScreenManagement
         
         [SerializeField] protected Button CloseButton;
         
+        public virtual GameObject OwnerGameObject => this != null ? gameObject : null;
+        
         public virtual void SetParams(object paramsObject) {}
 
         protected virtual void OnDestroy()
@@ -30,7 +32,7 @@ namespace Core.ScreenManagement
         
         public virtual void ClosePopup()
         {
-            Destroy(gameObject);
+            Destroy(OwnerGameObject);
         }
     }
 }

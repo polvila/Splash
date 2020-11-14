@@ -18,7 +18,7 @@ namespace Core.NetworkServices
                 .AsSingle()
                 .WithArguments(_generatorMode);
 
-            Container.Bind<IGameManagerService>().To<GameManagerServiceMock>()
+            Container.BindInterfacesTo<GameManagerServiceMock>()
                 .AsSingle();
 
             Container.Bind<IAuthenticationService>().To<AuthenticationService>().AsSingle();

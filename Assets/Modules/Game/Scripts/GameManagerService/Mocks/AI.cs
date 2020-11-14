@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class IA
+public class AI
 {
     private GameManagerServiceMock _gameManagerService;
     private CoroutineProxy _coroutineProxy;
@@ -12,8 +12,9 @@ public class IA
     private int[] _positionsToCheck;
     private int _positionsToCheckIndex;
     private bool _checkSplash;
+    private bool _paused;
 
-    public IA(GameManagerServiceMock gameManagerService, CoroutineProxy coroutineProxy)
+    public AI(GameManagerServiceMock gameManagerService, CoroutineProxy coroutineProxy)
     {
         _gameManagerService = gameManagerService;
         _coroutineProxy = coroutineProxy;
@@ -34,11 +35,13 @@ public class IA
             for (; _positionsToCheckIndex < _positionsToCheck.Length; ++_positionsToCheckIndex)
             {
                 yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
+                yield return new WaitUntil(() => !_paused);
                 _gameManagerService.PlayThisCard(_positionsToCheck[_positionsToCheckIndex]);
                 if (_checkSplash)
                 {
                     _checkSplash = false;
                     yield return new WaitForSeconds(Random.Range(0.4f, 0.6f));
+                    yield return new WaitUntil(() => !_paused);
                     _gameManagerService.TryDoSplash(true);
                 }
             }
@@ -52,6 +55,11 @@ public class IA
     {
         if (_currentCoroutine == null) return;
         _coroutineProxy.StopCoroutine(_currentCoroutine);
+    }
+
+    public void Pause(bool active)
+    {
+        _paused = active;
     }
 
     private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
@@ -73,5 +81,4 @@ public class IA
     {
         _checkSplash = true;
     }
-
 }

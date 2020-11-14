@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Core.ScreenManagement;
 using TMPro;
 using UnityEngine;
 using Zenject;
 
-public class PointsView : MonoBehaviour
+public class HUDView : MonoBehaviour
 {
     private const string PointsFormat = "000";
     
@@ -11,20 +11,27 @@ public class PointsView : MonoBehaviour
     [SerializeField] private TMP_Text _maxRecordText;
 
     private IGameManagerService _gameManagerService;
+    private IScreenManager _screenManager;
 
     private int _totalPoints;
 
     [Inject]
-    private void Init(IGameManagerService gameManagerService)
+    private void Init(IGameManagerService gameManagerService, IScreenManager screenManager)
     {
         _gameManagerService = gameManagerService;
+        _screenManager = screenManager;
 
         _gameManagerService.Splashed += OnSplashed;
         _gameManagerService.CardUpdate += OnCardUpdate;
         _pointsText.text = _totalPoints.ToString(PointsFormat);
         _maxRecordText.text = _gameManagerService.HumanRecord.ToString(PointsFormat);
     }
-    
+
+    public void OnSettingsClicked()
+    {
+        _screenManager.ShowPopup("SettingsPopup");
+    }
+
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
         if (wasHuman)

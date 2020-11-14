@@ -14,6 +14,7 @@ namespace Core.ScreenManagement
         private GameObject _parent;
         private bool _worldPositionStays;
         private Camera _renderCamera;
+        private HashSet<IPopupScreenView> _openedPopups;
 
         public struct ScreenManagerConfig
         {
@@ -53,12 +54,14 @@ namespace Core.ScreenManagement
             _parent = config.Parent;
             _worldPositionStays = config.WorldPositionStays;
             _renderCamera = config.RenderCamera;
+            _openedPopups = new HashSet<IPopupScreenView>();
         }
 
         public void ShowScreen(string screenName)
         {
+            CloseAllModalScreens();
             var screen = _sceneContext.Container.InstantiatePrefab(_screens[screenName]);
-            GameObject.Destroy(_currentScreen);
+            Object.Destroy(_currentScreen);
             AssignWorldCamera(screen);
             _currentScreen = screen;
             SetParent(_currentScreen);
@@ -70,6 +73,11 @@ namespace Core.ScreenManagement
             AssignWorldCamera(screen);
             var view = screen.GetComponentInChildren<IPopupScreenView>();
             view.SetParams(paramsObject);
+            view.PopupClosed += popup =>
+            {
+                _openedPopups.Remove(popup);
+            };
+            _openedPopups.Add(view);
             SetParent(screen);
         }
 
@@ -86,6 +94,14 @@ namespace Core.ScreenManagement
         {
             _spinnerActive = false;
             _spinner.gameObject.SetActive(false);
+        }
+
+        private void CloseAllModalScreens()
+        {
+            foreach (var screen in _openedPopups)
+            {
+                Object.Destroy(screen.OwnerGameObject);
+            }
         }
 
         private void AssignWorldCamera(GameObject screen, bool force = false)

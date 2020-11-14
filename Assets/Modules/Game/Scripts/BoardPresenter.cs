@@ -52,7 +52,7 @@ public class BoardPresenter : Presenter<BoardView>
         {
             view.AddNewCardTo(LeftPilePosition, numbers[LeftPilePosition]);
             view.AddNewCardTo(RightPilePosition, numbers[RightPilePosition]);
-            _gameManagerService.StartGame(Mode.IA);
+            _gameManagerService.StartGame(Mode.AI);
         });
     }
 

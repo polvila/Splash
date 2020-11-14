@@ -4,7 +4,7 @@ using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
-public class GameManagerServiceMock : IGameManagerService
+public class GameManagerServiceMock : IGameManagerService, IAIManagerService
 {
     private static readonly int BlockedTimeSec = 2;
     private static readonly string HumanRecordKey = "HumanRecord";
@@ -15,7 +15,7 @@ public class GameManagerServiceMock : IGameManagerService
     private INumberGeneratorService _numberGeneratorService;
     private CoroutineProxy _coroutineProxy;
     private int _unblockDelayId;
-    private IA _ia;
+    private AI _ai;
     private int _humanRecord = -1;
 
     public event Action<int[]> NewGameReceived;
@@ -57,29 +57,25 @@ public class GameManagerServiceMock : IGameManagerService
         {
             numbers[i] = _numberGeneratorService.GetNumber();
         }
+        
+        Debug.Log("New piles " + numbers[LeftPilePosition] + ":" + numbers[RightPilePosition]);
 
-        _gameStateModel = new GameStateModel(numbers);
-        _gameStateModel.HumanLifePoints = 100;
-        _gameStateModel.HumanPointsCounter = 0;
-        _gameStateModel.SplashPot = 2;
+        _gameStateModel = new GameStateModel(numbers)
+        {
+            HumanLifePoints = 100, 
+            HumanPointsCounter = 0, 
+            SplashPot = 2
+        };
 
-        _coroutineProxy.StartCoroutine(
-            DelayedCallback(1, () => NewGameReceived?.Invoke(_gameStateModel.Numbers)));
-    }
-
-    private IEnumerator DelayedCallback(int seconds, Action callback)
-    {
-        yield return new WaitForSeconds(seconds);
-        callback?.Invoke();
+        LeanTween.delayedCall(1f, () => NewGameReceived?.Invoke(_gameStateModel.Numbers));
     }
 
     public void StartGame(Mode mode)
     {
-        _gameStateModel.GamePaused = false;
-        if (mode == Mode.IA)
+        if (mode == Mode.AI)
         {
-            _ia = new IA(this, _coroutineProxy);
-            _ia.Play();
+            _ai = new AI(this, _coroutineProxy);
+            _ai.Play();
         }
 
         if (IsGameBlocked())
@@ -91,8 +87,6 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void PlayThisCard(int positionCardSelected)
     {
-        if (_gameStateModel.GamePaused) return;
-
         var selectedNum = _gameStateModel.Numbers[positionCardSelected];
         var leftPileNum = _gameStateModel.Numbers[LeftPilePosition];
         var rightPileNum = _gameStateModel.Numbers[RightPilePosition];
@@ -128,10 +122,9 @@ public class GameManagerServiceMock : IGameManagerService
         }
     }
 
-    public void TryDoSplash(bool fromIA = false)
+    public void TryDoSplash(bool fromAI = false)
     {
-        if (_gameStateModel.GamePaused ||
-            _gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
+        if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
             _gameStateModel.Numbers[LeftPilePosition] == -1 &&
             _gameStateModel.Numbers[RightPilePosition] == -1) return;
 
@@ -150,12 +143,12 @@ public class GameManagerServiceMock : IGameManagerService
 
             if (IsGameBlocked())
             {
-                Debug.Log("Unblock by splash " + (fromIA ? " from IA " : "from human"));
+                Debug.Log("Unblock by splash " + (fromAI ? " from AI " : "from human"));
                 UnblockIn(BlockedTimeSec);
             }
         });
 
-        if (fromIA)
+        if (fromAI)
         {
             _gameStateModel.HumanLifePoints -= _gameStateModel.SplashPot;
             Splashed?.Invoke(false, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
@@ -166,7 +159,7 @@ public class GameManagerServiceMock : IGameManagerService
             Splashed?.Invoke(true, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
         }
 
-        Debug.Log((fromIA ? "IA Splash!" : "Splash!") + " with " + _gameStateModel.SplashPot + "points");
+        Debug.Log((fromAI ? "AI Splash!" : "Splash!") + " with " + _gameStateModel.SplashPot + "points");
 
         _gameStateModel.SplashPot = 2;
 
@@ -205,7 +198,13 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void Exit()
     {
+        _ai.Stop();
         StopDelayedUnblock();
+    }
+
+    public void PauseAI(bool active)
+    {
+        _ai?.Pause(active);
     }
 
     private void MoveCard(int selectedNum, int pilePosition, int positionCardSelected,
@@ -254,8 +253,7 @@ public class GameManagerServiceMock : IGameManagerService
 
     private void GameOver()
     {
-        _ia.Stop();
-        _gameStateModel.GamePaused = true;
+        _ai.Stop();
         StopDelayedUnblock();
         bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;
         if (isNewHumanRecord)

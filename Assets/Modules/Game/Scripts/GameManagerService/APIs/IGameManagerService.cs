@@ -2,7 +2,7 @@ using System;
 
 public enum Mode
 {
-    IA,
+    AI,
     Local,
     Online
 }
