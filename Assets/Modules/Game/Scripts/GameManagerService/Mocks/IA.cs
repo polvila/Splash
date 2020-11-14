@@ -38,7 +38,7 @@ public class IA
                 if (_checkSplash)
                 {
                     _checkSplash = false;
-                    yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
+                    yield return new WaitForSeconds(Random.Range(0.4f, 0.6f));
                     _gameManagerService.TryDoSplash(true);
                 }
             }
