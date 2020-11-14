@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using UniRx;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -10,12 +9,12 @@ public class GameManagerServiceMock : IGameManagerService
     private static readonly int BlockedTimeSec = 4;
     private static readonly string HumanRecordKey = "HumanRecord";
 
-    private const int LeftPilePosition = 4;
-    private const int RightPilePosition = 5;
+    public const int LeftPilePosition = 4;
+    public const int RightPilePosition = 5;
     private GameStateModel _gameStateModel;
     private INumberGeneratorService _numberGeneratorService;
     private CoroutineProxy _coroutineProxy;
-    private IDisposable _blockedTime;
+    private int _unblockDelayId;
     private IA _ia;
     private int _humanRecord = -1;
 
@@ -80,7 +79,7 @@ public class GameManagerServiceMock : IGameManagerService
         if (mode == Mode.IA)
         {
             _ia = new IA(this, _coroutineProxy);
-            _ia.StartPlaying();
+            _ia.Play();
         }
 
         if (IsGameBlocked())
@@ -179,25 +178,24 @@ public class GameManagerServiceMock : IGameManagerService
 
     private void UnblockIn(int seconds)
     {
-        _blockedTime?.Dispose();
-        _blockedTime = Observable.Timer(TimeSpan.FromSeconds(seconds))
-            .Subscribe(timeSpan =>
-            {
-                _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
-                _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
-                _gameStateModel.SplashPot += 2;
-                Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
-                    _gameStateModel.Numbers[RightPilePosition]);
-                Debug.Log("Unblocked");
-                Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" +
-                          _gameStateModel.Numbers[RightPilePosition]);
+        StopDelayedUnblock();
+        _unblockDelayId = LeanTween.delayedCall(seconds, () =>
+        {
+            _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
+            _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
+            _gameStateModel.SplashPot += 2;
+            Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
+                _gameStateModel.Numbers[RightPilePosition]);
+            Debug.Log("Unblocked");
+            Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" +
+                      _gameStateModel.Numbers[RightPilePosition]);
 
-                if (IsGameBlocked())
-                {
-                    Debug.Log("Unblock by unblock");
-                    UnblockIn(BlockedTimeSec);
-                }
-            });
+            if (IsGameBlocked())
+            {
+                Debug.Log("Unblock by unblock");
+                UnblockIn(BlockedTimeSec);
+            }
+        }).id;
     }
 
     public void HumanSplash()
@@ -207,7 +205,7 @@ public class GameManagerServiceMock : IGameManagerService
 
     public void Exit()
     {
-        _blockedTime?.Dispose();
+        StopDelayedUnblock();
     }
 
     private void MoveCard(int selectedNum, int pilePosition, int positionCardSelected,
@@ -246,11 +244,19 @@ public class GameManagerServiceMock : IGameManagerService
         }
     }
 
+    private void StopDelayedUnblock()
+    {
+        if (LeanTween.isTweening(_unblockDelayId))
+        {
+            LeanTween.cancel(_unblockDelayId);
+        }
+    }
+
     private void GameOver()
     {
         _ia.Stop();
         _gameStateModel.GamePaused = true;
-        _blockedTime?.Dispose();
+        StopDelayedUnblock();
         bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;
         if (isNewHumanRecord)
         {

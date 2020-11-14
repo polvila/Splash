@@ -2,7 +2,7 @@
 
 public class NumberGeneratorServiceMock : INumberGeneratorService 
 {
-	protected const int MaxRange = 12;
+	protected const int MaxRange = 13;
 	protected const int MinRange = 1;
 
 	public int GetMaxRange => MaxRange;

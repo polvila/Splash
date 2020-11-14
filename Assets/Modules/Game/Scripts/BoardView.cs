@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -18,7 +17,6 @@ public class BoardView : MonoBehaviour
     private IDisposable _setInfoTimer;
     private Transform[] _slots;
 
-    [SerializeField] private TMP_Text _infoText;
     [SerializeField] private TMP_Text _countdownText;
     [SerializeField] private Transform[] _slotContainers;
 
@@ -63,18 +61,6 @@ public class BoardView : MonoBehaviour
 
             SplashZoneSelected?.Invoke();
         });
-    }
-
-    public void SetInfo(string text, bool timed = true)
-    {
-        _infoText.text = text;
-
-        if (text == "" || !timed) return;
-
-        _setInfoTimer?.Dispose();
-        _setInfoTimer = Observable
-            .Timer(TimeSpan.FromSeconds(1))
-            .Subscribe(x => { SetInfo(""); });
     }
 
     public void MoveCard(int from, int to)

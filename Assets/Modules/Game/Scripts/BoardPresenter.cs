@@ -69,13 +69,11 @@ public class BoardPresenter : Presenter<BoardView>
     private void OnGameFinished(int result, bool newRecord)
     {
         view.StopPlayableCards();
-        view.SetInfo("");
         _stateManager.TriggerEvent(Event.SHOW_RESULT);
     }
 
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
-        view.SetInfo(wasHuman ? "Splash!" : "IA Splash!");
         view.ShowSplash(wasHuman, points);
         view.DestroyCard(LeftPilePosition);
         view.DestroyCard(RightPilePosition);
@@ -83,7 +81,6 @@ public class BoardPresenter : Presenter<BoardView>
 
     private void OnUnblocked(int newLeftNumber, int newRightNumber)
     {
-        view.SetInfo("Unblocked");
         UpdatePiles(newLeftNumber, newRightNumber);
     }
 
