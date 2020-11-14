@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.ScreenManagement;
+using UnityEngine;
 using Zenject;
 
 public class StateManager : MonoBehaviour, IStateManager, IInitializable
@@ -43,11 +44,6 @@ public class StateManager : MonoBehaviour, IStateManager, IInitializable
     public void OnGame()
     {
         _screenManager.ShowScreen("GameScreen");
-    }
-
-    public void OnResult()
-    {
-        _screenManager.ShowPopup("ResultPopup");
     }
 
     public void TriggerEvent(string eventKey)

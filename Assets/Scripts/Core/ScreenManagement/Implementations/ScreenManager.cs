@@ -64,10 +64,12 @@ namespace Core.ScreenManagement
             SetParent(_currentScreen);
         }
 
-        public void ShowPopup(string popupName)
+        public void ShowPopup(string popupName, object paramsObject = null)
         {
             var screen = _sceneContext.Container.InstantiatePrefab(_screens[popupName]);
             AssignWorldCamera(screen);
+            var view = screen.GetComponentInChildren<IPopupScreenView>();
+            view.SetParams(paramsObject);
             SetParent(screen);
         }
 

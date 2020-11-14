@@ -1,3 +1,6 @@
+using Core.ScreenManagement;
+using Modules.Game.Scripts.Result;
+
 public class BoardPresenter : Presenter<BoardView>
 {
     private const int LeftPilePosition = 4;
@@ -69,7 +72,7 @@ public class BoardPresenter : Presenter<BoardView>
     private void OnGameFinished(int result, bool newRecord)
     {
         view.StopPlayableCards();
-        _stateManager.TriggerEvent(Event.SHOW_RESULT);
+        _screenManager.ShowPopup("ResultPopup", new ResultParams(result, newRecord));
     }
 
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
@@ -99,7 +102,7 @@ public class BoardPresenter : Presenter<BoardView>
         _gameManagerService.CardUpdate -= OnCardUpdate;
         _gameManagerService.GameFinished -= OnGameFinished;
         _gameManagerService.Splashed -= OnSplashed;
-        _gameManagerService.Unblocked += OnUnblocked;
+        _gameManagerService.Unblocked -= OnUnblocked;
         
         _gameManagerService.Exit();
 

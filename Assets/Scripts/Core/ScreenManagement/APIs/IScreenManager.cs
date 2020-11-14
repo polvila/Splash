@@ -1,9 +1,10 @@
-﻿using System;
-
-public interface IScreenManager
+﻿namespace Core.ScreenManagement
 {
-    void ShowScreen(string screenName);
-    void ShowPopup(string popupName);
-    void ShowSpinner(string text = "");
-    void HideSpinner();
+    public interface IScreenManager
+    {
+        void ShowScreen(string screenName);
+        void ShowPopup(string popupName, object paramsObject = null);
+        void ShowSpinner(string text = "");
+        void HideSpinner();
+    }
 }

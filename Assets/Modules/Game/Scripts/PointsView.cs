@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -44,5 +45,11 @@ public class PointsView : MonoBehaviour
     {
         _totalPoints += points;
         _pointsText.text = _totalPoints.ToString(PointsFormat);
+    }
+
+    private void OnDestroy()
+    {
+        _gameManagerService.Splashed -= OnSplashed;
+        _gameManagerService.CardUpdate -= OnCardUpdate;
     }
 }

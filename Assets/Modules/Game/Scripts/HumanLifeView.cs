@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -54,5 +55,11 @@ public class HumanLifeView : MonoBehaviour
         var newWidth = _totalPoints * _pointsToLifeWidth;
         sizeDelta = new Vector2(newWidth, sizeDelta.y);
         _life.sizeDelta = sizeDelta;
+    }
+
+    private void OnDestroy()
+    {
+        _gameManagerService.Splashed -= OnSplashed;
+        _gameManagerService.CardUpdate -= OnCardUpdate;
     }
 }
