@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class GameManagerServiceMock : IGameManagerService
 {
-    private static readonly int BlockedTimeSec = 4;
+    private static readonly int BlockedTimeSec = 2;
     private static readonly string HumanRecordKey = "HumanRecord";
 
     public const int LeftPilePosition = 4;
