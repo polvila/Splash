@@ -55,15 +55,13 @@ public class BoardPresenter : Presenter<BoardView>
 
     private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
     {
-        if (fromCardPosition == toCardPosition)
+        if (fromCardPosition == toCardPosition || newNumber == null)
         {
-            view.ShowCardMiss(fromCardPosition);
-            return;
+            view.MissCardMove(fromCardPosition);
         }
-
-        view.MoveCard(fromCardPosition, toCardPosition);
-        if (newNumber != null)
+        else
         {
+            view.MoveCard(fromCardPosition, toCardPosition);
             view.AddNewCardTo(fromCardPosition, newNumber.Value);
         }
     }

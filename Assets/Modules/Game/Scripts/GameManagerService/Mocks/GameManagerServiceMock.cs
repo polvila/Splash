@@ -238,10 +238,8 @@ public class GameManagerServiceMock : IGameManagerService
         if (_gameStateModel.HumanLifePoints <= 0)
         {
             GameOver();
-            return;
         }
-
-        if (IsGameBlocked())
+        else if (IsGameBlocked())
         {
             Debug.Log("Unblock by move card");
             UnblockIn(BlockedTimeSec);

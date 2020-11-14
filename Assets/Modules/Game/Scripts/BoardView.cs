@@ -79,17 +79,15 @@ public class BoardView : MonoBehaviour
 
     public void MoveCard(int from, int to)
     {
-        _cards[from].transform.SetAsLastSibling();
         CardView oldPileCard = _cards[to];
         _cards[to] = _cards[from];
         _cards[to].Index = to;
-        LeanTween.move(_cards[from].gameObject,
-            _slots[to], 0.2f).setOnComplete(() => { Destroy(oldPileCard.gameObject); });
+        _cards[from].MoveFrom(_slots[from], _slots[to], () => { Destroy(oldPileCard.gameObject); });
     }
 
-    public void ShowCardMiss(int position)
+    public void MissCardMove(int from)
     {
-        _cards[position].TriggerMissAnimationFrom(_slots[position].position);
+        _cards[from].TriggerMissAnimationFrom(_slots[from]);
     }
 
     public void DestroyCard(int position, float delay = 0)
@@ -125,7 +123,7 @@ public class BoardView : MonoBehaviour
 
         if (cardPosition >= FirstPositionHumanCards)
         {
-            card.gameObject.AddComponent<Button>().onClick.AddListener(() =>
+            card.Button.onClick.AddListener(() =>
             {
                 if (!_cardsArePlayable && !SROptions.Current.GodMode) return;
 
@@ -176,7 +174,7 @@ public class BoardView : MonoBehaviour
         foreach (var card in _cards)
         {
             if (card == null) continue;
-            card.GetComponent<Button>()?.onClick.RemoveAllListeners();
+            card.Button.onClick.RemoveAllListeners();
         }
 
         _splashZone.onClick.RemoveAllListeners();
