@@ -9,6 +9,7 @@ public class CardView : MonoBehaviour
 	public Button Button;
 
 	private int _missAnimationId;
+	private int _moveAnimationId;
 
 	private int _num;
 	public int Num
@@ -42,6 +43,14 @@ public class CardView : MonoBehaviour
 			LeanTween.cancel(_missAnimationId);
 		}
 		transform.position = from.position;
-		LeanTween.move(gameObject, to, 0.2f).setOnComplete(onComplete);
+		_moveAnimationId = LeanTween.move(gameObject, to, 0.2f).setOnComplete(onComplete).id;
+	}
+
+	private void OnDestroy()
+	{
+		if (LeanTween.isTweening(_moveAnimationId))
+		{
+			LeanTween.cancel(_moveAnimationId, true);
+		}
 	}
 }
