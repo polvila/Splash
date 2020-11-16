@@ -4,15 +4,16 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16d00b7005a47ef47802a8421dc6baf6, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  _isEnabled: 1
-  _autoLoad: 1
+  _isEnabled: 0
+  _autoLoad: 0
   _defaultTab: 2
   _triggerEnableMode: 0
   _triggerBehaviour: 2
@@ -55,10 +56,10 @@ MonoBehaviour:
   _apiKey: 
   _enableBugReporter: 0
   _disabledTabs: 
-  _profilerAlignment: 2
+  _profilerAlignment: 0
   _optionsAlignment: 3
   _consoleAlignment: 0
-  _triggerPosition: 0
+  _triggerPosition: 2
   _maximumConsoleEntries: 1500
   _enableEventSystemCreation: 1
   _automaticShowCursor: 1
