@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -134,11 +133,13 @@ public class GameManagerServiceMock : IGameManagerService, IAIManagerService
         var newLeftNumber = _numberGeneratorService.GetNumber();
         var newRightNumber = _numberGeneratorService.GetNumber();
 
-        LeanTween.delayedCall(2f, () =>
+        _unblockDelayId = LeanTween.delayedCall(2f, () =>
         {
             Debug.Log("Update piles " + newLeftNumber + ":" + newRightNumber);
             _gameStateModel.Numbers[LeftPilePosition] = newLeftNumber;
             _gameStateModel.Numbers[RightPilePosition] = newRightNumber;
+            _gameStateModel.SplashPot = 2;
+
             Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition], _gameStateModel.Numbers[RightPilePosition]);
 
             if (IsGameBlocked())
@@ -146,22 +147,20 @@ public class GameManagerServiceMock : IGameManagerService, IAIManagerService
                 Debug.Log("Unblock by splash " + (fromAI ? " from AI " : "from human"));
                 UnblockIn(BlockedTimeSec);
             }
-        });
+        }).id;
 
         if (fromAI)
         {
             _gameStateModel.HumanLifePoints -= _gameStateModel.SplashPot;
-            Splashed?.Invoke(false, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
         }
         else
         {
             _gameStateModel.HumanPointsCounter += _gameStateModel.SplashPot;
-            Splashed?.Invoke(true, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
         }
+        
+        Splashed?.Invoke(!fromAI, newLeftNumber, newRightNumber, _gameStateModel.SplashPot);
 
-        Debug.Log((fromAI ? "AI Splash!" : "Splash!") + " with " + _gameStateModel.SplashPot + "points");
-
-        _gameStateModel.SplashPot = 2;
+        Debug.Log((fromAI ? "AI Splash!" : "Splash!") + " with " + _gameStateModel.SplashPot + " points");
 
         if (_gameStateModel.HumanLifePoints <= 0)
         {
