@@ -13,6 +13,15 @@ public class BoardPresenter : Presenter<BoardView>
     private bool _gameFinished;
     private Action _gameFinishedAction;
 
+    private enum ActionType
+    {
+        Miss,
+        Move,
+        Splash
+    }
+
+    private ActionType _lastAction;
+
     public BoardPresenter(
         IGameManagerService gameManagerService,
         IScreenManager screenManager)
@@ -61,18 +70,22 @@ public class BoardPresenter : Presenter<BoardView>
     {
         if (fromCardPosition == toCardPosition || newNumber == null)
         {
-            view.MissCardMove(fromCardPosition);
+            _lastAction = ActionType.Miss;
+            view.MissCardMove(fromCardPosition, () => CheckGameFinished(ActionType.Miss));
         }
         else
         {
-            view.MoveCard(fromCardPosition, toCardPosition, () =>
-            {
-                if (_gameFinished)
-                {
-                    _gameFinishedAction?.Invoke();
-                }
-            });
+            _lastAction = ActionType.Move;
+            view.MoveCard(fromCardPosition, toCardPosition, () => CheckGameFinished(ActionType.Move));
             view.AddNewCardTo(fromCardPosition, newNumber.Value);
+        }
+    }
+
+    private void CheckGameFinished(ActionType fromAction)
+    {
+        if (_gameFinished && fromAction == _lastAction)
+        {
+            _gameFinishedAction?.Invoke();
         }
     }
 
@@ -85,13 +98,8 @@ public class BoardPresenter : Presenter<BoardView>
 
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
-        view.ShowSplash(wasHuman, points, () =>
-        {
-            if (_gameFinished)
-            {
-                _gameFinishedAction?.Invoke();
-            }
-        });
+        _lastAction = ActionType.Splash;
+        view.ShowSplash(wasHuman, points, () => CheckGameFinished(ActionType.Splash));
         view.DestroyCard(LeftPilePosition);
         view.DestroyCard(RightPilePosition);
     }

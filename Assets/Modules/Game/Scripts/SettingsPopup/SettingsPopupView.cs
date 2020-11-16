@@ -1,4 +1,5 @@
 ﻿using Core.ScreenManagement;
+using Core.StateManager;
 using Zenject;
 
 public class SettingsPopupView : PopupScreenView

@@ -1,13 +1,11 @@
 using UnityEngine;
 using Zenject;
 
-namespace Core.NetworkServices
+namespace Modules.Game
 {
-    public class NetworkServicesInstaller : MonoInstaller
+    public class GameManagerInstaller : MonoInstaller
     {
-        [Header("Card Generator")]
         [SerializeField] private CardGeneratorMode _generatorMode;
-        [SerializeField] private GameObject _card;
     
         public override void InstallBindings()
         {
@@ -20,8 +18,6 @@ namespace Core.NetworkServices
 
             Container.BindInterfacesTo<GameManagerServiceMock>()
                 .AsSingle();
-
-            Container.Bind<IAuthenticationService>().To<AuthenticationService>().AsSingle();
         }
     }
 }

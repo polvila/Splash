@@ -1,4 +1,7 @@
-public interface IStateManager
+namespace Core.StateManager
 {
-    void TriggerEvent(string eventKey);
+    public interface IStateManager
+    {
+        void TriggerEvent(string eventKey);
+    }
 }

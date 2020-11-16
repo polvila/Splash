@@ -75,9 +75,9 @@ public class BoardView : MonoBehaviour
         });
     }
 
-    public void MissCardMove(int from)
+    public void MissCardMove(int from, Action onComplete)
     {
-        _cards[from].TriggerMissAnimationFrom(_slots[from]);
+        _cards[from].TriggerMissAnimationFrom(_slots[from], onComplete);
     }
 
     public void DestroyCard(int position, float delay = 0)

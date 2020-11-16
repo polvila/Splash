@@ -1114,6 +1114,7 @@ GameObject:
   - component: {fileID: 461117036705443316}
   - component: {fileID: 1042989473137842945}
   - component: {fileID: 7869967702447794034}
+  - component: {fileID: 7759837141141867169}
   m_Layer: 5
   m_Name: LeaderboardsButton
   m_TagString: Untagged
@@ -1221,18 +1222,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1042989473137842945}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6088747548699620811}
-        m_MethodName: OnLeaderboardsClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &7759837141141867169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860625730405655363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e35abd56f8827428f1d3b9b8fe9188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6985358297920671857
 GameObject:
   m_ObjectHideFlags: 0
@@ -1637,6 +1639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aea46002570b46aaa52e4eccedba8ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CloseButton: {fileID: 0}
   _resultText: {fileID: 1062027221448400955}
   _newRecordBanner: {fileID: 526061617714114355}
 --- !u!1 &8576263350312197537

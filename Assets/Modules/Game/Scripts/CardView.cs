@@ -24,14 +24,17 @@ public class CardView : MonoBehaviour
 
 	public int Index;
 
-	public void TriggerMissAnimationFrom(Transform from)
+	public void TriggerMissAnimationFrom(Transform from, Action onComplete)
 	{
 		if (LeanTween.isTweening(_missAnimationId))
 		{
 			LeanTween.cancel(_missAnimationId);
 		}
 		transform.position = from.position;
-		_missAnimationId = LeanTween.moveLocalY(gameObject, transform.localPosition.y + 30f, 1f).setEasePunch().id;
+		_missAnimationId = LeanTween.moveLocalY(gameObject, transform.localPosition.y + 30f, 1f)
+			.setEasePunch()
+			.setOnComplete(onComplete)
+			.id;
 	}
 
 	public void MoveFrom(Transform from, Transform to, Action onComplete)

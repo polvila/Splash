@@ -252,6 +252,7 @@ public class GameManagerServiceMock : IGameManagerService, IAIManagerService
 
     private void GameOver()
     {
+        Debug.Log("GAME OVER");
         _ai.Stop();
         StopDelayedUnblock();
         bool isNewHumanRecord = _gameStateModel.HumanPointsCounter > HumanRecord;

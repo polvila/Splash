@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using Core.StateManager;
+using UnityEngine;
 using Zenject;
+using Event = Core.StateManager.Event;
 
 public class MainMenuView : MonoBehaviour
 {
