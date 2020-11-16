@@ -25,6 +25,7 @@ public class AI
 
     public void Play()
     {
+        _checkSplash = true;
         _currentCoroutine = _coroutineProxy.StartCoroutine(Update());
     }
 
@@ -34,9 +35,6 @@ public class AI
         {
             for (; _positionsToCheckIndex < _positionsToCheck.Length; ++_positionsToCheckIndex)
             {
-                yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
-                yield return new WaitUntil(() => !_paused);
-                _gameManagerService.PlayThisCard(_positionsToCheck[_positionsToCheckIndex]);
                 if (_checkSplash)
                 {
                     _checkSplash = false;
@@ -44,6 +42,9 @@ public class AI
                     yield return new WaitUntil(() => !_paused);
                     _gameManagerService.TryDoSplash(true);
                 }
+                yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
+                yield return new WaitUntil(() => !_paused);
+                _gameManagerService.PlayThisCard(_positionsToCheck[_positionsToCheckIndex]);
             }
 
             _positionsToCheck = _positionsToCheck.OrderBy(elem => Guid.NewGuid()).ToArray();
