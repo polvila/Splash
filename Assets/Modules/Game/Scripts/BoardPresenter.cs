@@ -1,3 +1,4 @@
+using System;
 using Core.ScreenManagement;
 using Modules.Game.Scripts.Result;
 
@@ -8,16 +9,16 @@ public class BoardPresenter : Presenter<BoardView>
 
     private IGameManagerService _gameManagerService;
     private IScreenManager _screenManager;
-    private IStateManager _stateManager;
+
+    private bool _gameFinished;
+    private Action _gameFinishedAction;
 
     public BoardPresenter(
         IGameManagerService gameManagerService,
-        IScreenManager screenManager,
-        IStateManager stateManager)
+        IScreenManager screenManager)
     {
         _gameManagerService = gameManagerService;
         _screenManager = screenManager;
-        _stateManager = stateManager;
     }
 
     public override void RegisterView(BoardView view)
@@ -64,7 +65,13 @@ public class BoardPresenter : Presenter<BoardView>
         }
         else
         {
-            view.MoveCard(fromCardPosition, toCardPosition);
+            view.MoveCard(fromCardPosition, toCardPosition, () =>
+            {
+                if (_gameFinished)
+                {
+                    _gameFinishedAction?.Invoke();
+                }
+            });
             view.AddNewCardTo(fromCardPosition, newNumber.Value);
         }
     }
@@ -72,12 +79,19 @@ public class BoardPresenter : Presenter<BoardView>
     private void OnGameFinished(int result, bool newRecord)
     {
         view.StopPlayableCards();
-        _screenManager.ShowPopup("ResultPopup", new ResultParams(result, newRecord));
+        _gameFinished = true;
+        _gameFinishedAction = () => _screenManager.ShowPopup("ResultPopup", new ResultParams(result, newRecord));
     }
 
     private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
     {
-        view.ShowSplash(wasHuman, points);
+        view.ShowSplash(wasHuman, points, () =>
+        {
+            if (_gameFinished)
+            {
+                _gameFinishedAction?.Invoke();
+            }
+        });
         view.DestroyCard(LeftPilePosition);
         view.DestroyCard(RightPilePosition);
     }

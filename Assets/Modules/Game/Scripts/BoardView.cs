@@ -63,12 +63,16 @@ public class BoardView : MonoBehaviour
         });
     }
 
-    public void MoveCard(int from, int to)
+    public void MoveCard(int from, int to, Action onComplete)
     {
         CardView oldPileCard = _cards[to];
         _cards[to] = _cards[from];
         _cards[to].Index = to;
-        _cards[from].MoveFrom(_slots[from], _slots[to], () => { Destroy(oldPileCard.gameObject); });
+        _cards[from].MoveFrom(_slots[from], _slots[to], () =>
+        {
+            Destroy(oldPileCard.gameObject);
+            onComplete?.Invoke();
+        });
     }
 
     public void MissCardMove(int from)
@@ -136,10 +140,10 @@ public class BoardView : MonoBehaviour
         return cardView;
     }
 
-    public void ShowSplash(bool fromHumanPlayer, int totalPoints)
+    public void ShowSplash(bool fromHumanPlayer, int totalPoints, Action onComplete)
     {
         var splash = fromHumanPlayer ? _humanSplash : _enemySplash;
-        splash.Show(totalPoints);
+        splash.Show(totalPoints, onComplete);
     }
 
     private void OnDestroy()
