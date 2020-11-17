@@ -15,7 +15,7 @@ MonoBehaviour:
   _isEnabled: 0
   _autoLoad: 0
   _defaultTab: 2
-  _triggerEnableMode: 0
+  _triggerEnableMode: 3
   _triggerBehaviour: 2
   _enableKeyboardShortcuts: 1
   _keyboardShortcuts: []
