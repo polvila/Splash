@@ -1,5 +1,5 @@
 using System;
-using TMPro;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -63,7 +63,7 @@ public class BoardView : MonoBehaviour
         });
     }
 
-    public void MoveCard(int from, int to, Action onComplete)
+    public void MoveCard(int from, int to)
     {
         CardView oldPileCard = _cards[to];
         _cards[to] = _cards[from];
@@ -71,13 +71,12 @@ public class BoardView : MonoBehaviour
         _cards[from].MoveFrom(_slots[from], _slots[to], () =>
         {
             Destroy(oldPileCard.gameObject);
-            onComplete?.Invoke();
         });
     }
 
-    public void MissCardMove(int from, Action onComplete)
+    public void MissCardMove(int from)
     {
-        _cards[from].TriggerMissAnimationFrom(_slots[from], onComplete);
+        _cards[from].TriggerMissAnimationFrom(_slots[from]);
     }
 
     public void DestroyCard(int position, float delay = 0)
@@ -122,9 +121,24 @@ public class BoardView : MonoBehaviour
         }
     }
 
-    public void StopPlayableCards()
+    public void FinishGame(Action onComplete)
     {
         _cardsArePlayable = false;
+        StartCoroutine(WaitUntilAnimationsEnd(onComplete));
+    }
+
+    private IEnumerator WaitUntilAnimationsEnd(Action onComplete)
+    {
+        foreach (var cardView in _cards)
+        {
+            if (cardView != null)
+            {
+                yield return new WaitUntil(() => !LeanTween.isTweening(cardView.gameObject));
+            }
+        }
+        yield return new WaitUntil(() => !LeanTween.isTweening(_humanSplash.gameObject));
+        yield return new WaitUntil(() => !LeanTween.isTweening(_enemySplash.gameObject));
+        onComplete?.Invoke();
     }
 
     public void StartCountdown(Action onComplete)
@@ -140,10 +154,10 @@ public class BoardView : MonoBehaviour
         return cardView;
     }
 
-    public void ShowSplash(bool fromHumanPlayer, int totalPoints, Action onComplete)
+    public void ShowSplash(bool fromHumanPlayer, int totalPoints)
     {
         var splash = fromHumanPlayer ? _humanSplash : _enemySplash;
-        splash.Show(totalPoints, onComplete);
+        splash.Show(totalPoints);
     }
 
     private void OnDestroy()

@@ -24,7 +24,7 @@ public class CardView : MonoBehaviour
 
 	public int Index;
 
-	public void TriggerMissAnimationFrom(Transform from, Action onComplete)
+	public void TriggerMissAnimationFrom(Transform from, Action onComplete = null)
 	{
 		if (LeanTween.isTweening(_missAnimationId))
 		{
@@ -33,11 +33,11 @@ public class CardView : MonoBehaviour
 		transform.position = from.position;
 		_missAnimationId = LeanTween.moveLocalY(gameObject, transform.localPosition.y + 30f, 1f)
 			.setEasePunch()
-			.setOnComplete(onComplete)
+			.setOnComplete(() => onComplete?.Invoke())
 			.id;
 	}
 
-	public void MoveFrom(Transform from, Transform to, Action onComplete)
+	public void MoveFrom(Transform from, Transform to, Action onComplete = null)
 	{
 		Button.enabled = false;
 		transform.SetAsLastSibling();
@@ -46,7 +46,7 @@ public class CardView : MonoBehaviour
 			LeanTween.cancel(_missAnimationId);
 		}
 		transform.position = from.position;
-		_moveAnimationId = LeanTween.move(gameObject, to, 0.2f).setOnComplete(onComplete).id;
+		_moveAnimationId = LeanTween.move(gameObject, to, 0.2f).setOnComplete(() => onComplete?.Invoke()).id;
 	}
 
 	private void OnDestroy()

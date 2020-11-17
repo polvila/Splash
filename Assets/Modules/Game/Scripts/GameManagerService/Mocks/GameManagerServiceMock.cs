@@ -107,7 +107,7 @@ public class GameManagerServiceMock : IGameManagerService, IAIManagerService
                     int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
                     MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
                 }
-                else
+                else //miss
                 {
                     --_gameStateModel.HumanLifePoints;
                     CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
