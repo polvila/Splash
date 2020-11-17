@@ -12,7 +12,6 @@
 #endif
 
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -60,21 +59,25 @@ namespace HutongGames.PlayMaker.Actions
             get { return cachedComponent as Camera; }
         }
 
+#if !UNITY_2019_3_OR_NEWER
+
 		#if UNITY_2017_2_OR_NEWER
 		#pragma warning disable CS0618 
         #endif
-        protected Text guiText
+        protected GUIText guiText
         {
-            get { return cachedComponent as Text; }
+            get { return cachedComponent as GUIText; }
         }
 
-        protected RawImage guiTexture
+        protected GUITexture guiTexture
         {
-            get { return cachedComponent as RawImage; }
+            get { return cachedComponent as GUITexture; }
         }
         #if UNITY_2017_2_OR_NEWER
         #pragma warning restore CS0618 
 		#endif
+
+#endif
 
         protected Light light
         {

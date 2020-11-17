@@ -2,17 +2,18 @@
 
 using UnityEngine;
 using System;
-using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
+#if !UNITY_2019_3_OR_NEWER
+
 	[ActionCategory(ActionCategory.GUIElement)]
 	[Tooltip("Sets the Color of the GUITexture attached to a Game Object.")]
 	#if UNITY_2017_2_OR_NEWER
 	#pragma warning disable CS0618  
 	[Obsolete("GUITexture is part of the legacy UI system and will be removed in a future release")]
 	#endif
-	public class SetGUITextureColor : ComponentAction<Image>
+	public class SetGUITextureColor : ComponentAction<GUITexture>
 	{
 		[RequiredField]
 		[CheckForComponent(typeof(GUITexture))]
@@ -52,4 +53,18 @@ namespace HutongGames.PlayMaker.Actions
 			}
 		}
 	}
+
+#else
+
+    [ActionCategory(ActionCategory.GUIElement)]
+    [Tooltip("Sets the Color of the GUITexture attached to a Game Object.")]
+    [Obsolete("GUITexture is part of the legacy UI system removed in 2019.3")]
+    public class SetGUITextureColor : FsmStateAction
+    {
+        [ActionSection("Obsolete. Use Unity UI instead.")]
+
+        public FsmColor color;
+    }
+
+#endif
 }

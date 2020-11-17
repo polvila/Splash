@@ -54,7 +54,7 @@ namespace HutongGames.PlayMaker
 #if UNITY_EDITOR
 
             // Unity 5.3.2 disallows scene dirty calls when playing
-            if (Application.isPlaying) return;
+            if (PlayMakerGlobals.IsPlaying) return;
 
             if (fsm == null || fsm.OwnerObject == null) return;
 
@@ -73,7 +73,10 @@ namespace HutongGames.PlayMaker
             {
                 EditorUtility.SetDirty(fsm.Owner);
 #if !UNITY_PRE_5_3
-                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(fsm.Owner.gameObject.scene);
+                if (fsm.Owner.gameObject != null)
+                {
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(fsm.Owner.gameObject.scene);
+                }
 #elif !UNITY_PRE_5_0
                 // Not sure if we need to do this...?
                 UnityEditor.EditorApplication.MarkSceneDirty();
