@@ -14,6 +14,8 @@ public class ResultView : PopupScreenView
 
     private IStateManager _stateManager;
     private ICloudOnceService _cloudOnceService;
+
+    private int _result;
     
     [Inject]
     void Init(IStateManager stateManager,
@@ -26,8 +28,9 @@ public class ResultView : PopupScreenView
     public override void SetParams(object paramsObject)
     {
         ResultParams resultParams = (ResultParams) paramsObject;
-        
-        _resultText.text = $"{resultParams.Result} points";
+
+        _result = resultParams.Result;
+        _resultText.text = $"{_result} points";
         _newRecordBanner.SetActive(resultParams.NewRecord);
         gameObject.SetActive(true);
         _cloudOnceService.SubmitScoreToLeaderboard(resultParams.Result);
@@ -47,5 +50,9 @@ public class ResultView : PopupScreenView
 
     public void OnShareClicked()
     {
+        new NativeShare().SetTitle("Share your new score!")
+            .SetText($"Hey, I just scored {_result} points at Splash!\nGive it a try: <google-store-link>")
+            .SetSubject("Look my new Splash! score")
+            .Share();
     }
 }

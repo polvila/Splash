@@ -128,6 +128,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.yasirkula.nativeshare": {
+      "version": "https://github.com/yasirkula/UnityNativeShare.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a325dd8ce0fa137d55994c11ad74267560f13e6b"
+    },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",
       "depth": 1,
