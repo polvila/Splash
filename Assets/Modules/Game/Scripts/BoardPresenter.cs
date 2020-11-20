@@ -71,7 +71,7 @@ namespace Modules.Game
             {
                 view.MissCardMove(fromCardPosition, () =>
                 {
-                    if(_playerModel.MissFTUECompleted) return;
+                    if (_playerModel.MissFTUECompleted && !_showTutorial) return;
                     view.OpenFTUE(true);
                 });
             }
