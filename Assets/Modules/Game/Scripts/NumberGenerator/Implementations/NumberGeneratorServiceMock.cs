@@ -34,6 +34,7 @@ namespace Modules.Game
 						_generator = _container.Resolve<FTUEGenerator>();
 						break;
 				}
+				_generator.Reset();
 			}
 		}
 

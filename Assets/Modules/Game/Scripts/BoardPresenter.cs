@@ -10,6 +10,7 @@ namespace Modules.Game
         private IGameManagerService _gameManagerService;
         private IScreenManager _screenManager;
         private IPlayerModel _playerModel;
+        private bool _showTutorial;
 
         public BoardPresenter(
             IGameManagerService gameManagerService,
@@ -35,7 +36,7 @@ namespace Modules.Game
             _gameManagerService.Initialize();
         }
 
-        private void OnNewGameReceived(int[] numbers)
+        private void OnNewGameReceived(int[] numbers, bool showTutorial)
         {
             for (int i = 0; i < LeftPilePosition; ++i)
             {
@@ -48,14 +49,15 @@ namespace Modules.Game
             }
 
             _screenManager.HideSpinner();
+            _showTutorial = showTutorial;
 
             view.StartCountdown(() =>
             {
-                view.SetCardsArePlayable(_playerModel.FTUECompleted);
+                view.SetCardsArePlayable(!_showTutorial);
                 view.AddNewCardTo(LeftPilePosition, numbers[LeftPilePosition]);
                 view.AddNewCardTo(RightPilePosition, numbers[RightPilePosition], () =>
                 {
-                    if (_playerModel.FTUECompleted) return;
+                    if (!_showTutorial) return;
                     view.OpenFTUE();
                     view.SetCardsArePlayable(true);
                 });

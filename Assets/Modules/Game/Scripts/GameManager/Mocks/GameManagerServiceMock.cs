@@ -17,8 +17,9 @@ namespace Modules.Game
         private IPlayerModel _playerModel;
         private int _unblockDelayId;
         private AI _ai;
+        private bool _tutorialModeActive;
 
-        public event Action<int[]> NewGameReceived;
+        public event Action<int[], bool> NewGameReceived;
         public event Action<int, int, int?> CardUpdate;
         public event Action<int, bool> GameFinished;
         public event Action<bool, int, int, int> Splashed;
@@ -36,7 +37,7 @@ namespace Modules.Game
 
         public void Initialize()
         {
-            if (!_playerModel.FTUECompleted)
+            if (_tutorialModeActive)
             {
                 _numberGeneratorService.GeneratorMode = CardGeneratorMode.FTUE;
             }
@@ -60,7 +61,10 @@ namespace Modules.Game
                 SplashPot = 2
             };
 
-            LeanTween.delayedCall(1f, () => NewGameReceived?.Invoke(_gameStateModel.Numbers));
+            LeanTween.delayedCall(1f, () =>
+            {
+                NewGameReceived?.Invoke(_gameStateModel.Numbers, _tutorialModeActive);
+            });
         }
 
         public void StartGame(Mode mode)
@@ -101,7 +105,7 @@ namespace Modules.Game
                         int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
                         MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
                     }
-                    else if (_playerModel.FTUECompleted) //non-valid card
+                    else if (!_tutorialModeActive) //non-valid card
                     {
                         --_gameStateModel.HumanLifePoints;
                         CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
@@ -119,7 +123,7 @@ namespace Modules.Game
         {
             if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
                 _gameStateModel.Numbers[LeftPilePosition] == -1 && _gameStateModel.Numbers[RightPilePosition] == -1 ||
-                !_playerModel.FTUECompleted && fromAI) return;
+                _tutorialModeActive && fromAI) return;
 
             _gameStateModel.Numbers[LeftPilePosition] = -1;
             _gameStateModel.Numbers[RightPilePosition] = -1;
@@ -194,6 +198,11 @@ namespace Modules.Game
         {
             _ai?.Stop();
             StopDelayedUnblock();
+        }
+
+        public void SetTutorialMode(bool active)
+        {
+            _tutorialModeActive = active;
         }
 
         public void PauseAI(bool active)

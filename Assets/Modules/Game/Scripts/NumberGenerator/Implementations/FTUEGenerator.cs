@@ -25,6 +25,12 @@ namespace Modules.Game
             };
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            _index = 0;
+        }
+
         public override int GenerateNumber(int minRange, int maxRange)
         {
             if (_index < _firstNumbers.Length)

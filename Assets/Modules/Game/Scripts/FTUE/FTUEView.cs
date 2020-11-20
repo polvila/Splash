@@ -118,6 +118,7 @@ namespace Modules.Game
                 {
                     _playerModel.FTUECompleted = true;
                 }
+                _gameManagerService.SetTutorialMode(false);
                 _aiManagerService.PauseAI(false);
                 Destroy(gameObject);
                 return;

@@ -11,7 +11,7 @@ namespace Modules.Game
 
     public interface IGameManagerService
     {
-        event Action<int[]> NewGameReceived;
+        event Action<int[], bool> NewGameReceived;
         event Action<int, int, int?> CardUpdate;
         event Action<int, bool> GameFinished;
         event Action<bool, int, int, int> Splashed;
@@ -22,5 +22,6 @@ namespace Modules.Game
         void PlayThisCard(int positionCardSelected);
         void HumanSplash();
         void Exit();
+        void SetTutorialMode(bool active);
     }
 }
