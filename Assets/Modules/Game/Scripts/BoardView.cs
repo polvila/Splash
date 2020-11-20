@@ -78,9 +78,9 @@ namespace Modules.Game
             });
         }
 
-        public void MissCardMove(int from)
+        public void MissCardMove(int from, Action onComplete)
         {
-            _cards[from].TriggerMissAnimationFrom(_slots[from]);
+            _cards[from].TriggerMissAnimationFrom(_slots[from], onComplete);
         }
 
         public void DestroyCard(int position, float delay = 0)
@@ -193,9 +193,16 @@ namespace Modules.Game
             AddNewCardTo(RightMiddlePositionCard, newRightNumber, TriggerFTUEAfterUnblocked);
         }
 
-        public void OpenFTUE()
+        public void OpenFTUE(bool miss = false)
         {
-            _ftueView = _assetManager.InstantiatePrefab("FTUE", transform).GetComponent<FTUEView>();
+            if (miss)
+            {
+                _assetManager.InstantiatePrefab("MissFTUE", transform);
+            }
+            else
+            {
+                _ftueView = _assetManager.InstantiatePrefab("FTUE", transform).GetComponent<FTUEView>();
+            }
         }
 
         private void TriggerFTUEs(int cardMovedPosition)

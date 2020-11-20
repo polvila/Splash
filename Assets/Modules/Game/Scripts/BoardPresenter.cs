@@ -67,7 +67,11 @@ namespace Modules.Game
         {
             if (fromCardPosition == toCardPosition || newNumber == null)
             {
-                view.MissCardMove(fromCardPosition);
+                view.MissCardMove(fromCardPosition, () =>
+                {
+                    if(_playerModel.MissFTUECompleted) return;
+                    view.OpenFTUE(true);
+                });
             }
             else
             {

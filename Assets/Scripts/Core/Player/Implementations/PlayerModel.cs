@@ -4,6 +4,7 @@ public class PlayerModel : IPlayerModel
 {
     private static readonly string HumanRecordKey = "HumanRecord";
     private static readonly string FTUECompletedKey = "FTUECompleted";
+    private static readonly string MissFTUECompletedKey = "MissFTUECompleted";
     
     private int _humanRecord = -1;
     public int HumanRecord
@@ -43,6 +44,27 @@ public class PlayerModel : IPlayerModel
             if (value == false) return;
             _ftueCompleted = true;
             PlayerPrefs.SetInt(FTUECompletedKey, 1);
+            PlayerPrefs.Save();
+        }
+    }
+    
+    private bool _missFtueCompleted;
+    public bool MissFTUECompleted
+    {
+        get
+        {
+            if (_missFtueCompleted == false)
+            {
+                _missFtueCompleted = PlayerPrefs.GetInt(MissFTUECompletedKey) != 0;
+            }
+
+            return _missFtueCompleted;
+        }
+        set
+        {
+            if (value == false) return;
+            _missFtueCompleted = true;
+            PlayerPrefs.SetInt(MissFTUECompletedKey, 1);
             PlayerPrefs.Save();
         }
     }

@@ -41,6 +41,7 @@ namespace Modules.Game
         [SerializeField] private FTUESequence _ftueSequence;
         [SerializeField] private Transform _darkBackground;
         [SerializeField] private Image _screenTouchBlocker;
+        [SerializeField] private bool _missFTUE;
 
         [Header("Masks")] [SerializeField] private Transform _enemyMask;
         [SerializeField] private Transform _middleMask;
@@ -58,11 +59,15 @@ namespace Modules.Game
         private int _currentScreenIndex = -1;
         private IGameManagerService _gameManagerService;
         private IPlayerModel _playerModel;
+        private IAIManagerService _aiManagerService;
 
         public event Action UpdatePiles;
 
         [Inject]
-        private void Init(IGameManagerService gameManagerService, IPlayerModel playerModel)
+        private void Init(
+            IGameManagerService gameManagerService, 
+            IPlayerModel playerModel,
+            IAIManagerService aiManagerService)
         {
             _masks = new Dictionary<HighlightedPosition, Transform>
             {
@@ -79,6 +84,7 @@ namespace Modules.Game
             _gameManagerService.CardUpdate += OnCardUpdate;
             _gameManagerService.Splashed += OnSplashed;
             _playerModel = playerModel;
+            _aiManagerService = aiManagerService;
         }
 
         private void Start()
@@ -91,6 +97,7 @@ namespace Modules.Game
             ++_currentScreenIndex;
             var screenConfig = _ftueSequence.ScreenSequence[_currentScreenIndex];
             gameObject.SetActive(true);
+            _aiManagerService.PauseAI(true);
             _darkBackground.SetParent(_masks[screenConfig.HighlightedPosition]);
             _darkBackground.SetAsFirstSibling();
             _topText.text = screenConfig.TopText;
@@ -103,7 +110,15 @@ namespace Modules.Game
         {
             if (_currentScreenIndex + 1 == _ftueSequence.ScreenSequence.Count)
             {
-                _playerModel.FTUECompleted = true;
+                if (_missFTUE)
+                {
+                    _playerModel.MissFTUECompleted = true;
+                }
+                else
+                {
+                    _playerModel.FTUECompleted = true;
+                }
+                _aiManagerService.PauseAI(false);
                 Destroy(gameObject);
                 return;
             }
@@ -111,7 +126,8 @@ namespace Modules.Game
             var nextScreenConfig = _ftueSequence.ScreenSequence[_currentScreenIndex + 1];
             if (nextScreenConfig.AwakeTrigger != FTUETrigger.None)
             {
-                gameObject.SetActive(false);
+                _aiManagerService.PauseAI(false);
+                gameObject.SetActive(false); 
                 if (_ftueSequence.ScreenSequence[_currentScreenIndex].AwakeTrigger == FTUETrigger.BeforeUnblocked)
                 {
                     UpdatePiles?.Invoke();
