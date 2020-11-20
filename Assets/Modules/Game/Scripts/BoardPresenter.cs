@@ -73,6 +73,7 @@ namespace Modules.Game
                 {
                     if (_playerModel.MissFTUECompleted && !_showTutorial) return;
                     view.OpenFTUE(true);
+                    _showTutorial = false;
                 });
             }
             else
