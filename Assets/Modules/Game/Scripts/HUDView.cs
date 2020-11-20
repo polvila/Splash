@@ -1,6 +1,7 @@
 ﻿using Core.ScreenManagement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Modules.Game
@@ -11,6 +12,7 @@ namespace Modules.Game
 
         [SerializeField] private TMP_Text _pointsText;
         [SerializeField] private TMP_Text _maxRecordText;
+        [SerializeField] private GameObject _cupImage;
 
         private IGameManagerService _gameManagerService;
         private IScreenManager _screenManager;
@@ -30,6 +32,10 @@ namespace Modules.Game
             _gameManagerService.Splashed += OnSplashed;
             _gameManagerService.CardUpdate += OnCardUpdate;
             _pointsText.text = _totalPoints.ToString(PointsFormat);
+
+            var showMaxRecord = _playerModel.HumanRecord > 0;
+            _cupImage.SetActive(showMaxRecord);
+            _maxRecordText.gameObject.SetActive(showMaxRecord);
             _maxRecordText.text = _playerModel.HumanRecord.ToString(PointsFormat);
         }
 

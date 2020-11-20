@@ -859,6 +859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pointsText: {fileID: 3036276247409058290}
   _maxRecordText: {fileID: 8749647915966994888}
+  _cupImage: {fileID: 736105080920533279}
 --- !u!1 &5096087488630486083
 GameObject:
   m_ObjectHideFlags: 0
