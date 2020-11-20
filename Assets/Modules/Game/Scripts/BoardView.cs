@@ -19,6 +19,7 @@ namespace Modules.Game
         private Transform[] _slots;
         private IAssetManager _assetManager;
         private FTUEView _ftueView;
+        private bool _missFTUEClosed = true;
 
         [SerializeField] private CountdownView _countdownView;
         [SerializeField] private Transform[] _slotContainers;
@@ -149,6 +150,8 @@ namespace Modules.Game
 
             yield return new WaitUntil(() => !LeanTween.isTweening(_humanSplash.gameObject));
             yield return new WaitUntil(() => !LeanTween.isTweening(_enemySplash.gameObject));
+            yield return new WaitForSeconds(0.1f);    //Wait for the possible miss FTUE screen
+            yield return new WaitUntil(() => _missFTUEClosed);
             onComplete?.Invoke();
         }
 
@@ -195,9 +198,14 @@ namespace Modules.Game
 
         public void OpenFTUE(bool miss = false)
         {
+            _missFTUEClosed = false;
             if (miss)
             {
-                _assetManager.InstantiatePrefab("MissFTUE", transform);
+                var missFtue = _assetManager.InstantiatePrefab("MissFTUE", transform).GetComponent<FTUEView>();
+                missFtue.OnClose += () =>
+                {
+                    _missFTUEClosed = true;
+                };
             }
             else
             {

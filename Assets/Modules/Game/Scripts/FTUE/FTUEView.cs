@@ -62,6 +62,7 @@ namespace Modules.Game
         private IAIManagerService _aiManagerService;
 
         public event Action UpdatePiles;
+        public event Action OnClose;
 
         [Inject]
         private void Init(
@@ -175,6 +176,8 @@ namespace Modules.Game
 
         private void OnDestroy()
         {
+            OnClose?.Invoke();
+
             _gameManagerService.CardUpdate -= OnCardUpdate;
             _gameManagerService.Splashed -= OnSplashed;
         }
