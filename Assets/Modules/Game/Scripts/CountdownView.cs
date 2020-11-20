@@ -2,24 +2,27 @@
 using TMPro;
 using UnityEngine;
 
-public class CountdownView : MonoBehaviour
+namespace Modules.Game
 {
-    [SerializeField] private TMP_Text _text;
-    
-    public void StartCountdown(Action onComplete)
+    public class CountdownView : MonoBehaviour
     {
-        var seq = LeanTween.sequence();
-        seq.append(() => { _text.text = "3"; });
-        seq.append(1f);
-        seq.append(() => { _text.text = "2"; });
-        seq.append(1f);
-        seq.append(() => { _text.text = "1"; });
-        seq.append(1f);
-        seq.append(() =>
+        [SerializeField] private TMP_Text _text;
+
+        public void StartCountdown(Action onComplete)
         {
-            _text.text = "";
-            gameObject.SetActive(false);
-            onComplete?.Invoke();
-        });
+            var seq = LeanTween.sequence();
+            seq.append(() => { _text.text = "3"; });
+            seq.append(1f);
+            seq.append(() => { _text.text = "2"; });
+            seq.append(1f);
+            seq.append(() => { _text.text = "1"; });
+            seq.append(1f);
+            seq.append(() =>
+            {
+                _text.text = "";
+                gameObject.SetActive(false);
+                onComplete?.Invoke();
+            });
+        }
     }
 }

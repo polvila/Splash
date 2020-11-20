@@ -1,4 +1,4 @@
-namespace Modules.Game.Scripts.Result
+namespace Modules.Game
 {
     public class ResultParams
     {

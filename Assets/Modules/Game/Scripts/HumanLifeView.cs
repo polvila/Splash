@@ -1,65 +1,68 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using Zenject;
 
-public class HumanLifeView : MonoBehaviour
+namespace Modules.Game
 {
-    private const int TotalPoints = 100;
-
-    [SerializeField] private RectTransform _life;
-    [SerializeField] private TMP_Text _totalPointsText;
-
-    private IGameManagerService _gameManagerService;
-
-    private int _totalPoints = TotalPoints;
-    private float _pointsToLifeWidth;
-
-    [Inject]
-    private void Init(IGameManagerService gameManagerService)
+    public class HumanLifeView : MonoBehaviour
     {
-        _gameManagerService = gameManagerService;
+        private const int TotalPoints = 100;
 
-        _gameManagerService.Splashed += OnSplashed;
-        _gameManagerService.CardUpdate += OnCardUpdate;
-        _totalPointsText.text = $"{_totalPoints}%";
-        _pointsToLifeWidth = _life.sizeDelta.x / TotalPoints;
-    }
-    
-    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
-    {
-        if (!wasHuman)
+        [SerializeField] private RectTransform _life;
+        [SerializeField] private TMP_Text _totalPointsText;
+
+        private IGameManagerService _gameManagerService;
+
+        private int _totalPoints = TotalPoints;
+        private float _pointsToLifeWidth;
+
+        [Inject]
+        private void Init(IGameManagerService gameManagerService)
         {
-            Damage(points);
-        }
-    }
-    
-    private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
-    {
-        if (fromCardPosition < toCardPosition || newNumber == null)
-        {
-            Damage(1);
-        }
-    }
+            _gameManagerService = gameManagerService;
 
-    private void Damage(int points)
-    {
-        _totalPoints -= points;
-        if (_totalPoints <= 0)
-        {
-            _totalPoints = 0;
+            _gameManagerService.Splashed += OnSplashed;
+            _gameManagerService.CardUpdate += OnCardUpdate;
+            _totalPointsText.text = $"{_totalPoints}%";
+            _pointsToLifeWidth = _life.sizeDelta.x / TotalPoints;
         }
-        _totalPointsText.text = $"{_totalPoints}%";
-        
-        var sizeDelta = _life.sizeDelta;
-        var newWidth = _totalPoints * _pointsToLifeWidth;
-        sizeDelta = new Vector2(newWidth, sizeDelta.y);
-        _life.sizeDelta = sizeDelta;
-    }
 
-    private void OnDestroy()
-    {
-        _gameManagerService.Splashed -= OnSplashed;
-        _gameManagerService.CardUpdate -= OnCardUpdate;
+        private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
+        {
+            if (!wasHuman)
+            {
+                Damage(points);
+            }
+        }
+
+        private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
+        {
+            if (fromCardPosition < toCardPosition || newNumber == null)
+            {
+                Damage(1);
+            }
+        }
+
+        private void Damage(int points)
+        {
+            _totalPoints -= points;
+            if (_totalPoints <= 0)
+            {
+                _totalPoints = 0;
+            }
+
+            _totalPointsText.text = $"{_totalPoints}%";
+
+            var sizeDelta = _life.sizeDelta;
+            var newWidth = _totalPoints * _pointsToLifeWidth;
+            sizeDelta = new Vector2(newWidth, sizeDelta.y);
+            _life.sizeDelta = sizeDelta;
+        }
+
+        private void OnDestroy()
+        {
+            _gameManagerService.Splashed -= OnSplashed;
+            _gameManagerService.CardUpdate -= OnCardUpdate;
+        }
     }
 }

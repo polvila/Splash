@@ -1,9 +1,12 @@
 using Zenject;
 
-public class GameInstaller : MonoInstaller<GameInstaller>
+namespace Modules.Game
 {
-    public override void InstallBindings()
+    public class GameInstaller : MonoInstaller<GameInstaller>
     {
-        Container.Bind<Presenter<BoardView>>().To<BoardPresenter>().AsTransient();
+        public override void InstallBindings()
+        {
+            Container.Bind<Presenter<BoardView>>().To<BoardPresenter>().AsTransient();
+        }
     }
 }

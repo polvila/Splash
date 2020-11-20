@@ -2,31 +2,34 @@
 using Core.StateManager;
 using Zenject;
 
-public class SettingsPopupView : PopupScreenView
+namespace Modules.Game
 {
-    private IAIManagerService _aiManagerService;
-    private IStateManager _stateManager;
-
-    [Inject]
-    private void Init(IAIManagerService aiManagerService,
-        IStateManager stateManager)
+    public class SettingsPopupView : PopupScreenView
     {
-        _aiManagerService = aiManagerService;
-        _stateManager = stateManager;
-        _aiManagerService.PauseAI(true);
-        LeanTween.pauseAll();
-    }
+        private IAIManagerService _aiManagerService;
+        private IStateManager _stateManager;
 
-    public void OnResumeClicked()
-    {
-        _aiManagerService.PauseAI(false);
-        LeanTween.resumeAll();
-        ClosePopup();
-    }
+        [Inject]
+        private void Init(IAIManagerService aiManagerService,
+            IStateManager stateManager)
+        {
+            _aiManagerService = aiManagerService;
+            _stateManager = stateManager;
+            _aiManagerService.PauseAI(true);
+            LeanTween.pauseAll();
+        }
 
-    public void OnLeaveMatchClicked()
-    {
-        LeanTween.resumeAll();
-        _stateManager.TriggerEvent(Event.SHOW_MAIN_MENU);
+        public void OnResumeClicked()
+        {
+            _aiManagerService.PauseAI(false);
+            LeanTween.resumeAll();
+            ClosePopup();
+        }
+
+        public void OnLeaveMatchClicked()
+        {
+            LeanTween.resumeAll();
+            _stateManager.TriggerEvent(Event.SHOW_MAIN_MENU);
+        }
     }
 }

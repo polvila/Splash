@@ -3,60 +3,67 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-public class HUDView : MonoBehaviour
+namespace Modules.Game
 {
-    private const string PointsFormat = "000";
-    
-    [SerializeField] private TMP_Text _pointsText;
-    [SerializeField] private TMP_Text _maxRecordText;
-
-    private IGameManagerService _gameManagerService;
-    private IScreenManager _screenManager;
-
-    private int _totalPoints;
-
-    [Inject]
-    private void Init(IGameManagerService gameManagerService, IScreenManager screenManager)
+    public class HUDView : MonoBehaviour
     {
-        _gameManagerService = gameManagerService;
-        _screenManager = screenManager;
+        private const string PointsFormat = "000";
 
-        _gameManagerService.Splashed += OnSplashed;
-        _gameManagerService.CardUpdate += OnCardUpdate;
-        _pointsText.text = _totalPoints.ToString(PointsFormat);
-        _maxRecordText.text = _gameManagerService.HumanRecord.ToString(PointsFormat);
-    }
+        [SerializeField] private TMP_Text _pointsText;
+        [SerializeField] private TMP_Text _maxRecordText;
 
-    public void OnSettingsClicked()
-    {
-        _screenManager.ShowPopup("SettingsPopup");
-    }
+        private IGameManagerService _gameManagerService;
+        private IScreenManager _screenManager;
+        private IPlayerModel _playerModel;
 
-    private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
-    {
-        if (wasHuman)
+        private int _totalPoints;
+
+        [Inject]
+        private void Init(IGameManagerService gameManagerService,
+            IScreenManager screenManager,
+            IPlayerModel playerModel)
         {
-            AddPoints(points);
+            _gameManagerService = gameManagerService;
+            _screenManager = screenManager;
+            _playerModel = playerModel;
+
+            _gameManagerService.Splashed += OnSplashed;
+            _gameManagerService.CardUpdate += OnCardUpdate;
+            _pointsText.text = _totalPoints.ToString(PointsFormat);
+            _maxRecordText.text = _playerModel.HumanRecord.ToString(PointsFormat);
         }
-    }
-    
-    private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
-    {
-        if (fromCardPosition > toCardPosition)
+
+        public void OnSettingsClicked()
         {
-            AddPoints(1);
+            _screenManager.ShowPopup("SettingsPopup");
         }
-    }
 
-    private void AddPoints(int points)
-    {
-        _totalPoints += points;
-        _pointsText.text = _totalPoints.ToString(PointsFormat);
-    }
+        private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
+        {
+            if (wasHuman)
+            {
+                AddPoints(points);
+            }
+        }
 
-    private void OnDestroy()
-    {
-        _gameManagerService.Splashed -= OnSplashed;
-        _gameManagerService.CardUpdate -= OnCardUpdate;
+        private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
+        {
+            if (fromCardPosition > toCardPosition)
+            {
+                AddPoints(1);
+            }
+        }
+
+        private void AddPoints(int points)
+        {
+            _totalPoints += points;
+            _pointsText.text = _totalPoints.ToString(PointsFormat);
+        }
+
+        private void OnDestroy()
+        {
+            _gameManagerService.Splashed -= OnSplashed;
+            _gameManagerService.CardUpdate -= OnCardUpdate;
+        }
     }
 }

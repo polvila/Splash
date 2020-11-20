@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3e27c18946adc4a83b9696650b2339, type: 3}
+  m_Name: FTUESequenceAsset
+  m_EditorClassIdentifier: 
+  ScreenSequence:
+  - HighlightedPosition: 0
+    TopText: Hey! Welcome to Splash!<br>Splash! is like a Solitarie game.
+    BottomText: You have to stack as many cards as possible using the card numbers.
+    ContinueText: Tap to continue
+    AwakeTrigger: 0
+    HideScreenCondition: 0
+  - HighlightedPosition: 1
+    TopText: These are the enemy piles.
+    BottomText: 
+    ContinueText: Tap to continue
+    AwakeTrigger: 0
+    HideScreenCondition: 0
+  - HighlightedPosition: 3
+    TopText: 
+    BottomText: These are your piles.
+    ContinueText: Tap to continue
+    AwakeTrigger: 0
+    HideScreenCondition: 0
+  - HighlightedPosition: 2
+    TopText: And those are the discard piles.
+    BottomText: 
+    ContinueText: Tap to continue
+    AwakeTrigger: 0
+    HideScreenCondition: 0
+  - HighlightedPosition: 0
+    TopText: You can play a card when the value on your card is on higher or...
+    BottomText: ...one lower than a card on the discard pile.
+    ContinueText: Tap to continue
+    AwakeTrigger: 0
+    HideScreenCondition: 0
+  - HighlightedPosition: 5
+    TopText: Just tap the card you want to play. The discard pile is selected automatically.
+    BottomText: Playing a card gives you 1 point.
+    ContinueText: Tap this card to move it on top of the 8
+    AwakeTrigger: 0
+    HideScreenCondition: 1
+  - HighlightedPosition: 4
+    TopText: When the enemy plays a card, it decreases your life 1 point.
+    BottomText: The game ends when your life reaches 0.
+    ContinueText: Tap to continue
+    AwakeTrigger: 1
+    HideScreenCondition: 0
+  - HighlightedPosition: 6
+    TopText: The number 13 fits on a 1 and viceversa.
+    BottomText: 
+    ContinueText: Tap this card to move it on top of the 1
+    AwakeTrigger: 0
+    HideScreenCondition: 1
+  - HighlightedPosition: 0
+    TopText: When you and your enemy can't play a card anymore...
+    BottomText: ...two new middle cards will appear.
+    ContinueText: Tap to continue
+    AwakeTrigger: 5
+    HideScreenCondition: 0
+  - HighlightedPosition: 2
+    TopText: Look! The middle cards have the same number!
+    BottomText: Now you can Splash! to sum up as may points as middle cards amount.
+    ContinueText: Tap the middle cards to Splash!
+    AwakeTrigger: 3
+    HideScreenCondition: 2
+  - HighlightedPosition: 7
+    TopText: Let's see how many points you are able to make before dying.
+    BottomText: Good luck and have fun!
+    ContinueText: Tap to continue with the match
+    AwakeTrigger: 4
+    HideScreenCondition: 0
