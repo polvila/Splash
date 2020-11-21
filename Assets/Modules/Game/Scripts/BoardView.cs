@@ -74,7 +74,7 @@ namespace Modules.Game
             _cards[to].Index = to;
             _cards[from].MoveFrom(_slots[from], _slots[to], () =>
             {
-                TriggerFTUEs(from);
+                TriggerFTUE(from);
                 Destroy(oldPileCard.gameObject);
             });
         }
@@ -213,7 +213,7 @@ namespace Modules.Game
             }
         }
 
-        private void TriggerFTUEs(int cardMovedPosition)
+        private void TriggerFTUE(int cardMovedPosition)
         {
             if (_ftueView == null) return;
 
