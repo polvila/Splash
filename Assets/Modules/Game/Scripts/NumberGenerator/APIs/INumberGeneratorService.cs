@@ -6,7 +6,6 @@
         int GetMinRange { get; }
         CardGeneratorMode GeneratorMode { get; set; }
         int GetNumber();
-        void SetDefaultGeneratorMode();
     }
 
     public enum CardGeneratorMode

@@ -8,6 +8,7 @@ namespace Modules.Game
         public string BottomText;
         public string ContinueText;
         public FTUETrigger AwakeTrigger;
-        public HideScreenCondition HideScreenCondition;
+        public FTUETrigger HideTrigger;
+        public bool InputBlocked;
     }
 }

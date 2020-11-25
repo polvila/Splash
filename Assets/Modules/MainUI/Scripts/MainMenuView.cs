@@ -32,13 +32,11 @@ public class MainMenuView : MonoBehaviour
 
     public void OnPlay()
     {
-        _gameManagerService.SetTutorialMode(!_playerModel.FTUECompleted);
-        _stateManager.TriggerEvent(Event.SHOW_GAME);
+        _stateManager.TriggerEvent(_playerModel.FTUECompleted ? Event.SHOW_GAME : Event.SHOW_TUTORIAL);
     }
 
     public void OnTutorial()
     {
-        _gameManagerService.SetTutorialMode(true);
-        _stateManager.TriggerEvent(Event.SHOW_GAME);
+        _stateManager.TriggerEvent(Event.SHOW_TUTORIAL);
     }
 }

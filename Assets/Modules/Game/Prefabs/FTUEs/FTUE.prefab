@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 2408388040683395223}
   - component: {fileID: 6791149585661490444}
   m_Layer: 5
-  m_Name: FTUE 1
+  m_Name: FTUE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,8 +217,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ftueSequence: {fileID: 11400000, guid: f9d3d97b2e2b25b4d965f4dd4a525d71, type: 2}
+  _missFtueSequence: {fileID: 11400000, guid: 003c4b49f43021843afe824fc6b7f087, type: 2}
   _darkBackground: {fileID: 1811429262489096631}
-  _screenTouchBlocker: {fileID: 1309354849361467509}
+  _fullScreenButton: {fileID: 8480132377635547341}
   _enemyMask: {fileID: 7658893987136035745}
   _middleMask: {fileID: 1017984503108051904}
   _playerMask: {fileID: 6301085339895360372}

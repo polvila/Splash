@@ -6,7 +6,7 @@ namespace Modules.Game
     {
         public override void InstallBindings()
         {
-            Container.Bind<Presenter<BoardView>>().To<BoardPresenter>().AsTransient();
+            Container.Bind<Presenter<IBoardView>>().To<BoardPresenter>().AsTransient();
         }
     }
 }

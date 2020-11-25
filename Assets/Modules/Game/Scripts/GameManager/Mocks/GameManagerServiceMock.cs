@@ -17,9 +17,9 @@ namespace Modules.Game
         private IPlayerModel _playerModel;
         private int _unblockDelayId;
         private AI _ai;
-        private bool _tutorialModeActive;
+        private Mode _gameMode;
 
-        public event Action<int[], bool> NewGameReceived;
+        public event Action<int[]> NewGameReceived;
         public event Action<int, int, int?> CardUpdate;
         public event Action<int, bool> GameFinished;
         public event Action<bool, int, int, int> Splashed;
@@ -35,15 +35,12 @@ namespace Modules.Game
             _playerModel = playerModel;
         }
 
-        public void Initialize()
+        public void Initialize(Mode gameMode)
         {
-            if (_tutorialModeActive)
+            _gameMode = gameMode;
+            if (_gameMode == Mode.FTUE)
             {
                 _numberGeneratorService.GeneratorMode = CardGeneratorMode.FTUE;
-            }
-            else
-            {
-                _numberGeneratorService.SetDefaultGeneratorMode();
             }
 
             int[] numbers = new int[10];
@@ -63,13 +60,13 @@ namespace Modules.Game
 
             LeanTween.delayedCall(1f, () =>
             {
-                NewGameReceived?.Invoke(_gameStateModel.Numbers, _tutorialModeActive);
+                NewGameReceived?.Invoke(_gameStateModel.Numbers);
             });
         }
 
-        public void StartGame(Mode mode)
+        public void StartGame()
         {
-            if (mode == Mode.AI)
+            if (_gameMode == Mode.AI || _gameMode == Mode.FTUE)
             {
                 _ai = new AI(this, _coroutineProxy);
                 _ai.Play();
@@ -105,7 +102,7 @@ namespace Modules.Game
                         int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
                         MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
                     }
-                    else if (!_tutorialModeActive) //non-valid card
+                    else
                     {
                         --_gameStateModel.HumanLifePoints;
                         CardUpdate?.Invoke(positionCardSelected, positionCardSelected, null);
@@ -122,8 +119,8 @@ namespace Modules.Game
         public void TryDoSplash(bool fromAI = false)
         {
             if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
-                _gameStateModel.Numbers[LeftPilePosition] == -1 && _gameStateModel.Numbers[RightPilePosition] == -1 ||
-                _tutorialModeActive && fromAI) return;
+                _gameStateModel.Numbers[LeftPilePosition] == -1 && _gameStateModel.Numbers[RightPilePosition] == -1) 
+                return;
 
             _gameStateModel.Numbers[LeftPilePosition] = -1;
             _gameStateModel.Numbers[RightPilePosition] = -1;
@@ -198,11 +195,6 @@ namespace Modules.Game
         {
             _ai?.Stop();
             StopDelayedUnblock();
-        }
-
-        public void SetTutorialMode(bool active)
-        {
-            _tutorialModeActive = active;
         }
 
         public void PauseAI(bool active)

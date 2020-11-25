@@ -47,25 +47,4 @@ public class PlayerModel : IPlayerModel
             PlayerPrefs.Save();
         }
     }
-    
-    private bool _missFtueCompleted;
-    public bool MissFTUECompleted
-    {
-        get
-        {
-            if (_missFtueCompleted == false)
-            {
-                _missFtueCompleted = PlayerPrefs.GetInt(MissFTUECompletedKey) != 0;
-            }
-
-            return _missFtueCompleted;
-        }
-        set
-        {
-            if (value == false) return;
-            _missFtueCompleted = true;
-            PlayerPrefs.SetInt(MissFTUECompletedKey, 1);
-            PlayerPrefs.Save();
-        }
-    }
 }

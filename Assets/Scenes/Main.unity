@@ -499,7 +499,7 @@ MonoBehaviour:
   - {fileID: 1930709413304466, guid: ab390c3c6312df249b548d10bf530f88, type: 3}
   - {fileID: 8470520886826039732, guid: 54e00c329d31089469e775dc492e5e99, type: 3}
   - {fileID: 8470520886826039732, guid: c7bd7a994d9246548b58bd44e122236b, type: 3}
-  - {fileID: 2408388040683395219, guid: 7033c40e31672294ea082f027a6b39aa, type: 3}
+  - {fileID: 2874377738118870918, guid: eb7c71ed724b2394c8a00765e1bd4f8e, type: 3}
   - {fileID: 1365416982397904, guid: 89fbbf33d9571446bb46bb680ee18422, type: 3}
   - {fileID: 782476396454167413, guid: 370f2422d5ed2e04d98e5a69ff3af2be, type: 3}
   - {fileID: 3227470351004168890, guid: 2bc0e2fb661db9e4cb60ec198d0c8ea0, type: 3}
@@ -1121,8 +1121,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 448.2422
         y: 107.74219
-        width: 106.8
-        height: 32
+        width: 131.6
+        height: 48
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
@@ -1132,6 +1132,14 @@ MonoBehaviour:
           isSystemEvent: 0
           isGlobal: 0
         toState: Game
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
+      - fsmEvent:
+          name: SHOW TUTORIAL
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: TutorialGame
         linkStyle: 0
         linkConstraint: 0
         colorIndex: 0
@@ -1166,7 +1174,7 @@ MonoBehaviour:
           tooltip: 
           showInInspector: 0
           networkSync: 0
-          typeName: StateManager
+          typeName: Core.StateManager.StateManager
           value: {fileID: 2096037770}
         fsmVarParams:
         - variableName: 
@@ -1225,8 +1233,8 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 620.6172
-        y: 229.63281
+        x: 660.58594
+        y: 155.47656
         width: 142
         height: 48
       isBreakpoint: 0
@@ -1280,7 +1288,7 @@ MonoBehaviour:
           tooltip: 
           showInInspector: 0
           networkSync: 0
-          typeName: StateManager
+          typeName: Core.StateManager.StateManager
           value: {fileID: 2096037770}
         fsmVarParams:
         - variableName: 
@@ -1394,6 +1402,120 @@ MonoBehaviour:
         paramName: []
         paramDataPos: 
         paramByteDataSize: 
+    - name: TutorialGame
+      description: 
+      colorIndex: 0
+      position:
+        serializedVersion: 2
+        x: 651.1406
+        y: 277.02344
+        width: 142
+        height: 48
+      isBreakpoint: 0
+      isSequence: 0
+      hideUnused: 0
+      transitions:
+      - fsmEvent:
+          name: SHOW GAME
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: Game
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
+      - fsmEvent:
+          name: SHOW MAIN MENU
+          isSystemEvent: 0
+          isGlobal: 1
+        toState: MainMenu
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
+      actionData:
+        actionNames:
+        - HutongGames.PlayMaker.Actions.CallMethod
+        customNames:
+        - 
+        actionEnabled: 01
+        actionIsOpen: 01
+        actionStartIndex: 00000000
+        actionHashCodes: ca51e900
+        unityObjectParams: []
+        fsmGameObjectParams: []
+        fsmOwnerDefaultParams: []
+        animationCurveParams: []
+        functionCallParams: []
+        fsmTemplateControlParams: []
+        fsmEventTargetParams: []
+        fsmPropertyParams: []
+        layoutOptionParams: []
+        fsmStringParams:
+        - useVariable: 0
+          name: 
+          tooltip: 
+          showInInspector: 0
+          networkSync: 0
+          value: OnTutorialGame
+        fsmObjectParams:
+        - useVariable: 0
+          name: 
+          tooltip: 
+          showInInspector: 0
+          networkSync: 0
+          typeName: Core.StateManager.StateManager
+          value: {fileID: 2096037770}
+        fsmVarParams:
+        - variableName: 
+          objectType: 
+          useVariable: 0
+          type: -1
+          floatValue: 0
+          intValue: 0
+          boolValue: 0
+          stringValue: 
+          vector4Value: {x: 0, y: 0, z: 0, w: 0}
+          objectReference: {fileID: 0}
+          arrayValue:
+            useVariable: 0
+            name: 
+            tooltip: 
+            showInInspector: 0
+            networkSync: 0
+            type: -1
+            objectTypeName: 
+            floatValues: []
+            intValues: 
+            boolValues: 
+            stringValues: []
+            vector4Values: []
+            objectReferences: []
+        fsmArrayParams: []
+        fsmEnumParams: []
+        fsmFloatParams: []
+        fsmIntParams: []
+        fsmBoolParams: []
+        fsmVector2Params: []
+        fsmVector3Params: []
+        fsmColorParams: []
+        fsmRectParams: []
+        fsmQuaternionParams: []
+        stringParams: []
+        byteData: 0000
+        arrayParamSizes: 00000000
+        arrayParamTypes:
+        - HutongGames.PlayMaker.FsmVar
+        customTypeSizes: 
+        customTypeNames: []
+        paramDataType: 18000000120000000c000000270000000100000001000000
+        paramName:
+        - behaviour
+        - methodName
+        - parameters
+        - storeResult
+        - everyFrame
+        - manualUI
+        paramDataPos: 000000000000000000000000000000000000000001000000
+        paramByteDataSize: 000000000000000000000000000000000100000001000000
     events:
     - name: SHOW GAME
       isSystemEvent: 0
@@ -1402,6 +1524,9 @@ MonoBehaviour:
       isSystemEvent: 0
       isGlobal: 1
     - name: SHOW RESULT
+      isSystemEvent: 0
+      isGlobal: 0
+    - name: SHOW TUTORIAL
       isSystemEvent: 0
       isGlobal: 0
     - name: START BOOTSTRAP

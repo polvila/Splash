@@ -7,21 +7,19 @@ using Zenject;
 
 namespace Modules.Game
 {
-    public class BoardView : MonoBehaviour
+    public class BoardView : MonoBehaviour, IBoardView
     {
-        private const int FirstPositionHumanCards = 6;
-        private const int LeftMiddlePositionCard = 4;
-        private const int RightMiddlePositionCard = 5;
+        protected const int FirstPositionHumanCards = 6;
+        protected const int LeftMiddlePositionCard = 4;
+        protected const int RightMiddlePositionCard = 5;
 
-        private Presenter<BoardView> _presenter;
-        private CardView[] _cards;
-        private bool _cardsArePlayable;
+        private Presenter<IBoardView> _presenter;
+        protected CardView[] _cards;
         private Transform[] _slots;
         private IAssetManager _assetManager;
-        private FTUEView _ftueView;
-        private bool _missFTUEOpened;
 
-        [SerializeField] private CountdownView _countdownView;
+        [SerializeField] private Mode _gameMode;
+        [SerializeField] protected CountdownView _countdownView;
         [SerializeField] private Transform[] _slotContainers;
 
         [Header("Splash")] [SerializeField] private Button _splashZone;
@@ -32,11 +30,15 @@ namespace Modules.Game
         [SerializeField] private string _enemyCardPrefabName;
         [SerializeField] private Transform _cardsParent;
 
-        public Action SplashZoneSelected;
-        public Action<int> CardSelected;
+        public event Action SplashZoneSelected;
+        public event Action<int> CardSelected;
+        public event Action StartGameEvent;
+
+        public Mode GameMode => _gameMode;
 
         [Inject]
-        void Init(Presenter<BoardView> presenter,
+        private void Init(
+            Presenter<IBoardView> presenter,
             IAssetManager assetManager)
         {
             _presenter = presenter;
@@ -53,33 +55,31 @@ namespace Modules.Game
                     ++i;
                 }
             }
-
-            _presenter.RegisterView(this);
         }
 
         private void Awake()
         {
             _splashZone.onClick.AddListener(() =>
             {
-                if (!_cardsArePlayable && !SROptions.Current.GodMode) return;
-
                 SplashZoneSelected?.Invoke();
             });
+            
+            _presenter.RegisterView(this);
         }
 
-        public void MoveCard(int from, int to)
+        public virtual void MoveCard(int from, int to, Action onComplete = null)
         {
             CardView oldPileCard = _cards[to];
             _cards[to] = _cards[from];
             _cards[to].Index = to;
             _cards[from].MoveFrom(_slots[from], _slots[to], () =>
             {
-                TriggerFTUE(from);
                 Destroy(oldPileCard.gameObject);
+                onComplete?.Invoke();
             });
         }
 
-        public void MissCardMove(int from, Action onComplete)
+        public virtual void MissCardMove(int from, Action onComplete = null)
         {
             _cards[from].TriggerMissAnimationFrom(_slots[from], onComplete);
         }
@@ -92,7 +92,7 @@ namespace Modules.Game
             _cards[position] = null;
         }
 
-        public virtual void AddNewCardTo(int cardPosition, int number, Action onComplete = null)
+        public void AddNewCardTo(int cardPosition, int number, Action onComplete = null)
         {
             var card = GetNewCardView(cardPosition <= LeftMiddlePositionCard, number);
 
@@ -118,27 +118,22 @@ namespace Modules.Game
 
             if (cardPosition >= FirstPositionHumanCards)
             {
-                card.Button.onClick.AddListener(() =>
-                {
-                    if (!_cardsArePlayable && !SROptions.Current.GodMode) return;
-
-                    CardSelected?.Invoke(cardPosition);
-                });
+                card.Button.onClick.AddListener(() => OnCardClicked(cardPosition));
             }
         }
 
-        public void SetCardsArePlayable(bool active)
+        protected virtual void OnCardClicked(int cardPosition)
         {
-            _cardsArePlayable = active;
+            CardSelected?.Invoke(cardPosition);
         }
 
-        public void FinishGame(Action onComplete)
+        public virtual void FinishGame(Action onComplete)
         {
-            _cardsArePlayable = false;
+            _countdownView.gameObject.SetActive(true);
             StartCoroutine(WaitUntilAnimationsEnd(onComplete));
         }
 
-        private IEnumerator WaitUntilAnimationsEnd(Action onComplete)
+        protected virtual IEnumerator WaitUntilAnimationsEnd(Action onComplete)
         {
             foreach (var cardView in _cards)
             {
@@ -150,14 +145,16 @@ namespace Modules.Game
 
             yield return new WaitUntil(() => !LeanTween.isTweening(_humanSplash.gameObject));
             yield return new WaitUntil(() => !LeanTween.isTweening(_enemySplash.gameObject));
-            yield return new WaitForSeconds(0.1f);    //Wait for the possible miss FTUE screen
-            yield return new WaitUntil(() => !_missFTUEOpened);
             onComplete?.Invoke();
         }
 
-        public void StartCountdown(Action onComplete)
+        public virtual void StartCountdown(Action onComplete)
         {
-            _countdownView.StartCountdown(onComplete);
+            _countdownView.StartCountdown(() =>
+            {
+                StartGameEvent?.Invoke();
+                onComplete?.Invoke();
+            });
         }
 
         private CardView GetNewCardView(bool enemyCard, int number)
@@ -169,73 +166,23 @@ namespace Modules.Game
             return cardView;
         }
 
-        public void ShowSplash(bool fromHumanPlayer, int totalPoints)
+        public virtual void ShowSplash(bool fromHumanPlayer, int totalPoints)
         {
             var splash = fromHumanPlayer ? _humanSplash : _enemySplash;
             splash.Show(totalPoints);
         }
 
-        public void UnblockMiddleCards(int newLeftNumber, int newRightNumber)
+        public virtual void UnblockMiddleCards(int newLeftNumber, int newRightNumber)
         {
-            if (_ftueView == null)
-            {
-                UpdatePiles(newLeftNumber, newRightNumber);
-            }
-            else
-            {
-                _ftueView.UpdatePiles += () => UpdatePiles(newLeftNumber, newRightNumber);
-                _ftueView.Trigger(FTUETrigger.BeforeUnblocked);
-            }
+            UpdatePiles(newLeftNumber, newRightNumber);
         }
 
-        private void UpdatePiles(int newLeftNumber, int newRightNumber)
+        protected virtual void UpdatePiles(int newLeftNumber, int newRightNumber, Action onComplete = null)
         {
             DestroyCard(LeftMiddlePositionCard, 0.3f);
             DestroyCard(RightMiddlePositionCard, 0.3f);
             AddNewCardTo(LeftMiddlePositionCard, newLeftNumber);
-            AddNewCardTo(RightMiddlePositionCard, newRightNumber, TriggerFTUEAfterUnblocked);
-        }
-
-        public void OpenFTUE(bool miss = false)
-        {
-            if (miss)
-            {
-                var missFtue = _assetManager.InstantiatePrefab("MissFTUE", transform).GetComponent<FTUEView>();
-                _missFTUEOpened = true;
-                missFtue.OnClose += () =>
-                {
-                    _missFTUEOpened = false;
-                };
-            }
-            else
-            {
-                _ftueView = _assetManager.InstantiatePrefab("FTUE", transform).GetComponent<FTUEView>();
-            }
-        }
-
-        private void TriggerFTUE(int cardMovedPosition)
-        {
-            if (_ftueView == null) return;
-
-            if (cardMovedPosition < LeftMiddlePositionCard)
-            {
-                _ftueView.Trigger(FTUETrigger.EnemyPlayed);
-            }
-            else if (cardMovedPosition > RightMiddlePositionCard)
-            {
-                _ftueView.Trigger(FTUETrigger.PlayerPlayed);
-            }
-
-            if (_cards[LeftMiddlePositionCard].Num == _cards[RightMiddlePositionCard].Num)
-            {
-                _ftueView.Trigger(FTUETrigger.SplashReady);
-            }
-        }
-
-        private void TriggerFTUEAfterUnblocked()
-        {
-            if (_ftueView == null) return;
-            _ftueView.Trigger(FTUETrigger.AfterUnblocked);
+            AddNewCardTo(RightMiddlePositionCard, newRightNumber, onComplete);
         }
 
         private void OnDestroy()

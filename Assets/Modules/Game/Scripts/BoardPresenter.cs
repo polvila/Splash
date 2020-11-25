@@ -2,7 +2,7 @@ using Core.ScreenManagement;
 
 namespace Modules.Game
 {
-    public class BoardPresenter : Presenter<BoardView>
+    public class BoardPresenter : Presenter<IBoardView>
     {
         private const int LeftPilePosition = 4;
         private const int RightPilePosition = 5;
@@ -10,7 +10,6 @@ namespace Modules.Game
         private IGameManagerService _gameManagerService;
         private IScreenManager _screenManager;
         private IPlayerModel _playerModel;
-        private bool _showTutorial;
 
         public BoardPresenter(
             IGameManagerService gameManagerService,
@@ -22,7 +21,7 @@ namespace Modules.Game
             _playerModel = playerModel;
         }
 
-        public override void RegisterView(BoardView view)
+        public override void RegisterView(IBoardView view)
         {
             base.RegisterView(view);
             _gameManagerService.NewGameReceived += OnNewGameReceived;
@@ -32,11 +31,12 @@ namespace Modules.Game
             _gameManagerService.Unblocked += OnUnblocked;
             view.CardSelected += _gameManagerService.PlayThisCard;
             view.SplashZoneSelected += _gameManagerService.HumanSplash;
+            view.StartGameEvent += _gameManagerService.StartGame;
             _screenManager.ShowSpinner();
-            _gameManagerService.Initialize();
+            _gameManagerService.Initialize(view.GameMode);
         }
 
-        private void OnNewGameReceived(int[] numbers, bool showTutorial)
+        private void OnNewGameReceived(int[] numbers)
         {
             for (int i = 0; i < LeftPilePosition; ++i)
             {
@@ -49,32 +49,18 @@ namespace Modules.Game
             }
 
             _screenManager.HideSpinner();
-            _showTutorial = showTutorial;
 
             view.StartCountdown(() =>
             {
-                view.SetCardsArePlayable(!_showTutorial);
-                view.AddNewCardTo(LeftPilePosition, numbers[LeftPilePosition]);
-                view.AddNewCardTo(RightPilePosition, numbers[RightPilePosition], () =>
-                {
-                    if (!_showTutorial) return;
-                    view.OpenFTUE();
-                    view.SetCardsArePlayable(true);
-                });
-                _gameManagerService.StartGame(Mode.AI);
+                view.UnblockMiddleCards(numbers[LeftPilePosition], numbers[RightPilePosition]);
             });
         }
-
+        
         private void OnCardUpdate(int fromCardPosition, int toCardPosition, int? newNumber)
         {
             if (fromCardPosition == toCardPosition || newNumber == null)
             {
-                view.MissCardMove(fromCardPosition, () =>
-                {
-                    if (_playerModel.MissFTUECompleted && !_showTutorial) return;
-                    view.OpenFTUE(true);
-                    _showTutorial = false; //Tutorial finished
-                });
+                view.MissCardMove(fromCardPosition);
             }
             else
             {
@@ -114,6 +100,7 @@ namespace Modules.Game
 
             view.CardSelected -= _gameManagerService.PlayThisCard;
             view.SplashZoneSelected -= _gameManagerService.HumanSplash;
+            view.StartGameEvent -= _gameManagerService.StartGame;
         }
     }
 }

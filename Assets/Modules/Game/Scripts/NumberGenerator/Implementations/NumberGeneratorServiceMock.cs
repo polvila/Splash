@@ -13,7 +13,6 @@ namespace Modules.Game
 		private RandomGenerator _generator;
 		private DiContainer _container;
 
-		private CardGeneratorMode _defaultGeneratorMode;
 		private CardGeneratorMode _generatorMode;
 
 		public CardGeneratorMode GeneratorMode
@@ -38,21 +37,15 @@ namespace Modules.Game
 			}
 		}
 
-		protected NumberGeneratorServiceMock(CardGeneratorMode generatorMode, DiContainer container)
+		protected NumberGeneratorServiceMock(DiContainer container)
 		{
 			_container = container;
-			_defaultGeneratorMode = generatorMode;
-			GeneratorMode = _defaultGeneratorMode;
+			GeneratorMode = _generatorMode;
 		}
 
 		public int GetNumber()
 		{
 			return _generator.GenerateNumber(MinRange, MaxRange);
-		}
-
-		public void SetDefaultGeneratorMode()
-		{
-			GeneratorMode = _defaultGeneratorMode;
 		}
 	}
 }

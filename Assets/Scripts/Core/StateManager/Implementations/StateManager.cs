@@ -53,6 +53,11 @@ namespace Core.StateManager
             _screenManager.ShowScreen("GameScreen");
         }
 
+        public void OnTutorialGame()
+        {
+            _screenManager.ShowScreen("FTUEGameScreen");
+        }
+
         public void TriggerEvent(string eventKey)
         {
             _mainFsm.SendEvent(eventKey);
