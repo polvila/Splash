@@ -4,15 +4,15 @@
 		{
 			"InternalID":"highScore",
 			"AppleID":"",
-			"GoogleID":"CgkIgem6t-0FEAIQAA"
+			"GoogleID":"CgkI4omZgrsREAIQAQ"
 		}
 	],
 	"CloudVariables":[],
 	"AppleSupported":false,
 	"GoogleSupported":true,
-	"GoogleAppID":"201174463617",
+	"GoogleAppID":"599957849314",
 	"GoogleSetupRun":true,
-	"DebugModeEnabled":false,
+	"DebugModeEnabled":true,
 	"Version":"2.7.1",
 	"SettingsLocation":"0"
 }
