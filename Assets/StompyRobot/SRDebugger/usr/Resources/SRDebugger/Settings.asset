@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   _isEnabled: 0
-  _autoLoad: 0
   _defaultTab: 2
-  _triggerEnableMode: 3
+  _triggerEnableMode: 0
   _triggerBehaviour: 2
+  _errorNotification: 1
   _enableKeyboardShortcuts: 1
   _keyboardShortcuts: []
   _newKeyboardShortcuts:
@@ -64,3 +64,4 @@ MonoBehaviour:
   _enableEventSystemCreation: 1
   _automaticShowCursor: 1
   _uiScale: 1
+  _unloadOnClose: 0
