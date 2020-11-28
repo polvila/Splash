@@ -54,7 +54,7 @@ namespace Modules.Game
                 {
                     _ftueView.Trigger(FTUETrigger.EnemyPlayed);
                 }
-                if (_cards[LeftMiddlePositionCard].Num == _cards[RightMiddlePositionCard].Num)
+                if (Cards[LeftMiddlePositionCard].Num == Cards[RightMiddlePositionCard].Num)
                 {
                     _ftueView.Trigger(FTUETrigger.SplashReady);
                 }

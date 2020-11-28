@@ -4,11 +4,8 @@ namespace Modules.Game
 {
 	public class NumberGeneratorServiceMock : INumberGeneratorService
 	{
-		protected const int MaxRange = 13;
-		protected const int MinRange = 1;
-
-		public int GetMaxRange => MaxRange;
-		public int GetMinRange => MinRange;
+		public readonly static int MaxRange = 13;
+		public readonly static int MinRange = 1;
 
 		private RandomGenerator _generator;
 		private DiContainer _container;

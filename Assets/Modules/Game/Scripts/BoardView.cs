@@ -14,7 +14,7 @@ namespace Modules.Game
         protected const int RightMiddlePositionCard = 5;
 
         private Presenter<IBoardView> _presenter;
-        protected CardView[] _cards;
+        [HideInInspector] public CardView[] Cards;
         private Transform[] _slots;
         private IAssetManager _assetManager;
 
@@ -43,7 +43,7 @@ namespace Modules.Game
         {
             _presenter = presenter;
             _assetManager = assetManager;
-            _cards = new CardView[10];
+            Cards = new CardView[10];
             _slots = new Transform[10];
 
             var i = 0;
@@ -69,10 +69,9 @@ namespace Modules.Game
 
         public virtual void MoveCard(int from, int to, Action onComplete = null)
         {
-            CardView oldPileCard = _cards[to];
-            _cards[to] = _cards[from];
-            _cards[to].Index = to;
-            _cards[from].MoveFrom(_slots[from], _slots[to], () =>
+            CardView oldPileCard = Cards[to];
+            Cards[to] = Cards[from];
+            Cards[from].MoveFrom(_slots[from], _slots[to], () =>
             {
                 Destroy(oldPileCard.gameObject);
                 onComplete?.Invoke();
@@ -81,23 +80,22 @@ namespace Modules.Game
 
         public virtual void MissCardMove(int from, Action onComplete = null)
         {
-            _cards[from].TriggerMissAnimationFrom(_slots[from], onComplete);
+            Cards[from].TriggerMissAnimationFrom(_slots[from], onComplete);
         }
 
         public void DestroyCard(int position, float delay = 0)
         {
-            if (_cards[position] == null) return;
+            if (Cards[position] == null) return;
 
-            Destroy(_cards[position].gameObject, delay);
-            _cards[position] = null;
+            Destroy(Cards[position].gameObject, delay);
+            Cards[position] = null;
         }
 
         public void AddNewCardTo(int cardPosition, int number, Action onComplete = null)
         {
             var card = GetNewCardView(cardPosition <= LeftMiddlePositionCard, number);
 
-            card.Index = cardPosition;
-            _cards[cardPosition] = card;
+            Cards[cardPosition] = card;
 
             Vector2 edgeVector = GetComponent<Canvas>().worldCamera.ViewportToWorldPoint(new Vector2(1, 0.5f));
 
@@ -135,7 +133,7 @@ namespace Modules.Game
 
         protected virtual IEnumerator WaitUntilAnimationsEnd(Action onComplete)
         {
-            foreach (var cardView in _cards)
+            foreach (var cardView in Cards)
             {
                 if (cardView != null)
                 {
@@ -188,7 +186,7 @@ namespace Modules.Game
         private void OnDestroy()
         {
             _presenter?.Dispose();
-            foreach (var card in _cards)
+            foreach (var card in Cards)
             {
                 if (card == null) continue;
                 card.Button.onClick.RemoveAllListeners();

@@ -260,14 +260,14 @@ namespace Modules.Game
             GameFinished?.Invoke(_gameStateModel.HumanPointsCounter, isNewHumanRecord);
         }
 
-        private bool IsACompatibleMove(int originNum, int destinationNum)
+        public static bool IsACompatibleMove(int originNum, int destinationNum)
         {
             return originNum == destinationNum + 1
                    || originNum == destinationNum - 1
-                   || originNum == _numberGeneratorService.GetMaxRange
-                   && destinationNum == _numberGeneratorService.GetMinRange
-                   || originNum == _numberGeneratorService.GetMinRange
-                   && destinationNum == _numberGeneratorService.GetMaxRange;
+                   || originNum == NumberGeneratorServiceMock.MaxRange
+                   && destinationNum == NumberGeneratorServiceMock.MinRange
+                   || originNum == NumberGeneratorServiceMock.MinRange
+                   && destinationNum == NumberGeneratorServiceMock.MaxRange;
         }
 
         private bool IsGameBlocked()
