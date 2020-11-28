@@ -1190,6 +1190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainButtonsContainer: {fileID: 8470520886644568011}
   _aboutContainer: {fileID: 8470520886456164925}
+  _madeBy: {fileID: 8470520886925239780}
 --- !u!1 &8470520886925239780
 GameObject:
   m_ObjectHideFlags: 0

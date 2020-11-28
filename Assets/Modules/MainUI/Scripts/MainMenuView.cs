@@ -7,6 +7,7 @@ public class MainMenuView : MonoBehaviour
 {
     [SerializeField] private GameObject _mainButtonsContainer;
     [SerializeField] private GameObject _aboutContainer;
+    [SerializeField] private GameObject _madeBy;
 
     private IStateManager _stateManager;
     private IPlayerModel _playerModel;
@@ -30,6 +31,7 @@ public class MainMenuView : MonoBehaviour
     public void OnAbout()
     {
         _aboutContainer.SetActive(true);
+        _madeBy.SetActive(true);
         _mainButtonsContainer.SetActive(false);
     }
 
@@ -45,6 +47,7 @@ public class MainMenuView : MonoBehaviour
     public void OnBackToMain()
     {
         _aboutContainer.SetActive(false);
+        _madeBy.SetActive(false);
         _mainButtonsContainer.SetActive(true);
     }
 
