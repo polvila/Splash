@@ -68,7 +68,7 @@ public class MainMenuView : MonoBehaviour
 
     public void OnContact()
     {
-        
+        Application.OpenURL("mailto:polvilasalo@gmail.com?subject=Splash! Support");
     }
 
     #endregion
