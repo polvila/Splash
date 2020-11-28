@@ -60,7 +60,10 @@ public class MainMenuView : MonoBehaviour
 
     public void OnShare()
     {
-        
+        new NativeShare().SetTitle("Splash!")
+            .SetText($"Splash! is a brand new card game. I love to play it - why don’t you try it, too. market://details?id={Application.identifier}")
+            .SetSubject("I've discovered an amazing mobile game!")
+            .Share();
     }
 
     public void OnContact()
