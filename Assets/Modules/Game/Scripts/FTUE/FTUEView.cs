@@ -61,6 +61,7 @@ namespace Modules.Game
         private int _nextMovementIndex = -1;
         private int[] _nextMovements;
         private bool _missFtueSelected;
+        private int _delayedCallId;
 
         public Action UnblockAction { get; set; }
         
@@ -110,7 +111,17 @@ namespace Modules.Game
             _continueText.text = screenConfig.ContinueText;
             _fullScreenButton.gameObject.SetActive(screenConfig.InputBlocked ||
                                                    screenConfig.HideTrigger == FTUETrigger.None);
-            _fullScreenButton.interactable = !screenConfig.InputBlocked;
+            _fullScreenButton.interactable = false;
+
+            if (!screenConfig.InputBlocked)
+            {
+                _continueText.text = "";
+                _delayedCallId = LeanTween.delayedCall(1f, () =>
+                {
+                    _fullScreenButton.interactable = true;
+                    _continueText.text = screenConfig.ContinueText;
+                }).id;
+            }
         }
 
         public void OnScreenTap()
@@ -171,6 +182,7 @@ namespace Modules.Game
             
             if (gameObject.activeSelf && _ftueSequence.ScreenSequence[_currentScreenIndex].HideTrigger == trigger)
             {
+                CancelDelayedCall();
                 OnScreenTap();
             }
         }
@@ -185,6 +197,14 @@ namespace Modules.Game
 
             position = -1;
             return false;
+        }
+
+        private void CancelDelayedCall()
+        {
+            if (LeanTween.isTweening(_delayedCallId))
+            {
+                LeanTween.cancel(_delayedCallId);
+            }
         }
     }
 }

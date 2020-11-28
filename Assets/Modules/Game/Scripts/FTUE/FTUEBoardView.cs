@@ -10,7 +10,7 @@ namespace Modules.Game
         [SerializeField] private FTUEView _ftueView;
 
         [Inject] private IPlayerModel _playerModel;
-        private bool _mainFtueCompleted;
+        [HideInInspector] public bool MainFtueCompleted;
         
         public event Action StartGameEvent;
 
@@ -21,7 +21,7 @@ namespace Modules.Game
                 if (!isMissFtue)
                 {
                     StartGameEvent?.Invoke();
-                    _mainFtueCompleted = true;
+                    MainFtueCompleted = true;
                 }
             };
             _countdownView.StartCountdown(onComplete);
@@ -59,7 +59,7 @@ namespace Modules.Game
                     _ftueView.Trigger(FTUETrigger.SplashReady);
                 }
                 
-                if (!_mainFtueCompleted && _ftueView.GetNextPositionToMove(out int position) &&
+                if (!MainFtueCompleted && _ftueView.GetNextPositionToMove(out int position) &&
                     position >= 0 && 
                     position < LeftMiddlePositionCard)
                 {
@@ -86,7 +86,7 @@ namespace Modules.Game
         
         protected override void OnCardClicked(int cardPosition)
         {
-            if (_mainFtueCompleted || !_mainFtueCompleted && cardPosition == _ftueView.NextPositionToMove)
+            if (MainFtueCompleted || !MainFtueCompleted && cardPosition == _ftueView.NextPositionToMove)
             {
                 base.OnCardClicked(cardPosition);
             }

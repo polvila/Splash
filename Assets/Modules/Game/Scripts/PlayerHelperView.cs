@@ -59,6 +59,11 @@ namespace Modules.Game
 
         private void StartDelayedHelpIn(float seconds = 2f)
         {
+            if (_boardView is FTUEBoardView ftueBoard && !ftueBoard.MainFtueCompleted)
+            {
+                return;
+            }
+            
             if (_lastShiningCard != null)
             {
                 _lastShiningCard.Shine = false;
