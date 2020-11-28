@@ -52,7 +52,7 @@ namespace Modules.Game
         public void OnShareClicked()
         {
             new NativeShare().SetTitle("Share your new score!")
-                .SetText($"Hey, I just scored {_result} points at Splash!\nGive it a try: market://details?id={Application.identifier}")
+                .SetText($"Hey, I just scored {_result} points at Splash!\nGive it a try: https://play.google.com/store/apps/details?id={Application.identifier}")
                 .SetSubject("Look my new Splash! score")
                 .Share();
         }
