@@ -24,7 +24,9 @@ namespace Core.StateManager
 
         public void Initialize()
         {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
             SRDebug.Init();
+#endif
             TriggerEvent(Event.START_BOOTSTRAP);
         }
 
