@@ -21,7 +21,7 @@ MonoBehaviour:
     HideTrigger: 0
     InputBlocked: 1
   - HighlightedPosition: 0
-    TopText: Hey! Welcome to Splash!<br>Splash! is like a Solitarie game.
+    TopText: Hey! Welcome to Splash!<br>This game is like the Solitarie.
     BottomText: You have to stack as many cards as possible using the card numbers.
     ContinueText: Tap to continue
     AwakeTrigger: 8

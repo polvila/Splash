@@ -26,6 +26,7 @@ MonoBehaviour:
   _enemyCardPrefabName: EnemyCard
   _cardsParent: {fileID: 2664432257754201456}
   _ftueView: {fileID: 1874248726000481586}
+  MainFtueCompleted: 0
 --- !u!1001 &2874717863818768148
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -449,22 +450,22 @@ PrefabInstance:
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 79
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 13
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 14
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
@@ -473,13 +474,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
-      propertyPath: m_fontSize
-      value: 100
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
-      propertyPath: m_firstOverflowCharacterIndex
-      value: -1
+      propertyPath: m_fontSizeBase
+      value: 67.4
       objectReference: {fileID: 0}
     - target: {fileID: 2408388040683395219, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
@@ -643,13 +644,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7877312552703177393, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
-      propertyPath: m_fontSize
-      value: 100
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7877312552703177393, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
-      propertyPath: m_firstOverflowCharacterIndex
-      value: -1
+      propertyPath: m_fontSizeBase
+      value: 67.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7033c40e31672294ea082f027a6b39aa, type: 3}
