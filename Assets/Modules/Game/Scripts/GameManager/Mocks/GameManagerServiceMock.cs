@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Modules.Game 
@@ -9,8 +8,8 @@ namespace Modules.Game
     {
         private static readonly int BlockedTimeSec = 2;
 
-        public const int LeftPilePosition = 4;
-        public const int RightPilePosition = 5;
+        private readonly int _leftStackPosition;
+        private readonly int _rightStackPosition;
         private GameStateModel _gameStateModel;
         private INumberGeneratorService _numberGeneratorService;
         private CoroutineProxy _coroutineProxy;
@@ -25,14 +24,16 @@ namespace Modules.Game
         public event Action<bool, int, int, int> Splashed;
         public event Action<int, int> Unblocked;
 
-        [Inject]
-        void Init(INumberGeneratorService numberGeneratorService,
+        public GameManagerServiceMock(
+            INumberGeneratorService numberGeneratorService,
             CoroutineProxy coroutineProxy,
             IPlayerModel playerModel)
         {
             _numberGeneratorService = numberGeneratorService;
             _coroutineProxy = coroutineProxy;
             _playerModel = playerModel;
+            _leftStackPosition = BoardView.LeftStackPosition;
+            _rightStackPosition = BoardView.RightStackPosition;
         }
 
         public void Initialize(Mode gameMode)
@@ -49,7 +50,7 @@ namespace Modules.Game
                 numbers[i] = _numberGeneratorService.GetNumber();
             }
 
-            Debug.Log("New piles " + numbers[LeftPilePosition] + ":" + numbers[RightPilePosition]);
+            Debug.Log("New piles " + numbers[_leftStackPosition] + ":" + numbers[_rightStackPosition]);
 
             _gameStateModel = new GameStateModel(numbers)
             {
@@ -82,24 +83,24 @@ namespace Modules.Game
         public void PlayThisCard(int positionCardSelected)
         {
             var selectedNum = _gameStateModel.Numbers[positionCardSelected];
-            var leftPileNum = _gameStateModel.Numbers[LeftPilePosition];
-            var rightPileNum = _gameStateModel.Numbers[RightPilePosition];
+            var leftPileNum = _gameStateModel.Numbers[_leftStackPosition];
+            var rightPileNum = _gameStateModel.Numbers[_rightStackPosition];
 
             if (IsACompatibleMove(selectedNum, rightPileNum))
             {
-                MoveCard(selectedNum, RightPilePosition, positionCardSelected, CardUpdate);
+                MoveCard(selectedNum, _rightStackPosition, positionCardSelected, CardUpdate);
             }
             else if (IsACompatibleMove(selectedNum, leftPileNum))
             {
-                MoveCard(selectedNum, LeftPilePosition, positionCardSelected, CardUpdate);
+                MoveCard(selectedNum, _leftStackPosition, positionCardSelected, CardUpdate);
             }
             else
             {
-                if (positionCardSelected > RightPilePosition) //is the main player
+                if (positionCardSelected > _rightStackPosition) //is the main player
                 {
                     if (SROptions.Current.GodMode)
                     {
-                        int randomPilePosition = LeftPilePosition + Random.Range(0, 2);
+                        int randomPilePosition = _leftStackPosition + Random.Range(0, 2);
                         MoveCard(selectedNum, randomPilePosition, positionCardSelected, CardUpdate);
                     }
                     else
@@ -118,12 +119,12 @@ namespace Modules.Game
 
         public void TryDoSplash(bool fromAI = false)
         {
-            if (_gameStateModel.Numbers[LeftPilePosition] != _gameStateModel.Numbers[RightPilePosition] ||
-                _gameStateModel.Numbers[LeftPilePosition] == -1 && _gameStateModel.Numbers[RightPilePosition] == -1) 
+            if (_gameStateModel.Numbers[_leftStackPosition] != _gameStateModel.Numbers[_rightStackPosition] ||
+                _gameStateModel.Numbers[_leftStackPosition] == -1 && _gameStateModel.Numbers[_rightStackPosition] == -1) 
                 return;
 
-            _gameStateModel.Numbers[LeftPilePosition] = -1;
-            _gameStateModel.Numbers[RightPilePosition] = -1;
+            _gameStateModel.Numbers[_leftStackPosition] = -1;
+            _gameStateModel.Numbers[_rightStackPosition] = -1;
 
             var newLeftNumber = _numberGeneratorService.GetNumber();
             var newRightNumber = _numberGeneratorService.GetNumber();
@@ -131,12 +132,12 @@ namespace Modules.Game
             _unblockDelayId = LeanTween.delayedCall(2f, () =>
             {
                 Debug.Log("Update piles " + newLeftNumber + ":" + newRightNumber);
-                _gameStateModel.Numbers[LeftPilePosition] = newLeftNumber;
-                _gameStateModel.Numbers[RightPilePosition] = newRightNumber;
+                _gameStateModel.Numbers[_leftStackPosition] = newLeftNumber;
+                _gameStateModel.Numbers[_rightStackPosition] = newRightNumber;
                 _gameStateModel.SplashPot = 2;
 
-                Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
-                    _gameStateModel.Numbers[RightPilePosition]);
+                Unblocked?.Invoke(_gameStateModel.Numbers[_leftStackPosition],
+                    _gameStateModel.Numbers[_rightStackPosition]);
 
                 if (IsGameBlocked())
                 {
@@ -169,14 +170,14 @@ namespace Modules.Game
             StopDelayedUnblock();
             _unblockDelayId = LeanTween.delayedCall(seconds, () =>
             {
-                _gameStateModel.Numbers[LeftPilePosition] = _numberGeneratorService.GetNumber();
-                _gameStateModel.Numbers[RightPilePosition] = _numberGeneratorService.GetNumber();
+                _gameStateModel.Numbers[_leftStackPosition] = _numberGeneratorService.GetNumber();
+                _gameStateModel.Numbers[_rightStackPosition] = _numberGeneratorService.GetNumber();
                 _gameStateModel.SplashPot += 2;
-                Unblocked?.Invoke(_gameStateModel.Numbers[LeftPilePosition],
-                    _gameStateModel.Numbers[RightPilePosition]);
+                Unblocked?.Invoke(_gameStateModel.Numbers[_leftStackPosition],
+                    _gameStateModel.Numbers[_rightStackPosition]);
                 Debug.Log("Unblocked");
-                Debug.Log("Update piles " + _gameStateModel.Numbers[LeftPilePosition] + ":" +
-                          _gameStateModel.Numbers[RightPilePosition]);
+                Debug.Log("Update piles " + _gameStateModel.Numbers[_leftStackPosition] + ":" +
+                          _gameStateModel.Numbers[_rightStackPosition]);
 
                 if (IsGameBlocked())
                 {
@@ -212,7 +213,7 @@ namespace Modules.Game
             _gameStateModel.Numbers[pilePosition] = selectedNum;
             _gameStateModel.Numbers[positionCardSelected] = newNumber;
             ++_gameStateModel.SplashPot;
-            if (positionCardSelected > RightPilePosition)
+            if (positionCardSelected > _rightStackPosition)
             {
                 _gameStateModel.HumanPointsCounter++;
             }
@@ -222,8 +223,8 @@ namespace Modules.Game
             }
 
             Debug.Log(log + " -> " +
-                      _gameStateModel.Numbers[LeftPilePosition] + " " +
-                      _gameStateModel.Numbers[RightPilePosition]);
+                      _gameStateModel.Numbers[_leftStackPosition] + " " +
+                      _gameStateModel.Numbers[_rightStackPosition]);
 
             destinationCallback?.Invoke(positionCardSelected, pilePosition, newNumber);
 
@@ -272,16 +273,16 @@ namespace Modules.Game
 
         private bool IsGameBlocked()
         {
-            int firstHumanPosition = RightPilePosition + 1;
-            for (int i = 0; i < LeftPilePosition; ++i)
+            int firstHumanPosition = _rightStackPosition + 1;
+            for (int i = 0; i < _leftStackPosition; ++i)
             {
-                if (IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[LeftPilePosition]) ||
-                    IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[RightPilePosition]) ||
+                if (IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[_leftStackPosition]) ||
+                    IsACompatibleMove(_gameStateModel.Numbers[i], _gameStateModel.Numbers[_rightStackPosition]) ||
                     IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i],
-                        _gameStateModel.Numbers[LeftPilePosition]) ||
+                        _gameStateModel.Numbers[_leftStackPosition]) ||
                     IsACompatibleMove(_gameStateModel.Numbers[firstHumanPosition + i],
-                        _gameStateModel.Numbers[RightPilePosition]) ||
-                    _gameStateModel.Numbers[LeftPilePosition] == _gameStateModel.Numbers[RightPilePosition]
+                        _gameStateModel.Numbers[_rightStackPosition]) ||
+                    _gameStateModel.Numbers[_leftStackPosition] == _gameStateModel.Numbers[_rightStackPosition]
                 )
                 {
                     return false;

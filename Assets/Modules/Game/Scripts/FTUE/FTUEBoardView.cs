@@ -35,33 +35,33 @@ namespace Modules.Game
 
         public override void MoveCard(int from, int to, Action onComplete = null)
         {
-            if (from > RightMiddlePositionCard)
+            if (from > RightStackPosition)
             {
                 _ftueView.Trigger(FTUETrigger.PlayerValidPlay);
             }
-            else if(from < LeftMiddlePositionCard)
+            else if(from < LeftStackPosition)
             {
                 _ftueView.Trigger(FTUETrigger.EnemyPlay);
             }
             
             base.MoveCard(from, to, () =>
             {
-                if (from > RightMiddlePositionCard)
+                if (from > RightStackPosition)
                 {
                     _ftueView.Trigger(FTUETrigger.PlayerPlayed);
                 }
-                else if(from < LeftMiddlePositionCard)
+                else if(from < LeftStackPosition)
                 {
                     _ftueView.Trigger(FTUETrigger.EnemyPlayed);
                 }
-                if (Cards[LeftMiddlePositionCard].Num == Cards[RightMiddlePositionCard].Num)
+                if (Cards[LeftStackPosition].Num == Cards[RightStackPosition].Num)
                 {
                     _ftueView.Trigger(FTUETrigger.SplashReady);
                 }
                 
                 if (!MainFtueCompleted && _ftueView.GetNextPositionToMove(out int position) &&
                     position >= 0 && 
-                    position < LeftMiddlePositionCard)
+                    position < LeftStackPosition)
                 {
                     OnCardClicked(_ftueView.NextPositionToMove);
                 }

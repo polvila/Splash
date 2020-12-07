@@ -9,9 +9,8 @@ namespace Modules.Game
 {
     public class BoardView : MonoBehaviour, IBoardView
     {
-        protected const int FirstPositionHumanCards = 6;
-        protected const int LeftMiddlePositionCard = 4;
-        protected const int RightMiddlePositionCard = 5;
+        public static readonly int LeftStackPosition = 4;
+        public static readonly int RightStackPosition = 5;
 
         private Presenter<IBoardView> _presenter;
         [HideInInspector] public CardView[] Cards;
@@ -22,11 +21,13 @@ namespace Modules.Game
         [SerializeField] protected CountdownView _countdownView;
         [SerializeField] private Transform[] _slotContainers;
 
-        [Header("Splash")] [SerializeField] private Button _splashZone;
+        [Header("Splash")] 
+        [SerializeField] private Button _splashZone;
         [SerializeField] private SplashView _humanSplash;
         [SerializeField] private SplashView _enemySplash;
 
-        [Header("Cards")] [SerializeField] private string _cardPrefabName;
+        [Header("Cards")] 
+        [SerializeField] private string _cardPrefabName;
         [SerializeField] private string _enemyCardPrefabName;
         [SerializeField] private Transform _cardsParent;
 
@@ -93,15 +94,15 @@ namespace Modules.Game
 
         public void AddNewCardTo(int cardPosition, int number, Action onComplete = null)
         {
-            var card = GetNewCardView(cardPosition <= LeftMiddlePositionCard, number);
+            var card = GetNewCardView(cardPosition <= LeftStackPosition, number);
 
             Cards[cardPosition] = card;
 
             Vector2 edgeVector = GetComponent<Canvas>().worldCamera.ViewportToWorldPoint(new Vector2(1, 0.5f));
 
-            if (cardPosition == LeftMiddlePositionCard || cardPosition == RightMiddlePositionCard)
+            if (cardPosition == LeftStackPosition || cardPosition == RightStackPosition)
             {
-                var offset = edgeVector.x * (cardPosition == LeftMiddlePositionCard ? -1 : 1);
+                var offset = edgeVector.x * (cardPosition == LeftStackPosition ? -1 : 1);
                 card.transform.position =
                     new Vector2(_slots[cardPosition].position.x + offset, _slots[cardPosition].position.y);
                 LeanTween.move(card.gameObject, _slots[cardPosition], 0.2f).setOnComplete(onComplete);
@@ -114,7 +115,7 @@ namespace Modules.Game
                 onComplete?.Invoke();
             }
 
-            if (cardPosition >= FirstPositionHumanCards)
+            if (cardPosition > RightStackPosition)
             {
                 card.Button.onClick.AddListener(() => OnCardClicked(cardPosition));
             }
@@ -177,10 +178,10 @@ namespace Modules.Game
 
         protected virtual void UpdatePiles(int newLeftNumber, int newRightNumber, Action onComplete = null)
         {
-            DestroyCard(LeftMiddlePositionCard, 0.3f);
-            DestroyCard(RightMiddlePositionCard, 0.3f);
-            AddNewCardTo(LeftMiddlePositionCard, newLeftNumber);
-            AddNewCardTo(RightMiddlePositionCard, newRightNumber, onComplete);
+            DestroyCard(LeftStackPosition, 0.3f);
+            DestroyCard(RightStackPosition, 0.3f);
+            AddNewCardTo(LeftStackPosition, newLeftNumber);
+            AddNewCardTo(RightStackPosition, newRightNumber, onComplete);
         }
 
         private void OnDestroy()

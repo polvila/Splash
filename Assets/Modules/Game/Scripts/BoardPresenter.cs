@@ -4,21 +4,15 @@ namespace Modules.Game
 {
     public class BoardPresenter : Presenter<IBoardView>
     {
-        private const int LeftPilePosition = 4;
-        private const int RightPilePosition = 5;
-
         private IGameManagerService _gameManagerService;
         private IScreenManager _screenManager;
-        private IPlayerModel _playerModel;
 
         public BoardPresenter(
             IGameManagerService gameManagerService,
-            IScreenManager screenManager,
-            IPlayerModel playerModel)
+            IScreenManager screenManager)
         {
             _gameManagerService = gameManagerService;
             _screenManager = screenManager;
-            _playerModel = playerModel;
         }
 
         public override void RegisterView(IBoardView view)
@@ -38,12 +32,12 @@ namespace Modules.Game
 
         private void OnNewGameReceived(int[] numbers)
         {
-            for (int i = 0; i < LeftPilePosition; ++i)
+            for (int i = 0; i < BoardView.LeftStackPosition; ++i)
             {
                 view.AddNewCardTo(i, numbers[i]);
             }
 
-            for (int i = RightPilePosition + 1; i < numbers.Length; ++i)
+            for (int i = BoardView.RightStackPosition + 1; i < numbers.Length; ++i)
             {
                 view.AddNewCardTo(i, numbers[i]);
             }
@@ -52,7 +46,9 @@ namespace Modules.Game
 
             view.StartCountdown(() =>
             {
-                view.UnblockMiddleCards(numbers[LeftPilePosition], numbers[RightPilePosition]);
+                view.UnblockMiddleCards(
+                    numbers[BoardView.LeftStackPosition], 
+                    numbers[BoardView.RightStackPosition]);
             });
         }
         
@@ -78,8 +74,8 @@ namespace Modules.Game
         private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
         {
             view.ShowSplash(wasHuman, points);
-            view.DestroyCard(LeftPilePosition);
-            view.DestroyCard(RightPilePosition);
+            view.DestroyCard(BoardView.LeftStackPosition);
+            view.DestroyCard(BoardView.RightStackPosition);
         }
 
         private void OnUnblocked(int newLeftNumber, int newRightNumber)

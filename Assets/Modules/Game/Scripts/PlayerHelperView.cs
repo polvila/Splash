@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using Zenject;
 
@@ -7,9 +5,6 @@ namespace Modules.Game
 {
     public class PlayerHelperView : MonoBehaviour
     {
-        protected const int LeftMiddlePositionCard = 4;
-        protected const int RightMiddlePositionCard = 5;
-        
         [SerializeField] private BoardView _boardView;
 
         private int _delayedCallId;
@@ -92,10 +87,10 @@ namespace Modules.Game
         {
             var cards = _boardView.Cards;
             card = null;
-            for (var i = RightMiddlePositionCard + 1; i < cards.Length; ++i)
+            for (var i = BoardView.RightStackPosition + 1; i < cards.Length; ++i)
             {
-                if(GameManagerServiceMock.IsACompatibleMove(cards[i].Num, cards[LeftMiddlePositionCard].Num) ||
-                   GameManagerServiceMock.IsACompatibleMove(cards[i].Num, cards[RightMiddlePositionCard].Num))
+                if(GameManagerServiceMock.IsACompatibleMove(cards[i].Num, cards[BoardView.LeftStackPosition].Num) ||
+                   GameManagerServiceMock.IsACompatibleMove(cards[i].Num, cards[BoardView.RightStackPosition].Num))
                 {
                     card = cards[i];
                     return true;

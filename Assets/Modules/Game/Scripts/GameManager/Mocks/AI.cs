@@ -75,7 +75,7 @@ namespace Modules.Game
 
             _checkSplash = true;
 
-            if (fromCardPosition < GameManagerServiceMock.LeftPilePosition)
+            if (fromCardPosition < BoardView.LeftStackPosition)
             {
                 --_positionsToCheckIndex;
             }
