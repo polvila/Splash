@@ -481,7 +481,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030bc0fc8b684fcd9e91607116f7d3c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _generatorMode: 0
 --- !u!114 &760545043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -888,9 +887,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9cbee2052be1944a62dbcb0ced7aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cloudSaveEnabled: 1
+  cloudSaveEnabled: 0
   autoSignIn: 1
-  autoCloudLoad: 1
+  autoCloudLoad: 0
 --- !u!4 &1338563553
 Transform:
   m_ObjectHideFlags: 0
