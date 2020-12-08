@@ -13,7 +13,8 @@ namespace Modules.Game
         private Coroutine _currentCoroutine;
         private int[] _positionsToCheck;
         private int _positionsToCheckIndex;
-        private bool _checkSplash;
+        private bool _stacksUpdated;
+        private bool _splashed;
         private bool _paused;
 
         public AI(GameManagerServiceMock gameManagerService, CoroutineProxy coroutineProxy)
@@ -23,11 +24,12 @@ namespace Modules.Game
             _positionsToCheck = Enumerable.Range(0, 4).OrderBy(elem => Guid.NewGuid()).ToArray();
             _gameManagerService.CardUpdate += OnCardUpdate;
             _gameManagerService.Unblocked += OnUnblocked;
+            _gameManagerService.Splashed += OnSplashed;
         }
 
         public void Play()
         {
-            _checkSplash = true;
+            _stacksUpdated = true;
             _currentCoroutine = _coroutineProxy.StartCoroutine(Update());
         }
 
@@ -37,16 +39,20 @@ namespace Modules.Game
             {
                 for (; _positionsToCheckIndex < _positionsToCheck.Length; ++_positionsToCheckIndex)
                 {
-                    if (_checkSplash)
+                    do
                     {
-                        _checkSplash = false;
-                        yield return new WaitForSeconds(Random.Range(0.4f, 0.6f));
-                        yield return new WaitUntil(() => !_paused);
-                        _gameManagerService.TryDoSplash(true);
-                    }
-
-                    yield return new WaitForSeconds(Random.Range(0.2f, 0.5f));
+                        _stacksUpdated = false;
+                        yield return new WaitForSeconds(Random.Range(0.6f, 0.8f));
+                    } while (_stacksUpdated);
                     yield return new WaitUntil(() => !_paused);
+                    _gameManagerService.TryDoSplash(true);
+                    
+                    if (_splashed)
+                    {
+                        _splashed = false;
+                        break;
+                    }
+                    
                     _gameManagerService.PlayThisCard(_positionsToCheck[_positionsToCheckIndex]);
                 }
 
@@ -73,7 +79,7 @@ namespace Modules.Game
                 return;
             }
 
-            _checkSplash = true;
+            _stacksUpdated = true;
 
             if (fromCardPosition < BoardView.LeftStackPosition)
             {
@@ -83,7 +89,12 @@ namespace Modules.Game
 
         private void OnUnblocked(int newLeftNumber, int newRightNumber)
         {
-            _checkSplash = true;
+            _stacksUpdated = true;
+        }
+        
+        private void OnSplashed(bool wasHuman, int newLeftNumber, int newRightNumber, int points)
+        {
+            _splashed = true;
         }
     }
 }
