@@ -52,13 +52,13 @@ namespace Modules.Game
             StartDelayedHelpIn();
         }
 
-        private void StartDelayedHelpIn(float seconds = 2f)
+        private bool IsMainFtueActive()
         {
-            if (_boardView is FTUEBoardView ftueBoard && !ftueBoard.MainFtueCompleted)
-            {
-                return;
-            }
-            
+            return _boardView is FTUEBoardView ftueBoard && ftueBoard.IsFtueOverlayActive();
+        }
+
+        public void StartDelayedHelpIn(float seconds = 2f)
+        {
             if (_lastShiningCard != null)
             {
                 _lastShiningCard.Shine = false;
@@ -67,7 +67,7 @@ namespace Modules.Game
 
             _delayedCallId = LeanTween.delayedCall(seconds, () =>
             {
-                if (GetPlayableCard(out var card))
+                if (GetPlayableCard(out var card) && !IsMainFtueActive())
                 {
                     _lastShiningCard = card;
                     _lastShiningCard.Shine = true;

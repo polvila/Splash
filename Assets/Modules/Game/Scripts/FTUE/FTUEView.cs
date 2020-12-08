@@ -36,6 +36,8 @@ namespace Modules.Game
 
     public class FTUEView : MonoBehaviour
     {
+        [SerializeField] private PlayerHelperView _playerHelperView;
+        
         [Header("FTUE")] 
         [SerializeField] private FTUESequence _ftueSequence;
         [SerializeField] private FTUESequence _missFtueSequence;
@@ -137,6 +139,7 @@ namespace Modules.Game
                 }
                 gameObject.SetActive(false);
                 _aiManagerService.PauseAI(false);
+                _playerHelperView.StartDelayedHelpIn();
                 return;
             }
 
@@ -145,6 +148,7 @@ namespace Modules.Game
             {
                 gameObject.SetActive(false);
                 _aiManagerService.PauseAI(false);
+                _playerHelperView.StartDelayedHelpIn();
             }
             else
             {

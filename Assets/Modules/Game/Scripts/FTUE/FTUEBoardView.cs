@@ -107,6 +107,11 @@ namespace Modules.Game
             base.FinishGame(onComplete);
         }
 
+        public bool IsFtueOverlayActive()
+        {
+            return _ftueView.gameObject.activeSelf;
+        }
+
         protected override IEnumerator WaitUntilAnimationsEnd(Action onComplete)
         {
             yield return base.WaitUntilAnimationsEnd(() =>

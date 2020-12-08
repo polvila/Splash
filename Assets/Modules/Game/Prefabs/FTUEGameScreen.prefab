@@ -368,6 +368,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2874717863818768148}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1144263728660352423 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2883483979779482291, guid: ab390c3c6312df249b548d10bf530f88,
+    type: 3}
+  m_PrefabInstance: {fileID: 2874717863818768148}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2874377738118870918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5da89e8fd1dd41348d0fdf0d83e62dd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2664468555399863838 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224921193242538250, guid: ab390c3c6312df249b548d10bf530f88,
@@ -475,7 +487,7 @@ PrefabInstance:
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 1007153002924312817, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
@@ -617,6 +629,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6791149585661490444, guid: 7033c40e31672294ea082f027a6b39aa,
+        type: 3}
+      propertyPath: _playerHelperView
+      value: 
+      objectReference: {fileID: 1144263728660352423}
     - target: {fileID: 7877312552703177393, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -645,7 +662,7 @@ PrefabInstance:
     - target: {fileID: 7877312552703177393, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7877312552703177393, guid: 7033c40e31672294ea082f027a6b39aa,
         type: 3}
