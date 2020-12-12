@@ -42,9 +42,10 @@ namespace Modules.Game
                     do
                     {
                         _stacksUpdated = false;
-                        yield return new WaitForSeconds(Random.Range(0.6f, 0.8f));
+                        var time = Random.Range(0.6f, 0.8f);
+                        yield return new WaitForSeconds(time);
+                        yield return new WaitUntil(() => !_paused);
                     } while (_stacksUpdated);
-                    yield return new WaitUntil(() => !_paused);
                     _gameManagerService.TryDoSplash(true);
                     
                     if (_splashed)
