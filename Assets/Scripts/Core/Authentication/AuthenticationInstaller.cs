@@ -1,3 +1,4 @@
+using Core.Authentication.Mock;
 using Zenject;
 
 namespace Core.Authentication
@@ -6,7 +7,7 @@ namespace Core.Authentication
     {
         public override void InstallBindings()
         {
-            Container.Bind<IAuthenticationService>().To<AuthenticationService>().AsSingle();
+            Container.Bind<IAuthenticationService>().To<AuthenticationServiceMock>().AsSingle();
         }
     }
 }
