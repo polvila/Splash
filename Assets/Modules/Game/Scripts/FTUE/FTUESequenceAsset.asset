@@ -21,7 +21,7 @@ MonoBehaviour:
     HideTrigger: 0
     InputBlocked: 1
   - HighlightedPosition: 0
-    TopText: Hey! Welcome to Splash!<br>This game is like the Solitarie.
+    TopText: Hey! Welcome to Splash!<br>This game is like Solitarie.
     BottomText: You have to stack as many cards as possible using the card numbers.
     ContinueText: Tap to continue
     AwakeTrigger: 8
@@ -42,14 +42,14 @@ MonoBehaviour:
     HideTrigger: 0
     InputBlocked: 0
   - HighlightedPosition: 3
-    TopText: And those are the discard piles.
+    TopText: And these are the discard piles.
     BottomText: 
     ContinueText: Tap to continue
     AwakeTrigger: 0
     HideTrigger: 0
     InputBlocked: 0
   - HighlightedPosition: 0
-    TopText: You can play a card when the value on your card is on higher or...
+    TopText: You can play a card when the value on your card is one higher or...
     BottomText: ...one lower than a card on the discard pile.
     ContinueText: Tap to continue
     AwakeTrigger: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
     HideTrigger: 0
     InputBlocked: 1
   - HighlightedPosition: 5
-    TopText: When the enemy plays a card, it decreases your life 1 point.
+    TopText: When the enemy plays a card, it decreases your life by 1 point.
     BottomText: The game ends when your life reaches 0.
     ContinueText: Tap to continue
     AwakeTrigger: 2
@@ -92,13 +92,14 @@ MonoBehaviour:
     InputBlocked: 0
   - HighlightedPosition: 3
     TopText: Look! The middle cards have the same number!
-    BottomText: Now you can Splash! to sum up as may points as middle cards amount.
+    BottomText: Now you can Splash! to sum up as many points as middle cards amount
+      to.
     ContinueText: Tap the middle cards to Splash!
     AwakeTrigger: 5
     HideTrigger: 6
     InputBlocked: 0
   - HighlightedPosition: 8
-    TopText: Let's see how many points you are able to make before dying.
+    TopText: Let's see how many points you are able to get before dying.
     BottomText: Good luck and have fun!
     ContinueText: Tap to continue with the match
     AwakeTrigger: 8

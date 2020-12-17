@@ -15,8 +15,8 @@ MonoBehaviour:
   ScreenSequence:
   - HighlightedPosition: 5
     TopText: If you tap a card that connot be played, it will decrease your life
-      1 point.
-    BottomText: Once a card is moving to the middle, it is already concidered the
+      by 1 point.
+    BottomText: Once a card is moving to the middle, it is already considered the
       top of the pile.
     ContinueText: Tap to continue with the match
     AwakeTrigger: 9
