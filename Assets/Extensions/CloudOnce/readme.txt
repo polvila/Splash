@@ -10,6 +10,23 @@ but it also attempts to satisfy the needs of power users.
 
 Release Notes
 -------------
+Version 2.7.5
+- Updated GPGS from v0.10.13 to v0.10.14
+- Fixed AndroidManifest path
+
+Version 2.7.4
+- Dropped support for Unity 5
+- Updated GPGS from v0.10.12 to v0.10.13
+- Updated EDM4U from v1.2.166 to v1.2.167
+
+Version 2.7.3
+- Fixed UnityWebRequest warnings in Unity 2020.2 and up
+- Updated EDM4U from v1.2.162 to v1.2.166
+
+Version 2.7.2
+- Updated GPGS from v0.10.10 to v0.10.12
+- Updated EDM4U from v1.2.157 to v1.2.162
+
 Version 2.7.1
 - Updated IUserProfile implementation for Unity 2020.1
 
